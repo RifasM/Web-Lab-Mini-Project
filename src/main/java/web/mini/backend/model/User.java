@@ -18,7 +18,7 @@ import java.util.Date;
  * @author Givantha Kalansuriya
  */
 @Entity
-@Table(name = "interest_users")
+@Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
