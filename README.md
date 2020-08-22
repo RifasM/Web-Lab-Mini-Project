@@ -9,12 +9,17 @@ An image sharing and social media service designed to enable saving and discover
 
 ## Architecture
 - Backend (API's only) 
-    - Spring Boot
+    - [Spring Boot](https://github.com/RifasM/Web-Lab-Mini-Project)
 - Backend (Server)
-    - NodeJS
+    - NodeJS*
 - FrontEnd
-    - ReactJS
+    - ReactJS*
     - HTML/CSS
 - Databases
     - MySQL (OpenShift Persistent)
     - MongoDB (Atlas Cluster)
+  
+### Note:
+```
+* Repositories coming up, will be updated soon. 👻
+```
