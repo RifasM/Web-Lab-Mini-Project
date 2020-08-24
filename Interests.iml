@@ -18,14 +18,14 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="Interests" />
+          <factory-entry name="Interests" value="f737ce11-a7e8-4990-bfab-21c0225a6929" />
           <factory-entry name="entityManagerFactory" value="4cdd67a1-f483-4dc2-b383-efe5250557a7" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_14">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -35,7 +35,7 @@
       <excludeFolder url="file://$MODULE_DIR$/lib" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="jdk" jdkName="openjdk-14" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="JPA 1.0-JPA 1.0" level="project" />
     <orderEntry type="library" name="Spring-5.2.3.RELEASE" level="project" />
