@@ -2,14 +2,19 @@ package web.mini.backend.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 
+@Entity
+@Table(name = "posts")
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private long id;
 
     @Column(name = "post_title", nullable = false)
     private String postTitle;
@@ -26,17 +31,17 @@ public class Post {
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "post_created_at", nullable = false)
-    private String postDate;
+    private Date postDate;
 
-    @Column(name = "created_by", nullable = false)
+    @Column(name = "post_created_by", nullable = false)
     @CreatedBy
     private String createdBy;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -72,11 +77,11 @@ public class Post {
         this.postLocation = postLocation;
     }
 
-    public String getPostDate() {
+    public Date getPostDate() {
         return postDate;
     }
 
-    public void setPostDate(String postDate) {
+    public void setPostDate(Date postDate) {
         this.postDate = postDate;
     }
 
