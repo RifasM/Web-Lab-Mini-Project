@@ -88,6 +88,12 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.2.8.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-mongodb:2.3.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-sync:4.0.5" level="project" />
+    <orderEntry type="library" name="Maven: org.mongodb:bson:4.0.5" level="project" />
+    <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:4.0.5" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-mongodb:3.0.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.3.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-json:2.3.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.11.2" level="project" />
@@ -97,7 +103,6 @@
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.37" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:5.2.8.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:2.3.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.3.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.3.3.RELEASE" level="project" />

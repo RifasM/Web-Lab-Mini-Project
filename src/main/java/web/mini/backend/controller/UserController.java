@@ -1,11 +1,11 @@
 package web.mini.backend.controller;
 
-import web.mini.backend.exception.ResourceNotFoundException;
-import web.mini.backend.model.User;
-import web.mini.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import web.mini.backend.exception.ResourceNotFoundException;
+import web.mini.backend.model.User;
+import web.mini.backend.repository.UserRepository;
 
 import javax.validation.Valid;
 import java.util.Date;
@@ -13,11 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * The type User controller.
- *
- * @author Mohammed Rifas S
- */
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
