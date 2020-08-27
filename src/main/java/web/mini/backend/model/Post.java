@@ -1,6 +1,5 @@
 package web.mini.backend.model;
 
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 
