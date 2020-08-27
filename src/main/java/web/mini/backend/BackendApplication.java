@@ -14,4 +14,19 @@ public class BackendApplication {
         SpringApplication.run(BackendApplication.class, args);
     }
 
+
+    // TODO: CORS HEADER for POST in posts
+    // TODO: CORS HEADER for POST in users
+    // TODO: CORS HEADER for POST in CrossOrigin
+
+    /*
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/api/v1/posts").allowedOrigins("http://localhost:8080");
+            }
+        };
+    }*/
 }
