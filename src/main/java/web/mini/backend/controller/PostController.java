@@ -53,7 +53,8 @@ public class PostController {
      * @return the post
      */
     @PostMapping("/posts")
-    public Post createUser(@Valid @RequestBody Post post) {
+    public Post createPost(@Valid @RequestBody Post post) {
+        System.out.println(post);
         return postRepository.save(post);
     }
 
