@@ -2,6 +2,7 @@ package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Post;
@@ -36,7 +37,7 @@ public class PostController {
      * @return the posts by id
      * @throws ResourceNotFoundException the resource not found exception
      */
-    @GetMapping("/posts/{id}")
+    @GetMapping("/post/{id}")
     public ResponseEntity<Post> getPostsById(@PathVariable(value = "id") Long postID)
             throws ResourceNotFoundException {
         Post post =
@@ -52,9 +53,9 @@ public class PostController {
      * @param post the post
      * @return the post
      */
-    @PostMapping("/posts")
+    @PostMapping("/post")
     public Post createPost(@Valid @RequestBody Post post) {
-        System.out.println(post);
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         return postRepository.save(post);
     }
 
