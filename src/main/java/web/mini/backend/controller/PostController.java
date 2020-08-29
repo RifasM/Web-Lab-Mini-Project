@@ -54,6 +54,7 @@ public class PostController {
      */
     @PostMapping("/post")
     public Post createPost(@Valid @RequestBody Post post) {
+        System.out.println(post);
         return postRepository.save(post);
     }
 
