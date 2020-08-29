@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -39,7 +38,6 @@ public class Post {
     private Date postDate;
 
     @Column(name = "post_created_by", nullable = false)
-    @CreatedBy
     private String createdBy;
 
     @Override
