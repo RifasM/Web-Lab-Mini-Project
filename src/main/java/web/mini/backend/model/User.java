@@ -12,7 +12,7 @@ import java.util.Date;
  *
  * @author Mohammed Rifas S
  */
-@Entity
+@Entity(name = "user")
 @Table(name = "users")
 public class User {
     @Id

@@ -1,6 +1,8 @@
 package web.mini.backend.model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import web.mini.backend.controller.UserController;
+import web.mini.backend.exception.ResourceNotFoundException;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,10 +31,7 @@ public class Post {
     @Column(name = "post_created_at", nullable = false)
     private Date postDate;
 
-    //@Column(name = "post_created_by", nullable = false)
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id", table = "users")
-    private User createdBy;
+    private long createdBy;
 
     public long getId() {
         return id;
@@ -82,12 +81,18 @@ public class Post {
         this.postDate = postDate;
     }
 
-    public User getCreatedBy() {
+    public long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
+    public void setCreatedBy(long createdBy) {
+        try {
+            new UserController().getUsersById(createdBy);
+            this.createdBy = createdBy;
+            System.out.println(this.createdBy);
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
