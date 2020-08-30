@@ -1,6 +1,5 @@
 package web.mini.backend.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -43,8 +42,7 @@ public class User {
     @Column(name = "updated_by", nullable = true)
     @LastModifiedBy
     private String updatedBy;
-
-    @JsonDeserialize
+    
     public long getId() {
         return id;
     }
@@ -53,7 +51,6 @@ public class User {
         this.id = id;
     }
 
-    @JsonDeserialize
     public String getFirstName() {
         return firstName;
     }
@@ -62,7 +59,6 @@ public class User {
         this.firstName = firstName;
     }
 
-    @JsonDeserialize
     public String getLastName() {
         return lastName;
     }
@@ -71,7 +67,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    @JsonDeserialize
     public String getEmail() {
         return email;
     }
@@ -80,7 +75,6 @@ public class User {
         this.email = email;
     }
 
-    @JsonDeserialize
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -89,7 +83,6 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    @JsonDeserialize
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -98,7 +91,6 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    @JsonDeserialize
     public String getUpdatedBy() {
         return updatedBy;
     }
