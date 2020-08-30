@@ -29,6 +29,16 @@ public class Post {
     @Column(name = "post_created_at", nullable = false)
     private Date postDate;
 
+    @Column(name = "post_user")
+    private long postUser;
+
+    public long getPostUser() {
+        return postUser;
+    }
+
+    public void setPostUser(long postUser) {
+        this.postUser = postUser;
+    }
 
     public long getId() {
         return id;
