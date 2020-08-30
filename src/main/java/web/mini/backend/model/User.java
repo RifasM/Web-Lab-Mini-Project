@@ -1,5 +1,6 @@
 package web.mini.backend.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -12,12 +13,34 @@ import java.util.Date;
  *
  * @author Mohammed Rifas S
  */
-@Entity(name = "user")
+@Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private long id;
+
+    public User() {
+
+    }
+
+    public User(long id,
+                String firstName,
+                String lastName,
+                String email,
+                Date createdAt,
+                Date updatedAt,
+                String updatedBy) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.updatedBy = updatedBy;
+    }
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -42,6 +65,7 @@ public class User {
     @LastModifiedBy
     private String updatedBy;
 
+    @JsonDeserialize
     public long getId() {
         return id;
     }
@@ -50,6 +74,7 @@ public class User {
         this.id = id;
     }
 
+    @JsonDeserialize
     public String getFirstName() {
         return firstName;
     }
@@ -58,6 +83,7 @@ public class User {
         this.firstName = firstName;
     }
 
+    @JsonDeserialize
     public String getLastName() {
         return lastName;
     }
@@ -66,6 +92,7 @@ public class User {
         this.lastName = lastName;
     }
 
+    @JsonDeserialize
     public String getEmail() {
         return email;
     }
@@ -74,6 +101,7 @@ public class User {
         this.email = email;
     }
 
+    @JsonDeserialize
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -82,6 +110,7 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    @JsonDeserialize
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -90,6 +119,7 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
+    @JsonDeserialize
     public String getUpdatedBy() {
         return updatedBy;
     }

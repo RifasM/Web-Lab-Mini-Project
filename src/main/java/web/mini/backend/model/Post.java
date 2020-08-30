@@ -1,17 +1,14 @@
 package web.mini.backend.model;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.http.ResponseEntity;
-import web.mini.backend.controller.UserController;
-import web.mini.backend.exception.ResourceNotFoundException;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "posts")
-public class Post {
+public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -33,9 +30,14 @@ public class Post {
     @Column(name = "post_created_at", nullable = false)
     private Date postDate;
 
+    @Id
+    @Column(name = "post_user_id", insertable = false, updatable = false)
+    private long createdById;
+
     //@Column(name = "post_created_by", nullable = false)
-    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE)
-    private long createdBy;
+    @OneToOne
+    @JoinColumn(name = "user_ID")
+    private User createdBy;
 
     public long getId() {
         return id;
@@ -85,14 +87,12 @@ public class Post {
         this.postDate = postDate;
     }
 
-    public long getCreatedBy() {
+    public User getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(long createdBy) throws ResourceNotFoundException {
-        ResponseEntity<User> user = new UserController().getUsersById(createdBy);
-        System.out.println(user);
-        this.createdBy = Objects.requireNonNull(user.getBody()).getId();
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Override
