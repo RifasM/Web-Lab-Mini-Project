@@ -1,9 +1,13 @@
 package web.mini.backend.model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.http.ResponseEntity;
+import web.mini.backend.controller.UserController;
+import web.mini.backend.exception.ResourceNotFoundException;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "posts")
@@ -29,7 +33,8 @@ public class Post {
     @Column(name = "post_created_at", nullable = false)
     private Date postDate;
 
-    @Column(name = "post_created_by", nullable = false)
+    //@Column(name = "post_created_by", nullable = false)
+    @OneToOne(targetEntity = User.class, cascade = CascadeType.REMOVE)
     private long createdBy;
 
     public long getId() {
@@ -84,8 +89,10 @@ public class Post {
         return createdBy;
     }
 
-    public void setCreatedBy(long createdBy) {
-        this.createdBy = createdBy;
+    public void setCreatedBy(long createdBy) throws ResourceNotFoundException {
+        ResponseEntity<User> user = new UserController().getUsersById(createdBy);
+        System.out.println(user);
+        this.createdBy = Objects.requireNonNull(user.getBody()).getId();
     }
 
     @Override
