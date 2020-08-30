@@ -47,6 +47,25 @@ public class PostController {
     }
 
     /**
+     * Gets post by user id.
+     *
+     * @param userID the user id
+     * @return the posts by user id
+     * @throws ResourceNotFoundException the resource not found exception
+     */
+    @GetMapping("/post/user/{user_id}")
+    public List<Post> getPostsByUserId(@PathVariable(value = "user_id") Long userID)
+            throws ResourceNotFoundException {
+        List<Post> post = postRepository.findAllByUserId(userID);
+        /*Post post =
+                postRepository
+                        .findBy(userID)
+                        .orElseThrow(() -> new ResourceNotFoundException("Post not found on userID :: " + userID));
+        return ResponseEntity.ok().body(post);*/
+        return post;
+    }
+
+    /**
      * Create post.
      *
      * @param post the post
