@@ -3,12 +3,11 @@ package web.mini.backend.model;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "posts")
-public class Post implements Serializable {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -30,14 +29,6 @@ public class Post implements Serializable {
     @Column(name = "post_created_at", nullable = false)
     private Date postDate;
 
-    @Id
-    @Column(name = "post_user_id", insertable = false, updatable = false)
-    private long createdById;
-
-    //@Column(name = "post_created_by", nullable = false)
-    @OneToOne
-    @JoinColumn(name = "user_ID")
-    private User createdBy;
 
     public long getId() {
         return id;
@@ -87,14 +78,6 @@ public class Post implements Serializable {
         this.postDate = postDate;
     }
 
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
-
     @Override
     public String toString() {
         return "Post{" +
@@ -104,7 +87,6 @@ public class Post implements Serializable {
                 ", postType='" + postType + '\'' +
                 ", postLocation='" + postLocation + '\'' +
                 ", postDate='" + postDate + '\'' +
-                ", createdBy='" + createdBy + '\'' +
                 '}';
     }
 }

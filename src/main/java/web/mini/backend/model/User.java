@@ -22,26 +22,6 @@ public class User {
     @Column(name = "user_id")
     private long id;
 
-    public User() {
-
-    }
-
-    public User(long id,
-                String firstName,
-                String lastName,
-                String email,
-                Date createdAt,
-                Date updatedAt,
-                String updatedBy) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.updatedBy = updatedBy;
-    }
-
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
