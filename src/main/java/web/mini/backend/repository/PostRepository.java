@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    @Query("select p from Post p where " +
-            "p.postUser = ?1")
+    @Query("select p from Post p where p.postUser = ?1")
     List<Post> findAllByUserId(long userID);
 }
