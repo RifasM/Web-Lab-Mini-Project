@@ -10,34 +10,43 @@
           th:fragment="bootstrap-css">
 </head>
 <body>
+<div class="wrapper" th:fragment="navbar-main">
+    <header>
+        <nav>
+            <div class="menu-icon">
+                <i class="fa fa-bars fa-2x"></i>
+            </div>
+            <div class="logo">
+                LOGO
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $(".menu-icon").on("click", function () {
+                        $("nav ul").toggleClass("showing");
+                    });
+                });
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top" th:fragment="navbar-main">
-    <div class="container">
-        <a class="navbar-brand" href="/">Interests</a>
-        <button aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"
-                class="navbar-toggler"
-                data-target="#navbarResponsive"
-                data-toggle="collapse" type="button">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Username</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+                // Scrolling Effect
 
-<div class="container">
-
+                $(window).on("scroll", function () {
+                    if ($(window).scrollTop()) {
+                        $('nav').addClass('black');
+                    } else {
+                        $('nav').removeClass('black');
+                    }
+                })
+            </script>
+        </nav>
+    </header>
 </div>
 
 <script crossorigin="anonymous" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
