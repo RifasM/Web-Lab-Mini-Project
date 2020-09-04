@@ -25,3 +25,33 @@ jQuery(document).ready(function ($) {
         $('.sh-side-options').removeClass('open');
     });
 });
+
+var c = document.body.className;
+c = c.replace(/woocommerce-no-js/, 'woocommerce-js');
+document.body.className = c;
+
+/* <![CDATA[ */
+var wpcf7 = {
+    "apiSettings": {
+        "root": "https:\/\/jevelin.shufflehound.com\/blog1\/wp-json\/contact-form-7\/v1",
+        "namespace": "contact-form-7\/v1"
+    }
+};
+/* ]]> */
+
+/* <![CDATA[ */
+var woocommerce_params = {
+    "ajax_url": "\/blog1\/wp-admin\/admin-ajax.php",
+    "wc_ajax_url": "\/blog1\/?wc-ajax=%%endpoint%%"
+};
+/* ]]> */
+
+/* <![CDATA[ */
+var wc_cart_fragments_params = {
+    "ajax_url": "\/blog1\/wp-admin\/admin-ajax.php",
+    "wc_ajax_url": "\/blog1\/?wc-ajax=%%endpoint%%",
+    "cart_hash_key": "wc_cart_hash_2469ca9463be8c946f2508971efb1c5e",
+    "fragment_name": "wc_fragments_2469ca9463be8c946f2508971efb1c5e",
+    "request_timeout": "5000"
+};
+/* ]]> */
