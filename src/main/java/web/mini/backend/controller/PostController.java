@@ -51,11 +51,9 @@ public class PostController {
      *
      * @param userID the user id
      * @return the posts by user id
-     * @throws ResourceNotFoundException the resource not found exception
      */
     @GetMapping("/post/user/{user_id}")
-    public List<Post> getPostsByUserId(@PathVariable(value = "user_id") Long userID)
-            throws ResourceNotFoundException {
+    public List<Post> getPostsByUserId(@PathVariable(value = "user_id") Long userID) {
         return postRepository.findAllByUserId(userID);
     }
 
