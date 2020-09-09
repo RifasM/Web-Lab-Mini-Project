@@ -8,7 +8,7 @@ public class webController {
     /**
      * Return Landing Page
      *
-     * @ return rendered landing.html
+     * @return rendered landing.html
      */
     @RequestMapping("/")
     public String index() {
