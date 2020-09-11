@@ -8,10 +8,10 @@ public class webController {
     /**
      * Return Landing Page
      *
-     * @return rendered landing.html
+     * @return rendered landpage.html
      */
     @RequestMapping("/")
     public String index() {
-        return "landing";
+        return "landpage";
     }
 }
