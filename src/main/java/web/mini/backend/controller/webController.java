@@ -14,4 +14,14 @@ public class webController {
     public String index() {
         return "landpage";
     }
+
+    @RequestMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping("/signup")
+    public String signup() {
+        return "signup";
+    }
 }
