@@ -8,10 +8,20 @@ public class webController {
     /**
      * Return Landing Page
      *
-     * @return rendered landing.html
+     * @return rendered landpage.html
      */
     @RequestMapping("/")
     public String index() {
-        return "landing";
+        return "landpage";
+    }
+
+    @RequestMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping("/signup")
+    public String signup() {
+        return "signup";
     }
 }
