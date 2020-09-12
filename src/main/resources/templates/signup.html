@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
     <title>Pixies</title>
     <!-- MDB icon -->
-    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon"/>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
     <!-- Google Fonts Roboto -->
     <link
       rel="stylesheet"
@@ -113,17 +114,18 @@
                   <br>
 
                   <!-- Submit button -->
-                  <button type="submit" class="btn btn-dark btn-block">Sign Up</button>
+                    <button type="submit" class="btn btn-dark btn-block">Sign Up</button>
                 </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- Background image -->
+        <!-- Background image -->
     </header>
     <!--Main Navigation-->
-    
+
+    <section th:insert="includes/navbar-home::footer"></section>
   </body>
 
   <!-- MDB -->
