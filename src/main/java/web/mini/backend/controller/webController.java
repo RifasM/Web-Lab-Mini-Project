@@ -15,11 +15,21 @@ public class webController {
         return "landpage";
     }
 
+    /**
+     * Return Login Page
+     *
+     * @return rendered login.html
+     */
     @RequestMapping("/login")
     public String login() {
         return "login";
     }
 
+    /**
+     * Return Register Page
+     *
+     * @return rendered signup.html
+     */
     @RequestMapping("/signup")
     public String signup() {
         return "signup";
