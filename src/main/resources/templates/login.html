@@ -27,17 +27,17 @@
   </head>
   <body>
 
-    <!----------------------------------------------------------------------- 
-      
-    This template was created with MDB 5 UI KIT (Material Design for Bootstrap 5).
+  <!-----------------------------------------------------------------------
 
-    MDB is a free (MIT license) library, that provides extra features and significantly extends Bootstrap's capabilities.
+  This template was created with MDB 5 UI KIT (Material Design for Bootstrap 5).
 
-    Visit our website to learn more: https://mdbootstrap.com/docs/standard/ 
-  
-    --------------------------------------------------------------------------->
+  MDB is a free (MIT license) library, that provides extra features and significantly extends Bootstrap's capabilities.
 
-    <!--Main Navigation-->
+  Visit our website to learn more: https://mdbootstrap.com/docs/standard/
+
+  --------------------------------------------------------------------------->
+
+  <!--Main Navigation-->
     <header>
       <style>
         #intro {
@@ -53,7 +53,7 @@
         }
       </style>
 
-        <section th:insert="includes/navbar-home::navbar-home"></section>
+        <th:block th:replace="includes/navbar-home::navbar-home"/>
 
       <!-- Background image -->
       <div id="intro" class="bg-image shadow-2-strong">
@@ -62,7 +62,12 @@
             <div class="row d-flex justify-content-center">
               <div class="col-xl-5 col-md-8">
                   <form class="bg-white rounded shadow-5-strong p-5"
-                        method='POST' th:action="@{/auth-login}">
+                        method='POST' th:action="@{/login}">
+                      <div th:if="${param.error}">
+                          <div class="alert alert-danger">
+                              Invalid username or password.
+                          </div>
+                      </div>
                       <h2>Welcome Back!!!</h2>
                       <br>
                       <!-- Email input -->
@@ -145,9 +150,10 @@
       </div>
         <!-- Background image -->
     </header>
+
     <!--Main Navigation-->
 
-    <section th:insert="includes/navbar-home::footer"></section>
+  <th:block th:replace="includes/navbar-home::footer"/>
   </body>
 
   <!-- MDB -->

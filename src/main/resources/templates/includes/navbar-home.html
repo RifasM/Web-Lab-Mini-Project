@@ -1,17 +1,18 @@
 <!DOCTYPE HTML>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
-<header th:fragment="navbar-home">
-    <!-- Navbar -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark d-none d-lg-block" style="z-index: 2000;">
-        <div class="container-fluid">
-            <!-- Navbar brand -->
-            <a
-                    class="navbar-brand nav-link"
-                    href="/#"
-            >
-                <strong>PIXIES</strong>
-            </a>
+<th:block th:fragment="navbar-home">
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark d-none d-lg-block" style="z-index: 2000;">
+            <div class="container-fluid">
+                <!-- Navbar brand -->
+                <a
+                        class="navbar-brand nav-link"
+                        href="/#"
+                >
+                    <strong>PIXIES</strong>
+                </a>
             <button
                     aria-controls="navbarExample01"
                     aria-expanded="false"
@@ -52,16 +53,20 @@
                     </li>
                 </ul>
             </div>
-        </div>
-    </nav>
-    <!-- Navbar -->
-</header>
+            </div>
+        </nav>
+        <!-- Navbar -->
+    </header>
+</th:block>
+
 
 <!-- Copyright -->
-<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);" th:fragment="footer">
-    © 2020 Copyright:
-    <a class="text-dark" href="https://rifasm.github.io/">Pixies</a>
-</div>
+<th:block th:fragment="footer">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2020 Copyright:
+        <a class="text-dark" href="https://rifasm.github.io/">Pixies</a>
+    </div>
+</th:block>
 <!-- Copyright -->
 </footer>
 <!--Footer-->
