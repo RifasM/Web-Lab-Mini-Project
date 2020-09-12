@@ -117,11 +117,10 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", updatedby='" + updatedBy + '\'' +
+                ", updatedBy='" + updatedBy + '\'' +
                 '}';
     }
-
-
 }
