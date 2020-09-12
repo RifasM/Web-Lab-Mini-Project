@@ -29,6 +29,9 @@ public class User {
     @Column(name = "email_address", nullable = false)
     private String email;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
@@ -75,6 +78,14 @@ public class User {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -106,11 +117,10 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", updatedby='" + updatedBy + '\'' +
+                ", updatedBy='" + updatedBy + '\'' +
                 '}';
     }
-
-
 }

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
     <title>Pixies</title>
     <!-- MDB icon -->
-    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon"/>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
     <!-- Google Fonts Roboto -->
     <link
       rel="stylesheet"
@@ -121,7 +121,7 @@
                               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                   <li><a class="dropdown-item" href="#">My profile</a></li>
                                   <li><a class="dropdown-item" href="settings.html">Settings</a></li>
-                                  <li><a class="dropdown-item" href="landpage.html">Logout</a></li>
+                                  <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
                               </ul>
                           </li>
                   </ul>

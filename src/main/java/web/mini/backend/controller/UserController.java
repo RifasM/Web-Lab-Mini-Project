@@ -1,7 +1,10 @@
 package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.User;
@@ -18,7 +21,15 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UserRepository userRepository;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     /**
      * Get all users list.
@@ -55,6 +66,9 @@ public class UserController {
      */
     @PostMapping("/users")
     public User createUser(@Valid @RequestBody User user) {
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
+
         return userRepository.save(user);
     }
 
