@@ -18,11 +18,11 @@ public class WebController {
     /**
      * Return Landing Page
      *
-     * @return rendered landpage.html
+     * @return rendered landing.html
      */
     @RequestMapping("/")
     public String index() {
-        return "landpage";
+        return "landing";
     }
 
     /**
