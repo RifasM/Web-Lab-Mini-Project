@@ -2,7 +2,6 @@ package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import web.mini.backend.repository.PostRepository;
 import web.mini.backend.repository.UserRepository;
@@ -22,6 +21,12 @@ public class WebController {
      */
     @RequestMapping("/")
     public String index() {
+        return "index";
+    }
+
+    // TODO: Remove
+    @RequestMapping("/old")
+    public String old_index() {
         return "landing";
     }
 
@@ -40,7 +45,7 @@ public class WebController {
      *
      * @return rendered signup.html
      */
-    @PostMapping("/signup")
+    @RequestMapping("/signup")
     public String signup() {
         return "signup";
     }
