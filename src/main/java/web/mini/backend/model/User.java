@@ -20,6 +20,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(name = "username", nullable = false)
+    private String userName;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -29,8 +35,11 @@ public class User {
     @Column(name = "email_address", nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "user_role", nullable = false)
+    private String role;
+
+    @Column(name = "account_enabled", nullable = false)
+    private int enabled;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -45,13 +54,29 @@ public class User {
     @Column(name = "updated_by", nullable = true)
     @LastModifiedBy
     private String updatedBy;
-    
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -78,12 +103,20 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRole() {
+        return role;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 
     public Date getCreatedAt() {
@@ -114,10 +147,13 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", enabled=" + enabled +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", updatedBy='" + updatedBy + '\'' +

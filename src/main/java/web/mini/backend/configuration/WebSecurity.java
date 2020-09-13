@@ -6,7 +6,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import web.mini.backend.exception.CustomAccessDeniedHandler;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -14,6 +17,18 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomAccessDeniedHandler accessDeniedHandler;
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Autowired
+    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.jdbcAuthentication().passwordEncoder(new BCryptPasswordEncoder())
+                .dataSource(dataSource)
+                .usersByUsernameQuery("select username, password, account_enabled from users where username=?")
+                .authoritiesByUsernameQuery("select username, user_role from users where username=?")
+        ;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -26,10 +41,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
         // /home page requires login as USER or ADMIN.
         // If no login, it will redirect to /login page.
-        http.authorizeRequests().antMatchers("/home/**").access("hasAnyRole('USER', 'ADMIN')");
+        http.authorizeRequests().antMatchers("/home/**").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
         // For ADMIN only.
-        http.authorizeRequests().antMatchers("/admin/**").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')");
 
         // When the user has logged in as XX.
         // But access a page that requires role YY,
@@ -41,7 +56,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 // Submit URL of login page.
                 //.loginProcessingUrl("/auth-login") // Submit URL
                 .loginPage("/login")//
-                //.defaultSuccessUrl("/home")//
+                .defaultSuccessUrl("/home")//
                 .failureUrl("/login?error=true")//
                 //.usernameParameter("username")//
                 //.passwordParameter("password")//
@@ -56,8 +71,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         // raw = password
         // hash = $2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO
         auth.inMemoryAuthentication()
-                .withUser("user@pixies.org").password("$2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO").roles("USER")
+                .withUser("user").password("$2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO").roles("USER")
                 .and()
-                .withUser("admin@pixies.org").password("$2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO").roles("ADMIN");
+                .withUser("admin").password("$2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO").roles("ADMIN");
     }
 }
