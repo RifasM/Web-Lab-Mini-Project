@@ -62,7 +62,7 @@
             <div class="row d-flex justify-content-center">
               <div class="col-xl-5 col-md-8">
                   <form class="bg-white rounded shadow-5-strong p-5"
-                        method='POST' th:action="@{/login}">
+                        method='POST' th:action="@{/home}">
                       <div th:if="${param.error}">
                           <div class="alert alert-danger">
                               Invalid username or password.
@@ -72,8 +72,8 @@
                       <br>
                       <!-- Email input -->
                       <div class="form-outline mb-4">
-                          <input class="form-control" id="userName" name="userName" type="email"/>
-                          <label class="form-label" for="userName">Email address</label>
+                          <input class="form-control" id="username" name="username" type="email"/>
+                          <label class="form-label" for="username">Email address</label>
                       </div>
 
                       <!-- Password input -->
