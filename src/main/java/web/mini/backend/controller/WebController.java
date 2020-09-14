@@ -59,4 +59,9 @@ public class WebController {
     public String authLogin() {
         return "home";
     }
+
+    @RequestMapping("/blog")
+    public String blog(){
+        return "blog";
+    }
 }
