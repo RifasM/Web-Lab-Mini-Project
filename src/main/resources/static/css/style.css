@@ -84,7 +84,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #header.header-scrolled, #header.header-inner-pages {
   background: #fff;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
   padding: 12px 0;
 }
 
@@ -157,7 +157,7 @@ h1, h2, h3, h4, h5, h6 {
   visibility: hidden;
   padding: 10px 0;
   background: #fff;
-  box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+  box-shadow: 0 0 30px rgba(127, 137, 161, 0.25);
   transition: 0.3s;
 }
 
@@ -379,7 +379,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero h1 {
-  margin: 0 0 10px 0;
+  margin: 0 0 10px;
   font-size: 48px;
   font-weight: 700;
   line-height: 56px;
@@ -400,7 +400,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 13px;
   letter-spacing: 1px;
   display: inline-block;
-  padding: 8px 30px 9px 30px;
+  padding: 8px 30px 9px;
   border-radius: 50px;
   transition: 0.5s;
   border: 2px solid #fff;
@@ -470,7 +470,7 @@ section {
 }
 
 .section-title h3 {
-  margin: 15px 0 0 0;
+  margin: 15px 0 0;
   font-size: 32px;
   font-weight: 700;
 }
@@ -480,7 +480,7 @@ section {
 }
 
 .section-title p {
-  margin: 15px auto 0 auto;
+  margin: 15px auto 0;
   font-weight: 600;
 }
 
@@ -582,7 +582,7 @@ section {
 .services .icon-box:hover::before {
   background: #e43c5c;
   top: 0;
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 .services .icon {
@@ -708,7 +708,7 @@ section {
 --------------------------------------------------------------*/
 .portfolio #portfolio-flters {
   padding: 0;
-  margin: 0 auto 25px auto;
+  margin: 0 auto 25px;
   list-style: none;
   text-align: center;
   border-radius: 50px;
@@ -717,12 +717,12 @@ section {
 .portfolio #portfolio-flters li {
   cursor: pointer;
   display: inline-block;
-  padding: 7px 17px 9px 17px;
+  padding: 7px 17px 9px;
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
   color: #444444;
-  margin: 0 3px 10px 3px;
+  margin: 0 3px 10px;
   transition: all ease-in-out 0.3s;
   background: #ede9e9;
   border-radius: 50px;
@@ -871,7 +871,7 @@ section {
 
 .pricing .box .btn-buy {
   display: inline-block;
-  padding: 8px 40px 10px 40px;
+  padding: 8px 40px 10px;
   border-radius: 50px;
   border: 2px solid #e43c5c;
   color: #e43c5c;
@@ -908,7 +908,7 @@ section {
   transform: translateX(-50%);
   z-index: 1;
   font-size: 13px;
-  padding: 3px 25px 6px 25px;
+  padding: 3px 25px 6px;
   background: #fce6ea;
   color: #e43c5c;
   border-radius: 50px;
@@ -986,7 +986,7 @@ section {
   text-align: center;
   border-radius: 5px;
   background: #fff;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
 .team .member .member-img {
@@ -1110,7 +1110,7 @@ section {
 .contact .php-email-form .validate {
   display: none;
   color: red;
-  margin: 0 0 15px 0;
+  margin: 0 0 15px;
   font-weight: 400;
   font-size: 13px;
 }
@@ -1230,7 +1230,7 @@ section {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
-  padding: 0 0 10px 0;
+  padding: 0 0 10px;
   margin: 0;
   font-size: 14px;
 }
@@ -1286,7 +1286,7 @@ section {
   right: 0;
   bottom: -70px;
   background: #fff;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
   z-index: 2;
 }
 
@@ -1320,7 +1320,7 @@ section {
 }
 
 .portfolio-details .portfolio-description p {
-  padding: 0 0 0 0;
+  padding: 0;
 }
 
 @media (max-width: 768px) {
@@ -1334,7 +1334,7 @@ section {
 # Blog
 --------------------------------------------------------------*/
 .blog {
-  padding: 40px 0 20px 0;
+  padding: 40px 0 20px;
 }
 
 .blog .entry {
@@ -1346,7 +1346,7 @@ section {
 
 .blog .entry .entry-img {
   max-height: 400px;
-  margin: -20px -20px 20px -20px;
+  margin: -20px -20px 20px;
   overflow: hidden;
 }
 
@@ -1355,7 +1355,7 @@ section {
   line-height: 26px;
   font-weight: bold;
   padding: 0;
-  margin: 0 0 20px 0;
+  margin: 0 0 20px;
 }
 
 .blog .entry .entry-title a {
@@ -1413,7 +1413,7 @@ section {
   display: inline-block;
   background: #e43c5c;
   color: #fff;
-  padding: 5px 20px 7px 20px;
+  padding: 5px 20px 7px;
   transition: 0.3s;
   font-size: 14px;
   border-radius: 50px;
@@ -1553,7 +1553,7 @@ section {
   margin-left: 140px;
   font-weight: 600;
   font-size: 22px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
   padding: 0;
 }
 
@@ -1653,7 +1653,7 @@ section {
 
 .blog .blog-comments .reply-form textarea {
   border-radius: 0;
-  padding: 10px 10px;
+  padding: 10px;
   font-size: 14px;
 }
 
@@ -1733,8 +1733,8 @@ section {
 .blog .sidebar .sidebar-title {
   font-size: 20px;
   font-weight: 700;
-  padding: 0 0 0 0;
-  margin: 0 0 15px 0;
+  padding: 0;
+  margin: 0 0 15px;
   color: #493c3e;
   position: relative;
 }
@@ -1875,11 +1875,11 @@ section {
   color: #444444;
   font-size: 14px;
   background: #f6f4f4;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
 #footer .footer-top {
-  padding: 60px 0 30px 0;
+  padding: 60px 0 30px;
   background: #fff;
 }
 
@@ -1889,8 +1889,8 @@ section {
 
 #footer .footer-top .footer-contact h4 {
   font-size: 22px;
-  margin: 0 0 30px 0;
-  padding: 2px 0 2px 0;
+  margin: 0 0 30px;
+  padding: 2px 0;
   line-height: 1;
   font-weight: 700;
 }
@@ -1991,7 +1991,7 @@ section {
   color: #fff;
   transition: 0.3s;
   border-radius: 50px;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
 #footer .footer-newsletter form input[type="submit"]:hover {
