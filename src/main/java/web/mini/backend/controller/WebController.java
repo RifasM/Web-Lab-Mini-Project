@@ -32,6 +32,11 @@ public class WebController {
      */
     @RequestMapping("/")
     public String index() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && !("anonymousUser").equals(auth.getName())) {
+            return "home";
+        }
+
         return "index";
     }
 
