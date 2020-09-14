@@ -32,8 +32,11 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "email_address", nullable = false)
-    private String email;
+    @Column(name = "age", nullable = false)
+    private int age;
+
+    @Column(name = "gender", nullable = false)
+    private String gender;
 
     @Column(name = "user_role", nullable = false)
     private String role;
@@ -95,12 +98,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getGender() {
+        return gender;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getRole() {
@@ -109,6 +112,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public int getEnabled() {
@@ -151,7 +162,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
                 ", role='" + role + '\'' +
                 ", enabled=" + enabled +
                 ", createdAt=" + createdAt +
