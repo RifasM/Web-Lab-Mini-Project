@@ -90,7 +90,7 @@ public class UserController {
                         .findById(userId)
                         .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + userId));
 
-        user.setEmail(userDetails.getEmail());
+        user.setUserName(userDetails.getUserName());
         user.setLastName(userDetails.getLastName());
         user.setFirstName(userDetails.getFirstName());
         user.setUpdatedAt(new Date());
