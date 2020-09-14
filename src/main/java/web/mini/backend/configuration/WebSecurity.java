@@ -71,8 +71,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         // raw = password
         // hash = $2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO
         auth.inMemoryAuthentication()
-                .withUser("user").password("$2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO").roles("USER")
+                .withUser("user@pixies.org").password("$2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO").roles("USER")
                 .and()
-                .withUser("admin").password("$2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO").roles("ADMIN");
+                .withUser("admin@pixies.org").password("$2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO").roles("ADMIN");
     }
 }
