@@ -1,73 +1,164 @@
 <!DOCTYPE HTML>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="navbar-home">
-    <header>
-        <!-- Navbar -->
-        <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark d-none d-lg-block" style="z-index: 2000;">
-            <div class="container-fluid">
-                <!-- Navbar brand -->
-                <a
-                        class="navbar-brand nav-link"
-                        href="/#"
-                >
-                    <strong>PIXIES</strong>
-                </a>
-            <button
-                    aria-controls="navbarExample01"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                    class="navbar-toggler"
-                    data-target="#navbarExample01"
-                    data-toggle="collapse"
-                    type="button"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarExample01">
-                <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
-                    <li class="nav-item active">
-                        <a aria-current="page" class="nav-link" href="/#">HOME</a>
-                    </li>
-                    <li class="nav-item">
-                        <a
-                                class="nav-link"
-                                href="/#about"
-                        >ABOUT</a
-                        >
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/#team"
-                        >TEAM</a
-                        >
-                    </li>
-                </ul>
 
-                <ul class="navbar-nav list-inline">
-                    <!-- Icons -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="login">LOG IN</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="signup">SIGN UP</a>
-                    </li>
+<th:block th:fragment="home-header">
+    <!-- Favicons -->
+    <link href="img/favicon.png" rel="icon">
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{vendor/icofont/icofont.min.css}">
+    <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+    <link href="vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="vendor/venobox/venobox.css" rel="stylesheet">
+    <link href="vendor/owl.carousel/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Tempo - v2.1.0
+    * Template URL: https://bootstrapmade.com/tempo-free-onepage-bootstrap-theme/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</th:block>
+
+<th:block th:fragment="navbar-home">
+    <header class="fixed-top " id="header">
+        <div class="container d-flex align-items-center">
+
+            <h1 class="logo mr-auto"><a th:href="@{/}">Pixies</a></h1>
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <!-- <a href="index.html" class="logo mr-auto"><img src="img/logo.png" alt="" class="img-fluid"></a>-->
+
+            <nav class="nav-menu d-none d-lg-block">
+                <ul>
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <!--li><a href="#services">Services</a></li-->
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <!--li><a href="blog.html">Blog</a></li-->
+                    <!--li class="drop-down"><a href="">Drop Down</a>
+                      <ul>
+                        <li><a href="#">Drop Down 1</a></li>
+                        <li class="drop-down"><a href="#">Deep Drop Down</a>
+                          <ul>
+                            <li><a href="#">Deep Drop Down 1</a></li>
+                            <li><a href="#">Deep Drop Down 2</a></li>
+                            <li><a href="#">Deep Drop Down 3</a></li>
+                            <li><a href="#">Deep Drop Down 4</a></li>
+                            <li><a href="#">Deep Drop Down 5</a></li>
+                          </ul>
+                        </li>
+                        <li><a href="#">Drop Down 2</a></li>
+                        <li><a href="#">Drop Down 3</a></li>
+                        <li><a href="#">Drop Down 4</a></li>
+                      </ul>
+                    </li-->
+                    <li><a href="#contact">Contact</a></li>
+
                 </ul>
-            </div>
-            </div>
-        </nav>
-        <!-- Navbar -->
+            </nav><!-- .nav-menu -->
+
+        </div>
     </header>
 </th:block>
 
 
 <!-- Copyright -->
 <th:block th:fragment="footer">
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-        © 2020 Copyright:
-        <a class="text-dark" href="https://rifasm.github.io/">Pixies</a>
-    </div>
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-6 footer-contact">
+                        <h3>Pixies</h3>
+                        <p>
+                            132 AECS Layout <br>
+                            Bangalore, Karnataka 560037<br>
+                            India <br><br>
+                            <strong>Phone:</strong> (Will be Updated Soon)<br>
+                            <strong>Email:</strong> info@pixies.com (Coming Soon)<br>
+                        </p>
+                    </div>
+
+                    <div class="col-lg-2 col-md-6 footer-links">
+                        <h4>Useful Links</h4>
+                        <ul>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#services">Services</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service (Coming Soon)</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy (Coming Soon)</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 footer-links">
+                        <h4>Supported Services</h4>
+                        <ul>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">Photos</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">Gifs</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">Videos</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 footer-newsletter">
+                        <h4>Join Our Newsletter</h4>
+                        <p>Coming Soon</p>
+                        <!--form action="" method="post">
+                          <input type="email" name="email"><input type="submit" value="Subscribe">
+                        </form-->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="container d-md-flex py-4">
+
+            <div class="mr-md-auto text-center text-md-left">
+                <div class="copyright">
+                    &copy; Copyright <strong><span>Pixies</span></strong>. All Rights Reserved
+                </div>
+                <div class="credits">
+                    Developed by <a href="https://rifasm.github.io/">PingIO</a>
+                </div>
+            </div>
+            <div class="social-links text-center text-md-right pt-3 pt-md-0">
+                <a class="twitter" href="#"><i class="bx bxl-twitter"></i></a>
+                <a class="facebook" href="#"><i class="bx bxl-facebook"></i></a>
+                <a class="instagram" href="#"><i class="bx bxl-instagram"></i></a>
+                <a class="google-plus" href="#"><i class="bx bxl-skype"></i></a>
+                <a class="linkedin" href="#"><i class="bx bxl-linkedin"></i></a>
+            </div>
+        </div>
+    </footer><!-- End Footer -->
 </th:block>
 <!-- Copyright -->
 </footer>
 <!--Footer-->
+
+<th:block th:fragment="home-scripts">
+    <!-- Vendor JS Files -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery.easing/jquery.easing.min.js"></script>
+    <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="vendor/venobox/venobox.min.js"></script>
+    <script src="vendor/owl.carousel/owl.carousel.min.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="js/main.js"></script>
+</th:block>
 </html>

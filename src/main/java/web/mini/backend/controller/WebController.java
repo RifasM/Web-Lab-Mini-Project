@@ -2,12 +2,9 @@ package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import web.mini.backend.repository.PostRepository;
 import web.mini.backend.repository.UserRepository;
-import web.mini.backend.utils.PasswordUtil;
 
 @Controller
 public class WebController {
@@ -17,16 +14,20 @@ public class WebController {
     @Autowired
     private PostRepository postRepository;
 
-    private PasswordUtil passwordUtil;
-
     /**
      * Return Landing Page
      *
-     * @return rendered landpage.html
+     * @return rendered landing.html
      */
     @RequestMapping("/")
     public String index() {
-        return "landpage";
+        return "index";
+    }
+
+    // TODO: Remove
+    @RequestMapping("/old")
+    public String old_index() {
+        return "landing";
     }
 
     /**
@@ -35,7 +36,7 @@ public class WebController {
      * @return rendered login.html
      */
     @RequestMapping("/login")
-    public String login(Model model) {
+    public String login() {
         return "login";
     }
 
@@ -52,11 +53,9 @@ public class WebController {
     /**
      * Return Home Page post login
      *
-     * @param userName
-     * @param password
      * @return rendered home.html
      */
-    @RequestMapping(value = "/auth-login", method = RequestMethod.POST)
+    @RequestMapping(value = "/home")
     public String authLogin() {
         return "home";
     }
