@@ -52,18 +52,26 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         //http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
 
         // Config for Login Form
-        http.authorizeRequests().and().formLogin()//
-                // Submit URL of login page.
-                //.loginProcessingUrl("/auth-login") // Submit URL
-                .loginPage("/login")//
-                .defaultSuccessUrl("/home")//
-                .failureUrl("/login?error=true")//
-                //.usernameParameter("username")//
-                //.passwordParameter("password")//
-                .permitAll()
+        http.authorizeRequests()
+                .and()
+                    .formLogin()//
+                    // Submit URL of login page.
+                    //.loginProcessingUrl("/auth-login") // Submit URL
+                    .loginPage("/login")//
+                    .defaultSuccessUrl("/home")//
+                    .failureUrl("/login?error=true")//
+                    //.usernameParameter("username")//
+                    //.passwordParameter("password")//
+                    .permitAll()
                 // Config for Logout Page
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/")
-                .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+                .and()
+                    .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/")
+                    .deleteCookies("JSESSIONID")
+                .and().
+                    exceptionHandling()
+                    .accessDeniedHandler(accessDeniedHandler);
     }
 
     @Autowired
