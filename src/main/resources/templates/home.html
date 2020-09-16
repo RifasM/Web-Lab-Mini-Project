@@ -1,305 +1,339 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+<html lang="en"
       xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
-    <title>Pixies</title>
-    <!-- MDB icon -->
-    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon"/>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
-    <!-- Google Fonts Roboto -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-    />
-    <!-- MDB -->
-    <link rel="stylesheet" href="css/mdb.min.css" />
-    <!-- Custom styles -->
-    <style>
-    </style>
-  </head>
-  <body>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <!--Main Navigation-->
-    <header>
+    <title>Pixies - Home</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
 
-      <!-- Navbar -->
-      <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark d-none d-lg-block" style="z-index: 2000;">
-          <div class="container-fluid">
-              <!-- Navbar brand -->
-              <a
-                  class="navbar-brand nav-link"
-                  target="_blank"
-                  href="#"
-                  >
-                  <strong>PIXIES</strong>
-              </a>
-              <button
-                  class="navbar-toggler"
-                  type="button"
-                  data-toggle="collapse"
-                  data-target="#navbarExample01"
-                  aria-controls="navbarExample01"
-                  aria-expanded="false"
-                  aria-label="Toggle navigation"
-                  >
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarExample01">
-                  <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
-                      <li class="nav-item active">
-                          <a class="nav-link" aria-current="page" href="#discover">Home</a>
-                      </li>
-                      <li class="nav-item">
-                          <a
-                              class="nav-link"
-                              href="#"
-                              >Today</a
-                          >
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link" href="#"
-                              >Following</a
-                          >
-                      </li>
-                  </ul>
-                  
-                  <div class="input-group">
-                      <span class="input-group-text border-0" id="search-addon"
-                          ><i class="fas fa-search"></i
-                          ></span>
-                      <input
-                      type="search"
-                      class="form-control rounded"
-                      placeholder="Search"
-                      aria-label="Search"
-                      aria-describedby="search-addon"
-                      />
-                  </div>
-                  
-                  <ul class="navbar-nav list-inline">
-                      <!-- Icons -->
-                      <li class="">
-                          <a
-                              class="nav-link"
-                              href="https://twitter.com/MDBootstrap"
-                              rel="nofollow"
-                              target="_blank"
-                              >
-                              <i class="fas fa-bell"></i>
-                          </a>
-                      </li>
-                      <li class="nav-item">
-                          <a
-                              class="nav-link"
-                              href="https://twitter.com/MDBootstrap"
-                              rel="nofollow"
-                              target="_blank"
-                              >
-                              <i class="fas fa-comment"></i>
-                          </a>
-                      </li>
-                          <li class="nav-item dropdown">
-                              <a
-                                  class="nav-link dropdown-toggle d-flex align-items-center"
-                                  href="#"
-                                  id="navbarDropdownMenuLink"
-                                  role="button"
-                                  data-toggle="dropdown"
-                                  aria-expanded="false"
-                                  >
-                                  <img
-                                  src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg"
-                                  class="rounded-circle"
-                                  height="22"
-                                  alt=""
-                                  loading="lazy"
-                                  />
-                              </a>
-                              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                  <li><a class="dropdown-item" href="#">My profile</a></li>
-                                  <li><a class="dropdown-item" href="settings.html">Settings</a></li>
-                                  <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
-                              </ul>
-                          </li>
-                  </ul>
-              </div>
-          </div>
-      </nav>
-        <br>
-        <!-- Navbar -->
-    </header>
-    <!--Main Navigation-->
+   <th:block th:insert="includes/home-fragments::home-header"></th:block>
+</head>
 
-    <span sec:authorize="isAuthenticated()">
-                | Logged user: <span sec:authentication="name"></span> |
-                Roles: <span sec:authentication="principal.authorities"></span> |
-                <a th:href="@{/logout}">Sign Out</a>
-            </span>
+<body>
 
-    <!--Main layout-->
-    <main class="my-5">
+<!-- ======= Header ======= -->
+<th:block th:insert="includes/home-fragments::navbar-home"></th:block>
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <!--section id="breadcrumbs" class="breadcrumbs">
         <div class="container">
-            <!--Section: Content-->
-            <section class="text-center">
-                <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-                <h4 class="mb-3"><strong>Latest Ideas</strong></h4>
 
-                <div class="row">
-            <div class="col-lg-4 col-md-12 mb-4">
-              <div class="card">
-                <div class="bg-image hover-overlay ripple" data-ripple-color="light">
-                  <img
-                    src="https://mdbootstrap.com/img/new/standard/nature/184.jpg"
-                    class="img-fluid"
-                  />
-                  <a href="#!">
-                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                  </a>
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">Post title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make up the bulk of the
-                    card's content.
-                  </p>
-                </div>
-              </div>
+            <ol>
+                <li><a th:href="@{/}">Home</a></li>
+                <li>Home</li>
+            </ol>
+            <h2>Blog</h2>
+
+        </div>
+    </section--><!-- End Breadcrumbs -->
+
+    <!-- ======= Blog Section ======= -->
+    <section id="blog" class="blog">
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-8 entries">
+
+                    <div class="row">
+
+                        <div class="col-md-6 d-flex align-items-stretch">
+                            <article class="entry">
+
+                                <div class="entry-img">
+                                    <img src="img/blog-1.jpg" alt="" class="img-fluid">
+                                </div>
+
+                                <h2 class="entry-title">
+                                    <a href="blog-single.html">Dolorum optio tempore voluptas dignissimos cumque fuga qui quibusdam quia</a>
+                                </h2>
+
+                                <div class="entry-meta">
+                                    <ul>
+                                        <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="blog-single.html">John Doe</a></li>
+                                        <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">Jan 1, 2020</time></a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="entry-content">
+                                    <p>
+                                        Similique neque nam consequuntur ad non maxime aliquam quas. Quibusdam animi praesentium. Aliquam et laboriosam eius aut nostrum quidem aliquid dicta zena prista maraeda talan mas indera.
+                                    </p>
+                                    <div class="read-more">
+                                        <a href="blog-single.html">Read More</a>
+                                    </div>
+                                </div>
+
+                            </article><!-- End blog entry -->
+                        </div>
+
+                        <div class="col-md-6 d-flex align-items-stretch">
+                            <article class="entry">
+
+                                <div class="entry-img">
+                                    <img src="img/blog-2.jpg" alt="" class="img-fluid">
+                                </div>
+
+                                <h2 class="entry-title">
+                                    <a href="blog-single.html">Nisi magni odit consequatur autem nulla dolorem</a>
+                                </h2>
+
+                                <div class="entry-meta">
+                                    <ul>
+                                        <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="blog-single.html">John Doe</a></li>
+                                        <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">Jan 1, 2020</time></a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="entry-content">
+                                    <p>
+                                        Ad impedit qui officiis est in non aliquid veniam laborum. Id ipsum qui aut. Sit aliquam et quia molestias laboriosam. Tempora nam odit omnis eum corrupti qui aliquid excepturi molestiae. Facilis et sint quos sed voluptas. Maxime sed tempore enim omnis non alias.
+                                    </p>
+                                    <div class="read-more">
+                                        <a href="blog-single.html">Read More</a>
+                                    </div>
+                                </div>
+
+                            </article><!-- End blog entry -->
+                        </div>
+
+                        <div class="col-md-6 d-flex align-items-stretch">
+                            <article class="entry">
+
+                                <div class="entry-img">
+                                    <img src="img/blog-3.jpg" alt="" class="img-fluid">
+                                </div>
+
+                                <h2 class="entry-title">
+                                    <a href="blog-single.html">Possimus soluta ut id suscipit ea ut. In quo quia et soluta libero sit sint.</a>
+                                </h2>
+
+                                <div class="entry-meta">
+                                    <ul>
+                                        <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="blog-single.html">John Doe</a></li>
+                                        <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">Jan 1, 2020</time></a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="entry-content">
+                                    <p>
+                                        Aut iste neque ut illum qui perspiciatis similique recusandae non. Fugit autem dolorem labore omnis et. Eum temporibus fugiat voluptate enim tenetur sunt omnis tara kero pakla metaruna nedore stan.
+                                    </p>
+                                    <div class="read-more">
+                                        <a href="blog-single.html">Read More</a>
+                                    </div>
+                                </div>
+
+                            </article><!-- End blog entry -->
+                        </div>
+
+                        <div class="col-md-6 d-flex align-items-stretch">
+                            <article class="entry">
+
+                                <div class="entry-img">
+                                    <img src="img/blog-4.jpg" alt="" class="img-fluid">
+                                </div>
+
+                                <h2 class="entry-title">
+                                    <a href="blog-single.html">Non rem rerum nam cum quo minus. Dolor distinctio deleniti explicabo eius exercitationem.</a>
+                                </h2>
+
+                                <div class="entry-meta">
+                                    <ul>
+                                        <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="blog-single.html">John Doe</a></li>
+                                        <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">Jan 1, 2020</time></a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="entry-content">
+                                    <p>
+                                        Aspernatur rerum perferendis et sint. Voluptates cupiditate voluptas atque quae. Rem veritatis rerum enim et autem. Saepe atque cum eligendi eaque iste omnis a qui.
+                                    </p>
+                                    <div class="read-more">
+                                        <a href="blog-single.html">Read More</a>
+                                    </div>
+                                </div>
+
+                            </article><!-- End blog entry -->
+                        </div>
+
+                        <div class="col-md-6 d-flex align-items-stretch">
+                            <article class="entry">
+
+                                <div class="entry-img">
+                                    <img src="img/blog-5.jpg" alt="" class="img-fluid">
+                                </div>
+
+                                <h2 class="entry-title">
+                                    <a href="blog-single.html">Blanditiis dignissimos deleniti. Rerum iste et.</a>
+                                </h2>
+
+                                <div class="entry-meta">
+                                    <ul>
+                                        <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="blog-single.html">John Doe</a></li>
+                                        <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">Jan 1, 2020</time></a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="entry-content">
+                                    <p>
+                                        Quidem et eum explicabo quia illo numquam nostrum corrupti provident. Quia aspernatur et et facere. Quisquam maiores natus nihil incidunt ipsum est optio eum maxime. Dignissimos vitae explicabo. Corrupti esse sed a a. Laborum optio reprehenderit quia dena per.
+                                    </p>
+                                    <div class="read-more">
+                                        <a href="blog-single.html">Read More</a>
+                                    </div>
+                                </div>
+
+                            </article><!-- End blog entry -->
+                        </div>
+
+                        <div class="col-md-6 d-flex align-items-stretch">
+                            <article class="entry">
+
+                                <div class="entry-img">
+                                    <img src="img/blog-6.jpg" alt="" class="img-fluid">
+                                </div>
+
+                                <h2 class="entry-title">
+                                    <a href="blog-single.html">Debitis cupiditate saepe ex quam aut id. Consequatur dignissimos et id id.</a>
+                                </h2>
+
+                                <div class="entry-meta">
+                                    <ul>
+                                        <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="blog-single.html">John Doe</a></li>
+                                        <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">Jan 1, 2020</time></a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="entry-content">
+                                    <p>
+                                        Modi dolor et placeat ut iure ad. Qui perferendis fugit quo et cumque facilis et debitis rerum. Repellendus animi qui eos. Unde perferendis et tempora Ratione porro omnis magn delata sera marto ned.
+                                    </p>
+                                    <div class="read-more">
+                                        <a href="blog-single.html">Read More</a>
+                                    </div>
+                                </div>
+
+                            </article><!-- End blog entry -->
+                        </div>
+
+                    </div>
+
+                    <div class="blog-pagination">
+                        <ul class="justify-content-center">
+                            <li class="disabled"><i class="icofont-rounded-left"></i></li>
+                            <li><a href="#">1</a></li>
+                            <li class="active"><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#"><i class="icofont-rounded-right"></i></a></li>
+                        </ul>
+                    </div>
+
+                </div><!-- End blog entries list -->
+
+                <div class="col-lg-4">
+
+                    <div class="sidebar">
+
+                        <h3 class="sidebar-title">Search</h3>
+                        <div class="sidebar-item search-form">
+                            <form action="">
+                                <input type="text">
+                                <button type="submit"><i class="icofont-search"></i></button>
+                            </form>
+
+                        </div><!-- End sidebar search formn-->
+
+                        <h3 class="sidebar-title">Categories</h3>
+                        <div class="sidebar-item categories">
+                            <ul>
+                                <li><a href="#">General <span>(25)</span></a></li>
+                                <li><a href="#">Lifestyle <span>(12)</span></a></li>
+                                <li><a href="#">Travel <span>(5)</span></a></li>
+                                <li><a href="#">Design <span>(22)</span></a></li>
+                                <li><a href="#">Creative <span>(8)</span></a></li>
+                                <li><a href="#">Educaion <span>(14)</span></a></li>
+                            </ul>
+
+                        </div><!-- End sidebar categories-->
+
+                        <h3 class="sidebar-title">Recent Posts</h3>
+                        <div class="sidebar-item recent-posts">
+                            <div class="post-item clearfix">
+                                <img src="img/blog-recent-1.jpg" alt="">
+                                <h4><a href="blog-single.html">Nihil blanditiis at in nihil autem</a></h4>
+                                <time datetime="2020-01-01">Jan 1, 2020</time>
+                            </div>
+
+                            <div class="post-item clearfix">
+                                <img src="img/blog-recent-2.jpg" alt="">
+                                <h4><a href="blog-single.html">Quidem autem et impedit</a></h4>
+                                <time datetime="2020-01-01">Jan 1, 2020</time>
+                            </div>
+
+                            <div class="post-item clearfix">
+                                <img src="img/blog-recent-3.jpg" alt="">
+                                <h4><a href="blog-single.html">Id quia et et ut maxime similique occaecati ut</a></h4>
+                                <time datetime="2020-01-01">Jan 1, 2020</time>
+                            </div>
+
+                            <div class="post-item clearfix">
+                                <img src="img/blog-recent-4.jpg" alt="">
+                                <h4><a href="blog-single.html">Laborum corporis quo dara net para</a></h4>
+                                <time datetime="2020-01-01">Jan 1, 2020</time>
+                            </div>
+
+                            <div class="post-item clearfix">
+                                <img src="img/blog-recent-5.jpg" alt="">
+                                <h4><a href="blog-single.html">Et dolores corrupti quae illo quod dolor</a></h4>
+                                <time datetime="2020-01-01">Jan 1, 2020</time>
+                            </div>
+
+                        </div><!-- End sidebar recent posts-->
+
+                        <h3 class="sidebar-title">Tags</h3>
+                        <div class="sidebar-item tags">
+                            <ul>
+                                <li><a href="#">App</a></li>
+                                <li><a href="#">IT</a></li>
+                                <li><a href="#">Business</a></li>
+                                <li><a href="#">Business</a></li>
+                                <li><a href="#">Mac</a></li>
+                                <li><a href="#">Design</a></li>
+                                <li><a href="#">Office</a></li>
+                                <li><a href="#">Creative</a></li>
+                                <li><a href="#">Studio</a></li>
+                                <li><a href="#">Smart</a></li>
+                                <li><a href="#">Tips</a></li>
+                                <li><a href="#">Marketing</a></li>
+                            </ul>
+
+                        </div><!-- End sidebar tags-->
+
+                    </div><!-- End sidebar -->
+
+                </div><!-- End blog sidebar -->
+
             </div>
 
-            <div class="col-lg-4 col-md-6 mb-4">
-              <div class="card">
-                <div class="bg-image hover-overlay ripple" data-ripple-color="light">
-                  <img
-                    src="https://mdbootstrap.com/img/new/standard/nature/023.jpg"
-                    class="img-fluid"
-                  />
-                  <a href="#!">
-                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                  </a>
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">Post title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make up the bulk of the
-                    card's content.
-                  </p>
-                </div>
-              </div>
-            </div>
+        </div>
+    </section><!-- End Blog Section -->
 
-            <div class="col-lg-4 col-md-6 mb-4">
-              <div class="card">
-                <div class="bg-image hover-overlay ripple" data-ripple-color="light">
-                  <img
-                    src="https://mdbootstrap.com/img/new/standard/nature/111.jpg"
-                    class="img-fluid"
-                  />
-                  <a href="#!">
-                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                  </a>
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">Post title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make up the bulk of the
-                    card's content.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+</main><!-- End #main -->
 
-          <div class="row">
-            <div class="col-lg-4 col-md-12 mb-4">
-              <div class="card">
-                <div class="bg-image hover-overlay ripple" data-ripple-color="light">
-                  <img
-                    src="https://mdbootstrap.com/img/new/standard/nature/002.jpg"
-                    class="img-fluid"
-                  />
-                  <a href="#!">
-                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                  </a>
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">Post title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make up the bulk of the
-                    card's content.
-                  </p>
-                </div>
-              </div>
-            </div>
+<!-- ======= Footer ======= -->
+<th:block th:insert="includes/home-fragments::footer"></th:block>
 
-            <div class="col-lg-4 col-md-6 mb-4">
-              <div class="card">
-                <div class="bg-image hover-overlay ripple" data-ripple-color="light">
-                  <img
-                    src="https://mdbootstrap.com/img/new/standard/nature/022.jpg"
-                    class="img-fluid"
-                  />
-                  <a href="#!">
-                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                  </a>
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">Post title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make up the bulk of the
-                    card's content.
-                  </p>
-                </div>
-              </div>
-            </div>
+<a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
 
-            <div class="col-lg-4 col-md-6 mb-4">
-              <div class="card">
-                <div class="bg-image hover-overlay ripple" data-ripple-color="light">
-                  <img
-                    src="https://mdbootstrap.com/img/new/standard/nature/035.jpg"
-                    class="img-fluid"
-                  />
-                  <a href="#!">
-                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                  </a>
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">Post title</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make up the bulk of the
-                    card's content.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <!--Section: Content-->
+<th:block th:insert="includes/home-fragments::home-scripts"></th:block>
 
-      </div>
-    </main>
-    <!--Main layout-->
+</body>
 
-    <!--Footer-->
-    <footer class="bg-light text-lg-left">
-
-      <!-- Copyright -->
-      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-        © 2020 Copyright:
-        <a class="text-dark" href="https://mdbootstrap.com/">Pixies</a>
-      </div>
-      <!-- Copyright -->
-    </footer>
-    <!--Footer-->
-    
-  </body>
-
-  <!-- MDB -->
-  <script type="text/javascript" src="js/mdb.min.js"></script>
-  <!-- Custom scripts -->
-  <script type="text/javascript"></script>
 </html>

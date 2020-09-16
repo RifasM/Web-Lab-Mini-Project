@@ -97,9 +97,13 @@ public class WebController {
      *
      * @return rendered home.html
      */
-    @RequestMapping(value = "/home")
+    @RequestMapping("/home")
     public String authLogin() {
         return "home";
     }
 
+    @RequestMapping("/profile")
+    public String profile(){
+        return "profile";
+    }
 }
