@@ -81,6 +81,7 @@
                         <input class="form-control input_user" id="age" name="age" placeholder="Enter Your Age" required
                                type="number" value="">
                     </div>
+                    <label class="input-group" id="age-errors"></label>
                     <div class="input-group mb-3">
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-info"></i></span>
@@ -94,9 +95,7 @@
                     </div>
                     <label class="input-group" id="gender_warning"></label>
                     <div class="d-flex justify-content-center mt-3 login_container">
-                        <button class="btn login_btn" name="button" onclick="validate_and_submit()">Sign
-                            Up
-                        </button>
+                        <a class="btn login_btn" href="javascript:validate_and_submit()">Sign Up</a>
                     </div>
                 </form>
             </div>
@@ -133,7 +132,7 @@
         clearTimeout(typingTimer);
     });*/
 
-    function matchpass() {
+    function validatePassword() {
         var firstpassword = document.getElementById("password").value;
         var secondpassword = document.getElementById("repassword").value;
 
@@ -146,7 +145,7 @@
         }
     }
 
-    function matchGender() {
+    function validateGender() {
         var ddl = document.getElementById("gender");
         if (ddl.selectedIndex === 0) {
             document.getElementById("gender_warning").innerHTML = "<p class=\"text-danger\">Please Select your Gender</p>";
@@ -157,11 +156,18 @@
         }
     }
 
+    function validateAge() {
+        var age = document.getElementById("age").value;
+        if (age >= 18) {
+            return true;
+        } else {
+            document.getElementById("age-errors").innerHTML = "<span class=\"badge badge-pill badge-danger\">Age should be Above 18</span>";
+            return false;
+        }
+    }
+
     function validate_and_submit() {
-        console.log("here");
-        console.log("conditions " + matchpass() && matchGender())
-        if (matchpass() && matchGender()) {
-            console.log("called");
+        if (validateGender() && validatePassword() && validateAge()) {
             document.getElementById("registration_form").submit();
         } else {
             document.getElementById("errors").innerHTML = "<span class=\"badge badge-pill badge-danger\">Please Correct the following</span>";
