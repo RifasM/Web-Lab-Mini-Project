@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-center form_container" style="margin-top: 100px;">
-                <form id="registration_form" method="post" onsubmit="validate_and_submit()" th:action="@{/signup}">
+                <form id="registration_form" method="post" th:action="@{/signup}">
                     <label class="input-group" id="errors"></label>
                     <div class="input-group mb-3">
                         <div class="input-group-append">
@@ -94,7 +94,7 @@
                     </div>
                     <label class="input-group" id="gender_warning"></label>
                     <div class="d-flex justify-content-center mt-3 login_container">
-                        <button class="btn login_btn" id="submit_btn" name="button" onclick="validate_and_submit()">Sign
+                        <button class="btn login_btn" name="button" onclick="validate_and_submit()">Sign
                             Up
                         </button>
                     </div>
@@ -148,8 +148,7 @@
 
     function matchGender() {
         var ddl = document.getElementById("gender");
-        var selectedValue = ddl.options[ddl.selectedIndex].value;
-        if (selectedValue === "opt") {
+        if (ddl.selectedIndex === 0) {
             document.getElementById("gender_warning").innerHTML = "<p class=\"text-danger\">Please Select your Gender</p>";
             return false;
         } else {
@@ -159,7 +158,10 @@
     }
 
     function validate_and_submit() {
+        console.log("here");
+        console.log("conditions " + matchpass() && matchGender())
         if (matchpass() && matchGender()) {
+            console.log("called");
             document.getElementById("registration_form").submit();
         } else {
             document.getElementById("errors").innerHTML = "<span class=\"badge badge-pill badge-danger\">Please Correct the following</span>";
