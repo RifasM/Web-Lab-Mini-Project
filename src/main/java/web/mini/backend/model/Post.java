@@ -22,8 +22,14 @@ public class Post implements Serializable {
     @Column(name = "post_type", nullable = false)
     private String postType;
 
-    @Column(name = "post_location", nullable = false)
-    private String postLocation;
+    @Column(name = "post_url", nullable = false)
+    private String postUrl;
+
+    @Column(name = "post_tags", nullable = false)
+    private String tags;
+
+    @Column(name = "post_enabled", nullable = false)
+    private int enabled;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -73,12 +79,28 @@ public class Post implements Serializable {
         this.postType = postType;
     }
 
-    public String getPostLocation() {
-        return postLocation;
+    public String getPostUrl() {
+        return postUrl;
     }
 
-    public void setPostLocation(String postLocation) {
-        this.postLocation = postLocation;
+    public void setPostUrl(String postUrl) {
+        this.postUrl = postUrl;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 
     public Date getPostDate() {
@@ -92,12 +114,15 @@ public class Post implements Serializable {
     @Override
     public String toString() {
         return "Post{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", postTitle='" + postTitle + '\'' +
                 ", postDescription='" + postDescription + '\'' +
                 ", postType='" + postType + '\'' +
-                ", postLocation='" + postLocation + '\'' +
-                ", postDate='" + postDate + '\'' +
+                ", postUrl='" + postUrl + '\'' +
+                ", tags='" + tags + '\'' +
+                ", enabled=" + enabled +
+                ", postDate=" + postDate +
+                ", postUser=" + postUser +
                 '}';
     }
 }
