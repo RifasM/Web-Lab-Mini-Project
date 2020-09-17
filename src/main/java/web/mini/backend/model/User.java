@@ -32,8 +32,8 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "age", nullable = false)
-    private int age;
+    @Column(name = "date_of_birth", nullable = false)
+    private Date dob;
 
     @Column(name = "gender", nullable = false)
     private String gender;
@@ -114,12 +114,12 @@ public class User {
         this.role = role;
     }
 
-    public int getAge() {
-        return age;
+    public Date getDob() {
+        return dob;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setDob(Date dob) {
+        this.dob = dob;
     }
 
     public int getEnabled() {
@@ -162,7 +162,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", age=" + age +
+                ", dob=" + dob +
                 ", gender='" + gender + '\'' +
                 ", role='" + role + '\'' +
                 ", enabled=" + enabled +
