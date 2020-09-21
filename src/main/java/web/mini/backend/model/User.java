@@ -30,6 +30,7 @@ public class User {
     private String name;
 
     @Column(name = "date_of_birth", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date dob;
 
     @Column(name = "gender", nullable = false)

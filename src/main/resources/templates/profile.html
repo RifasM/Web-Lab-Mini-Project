@@ -77,29 +77,49 @@
                 <!-- Form -->
                 <form action="#!">
 
-          <p>Update your details</p>
-
-          <p>
-            <a th:href="@{/home}">Go home instead</a>
-          </p>
+          <a href="#">Update your password</a>
 
           <!-- Name -->
-          <div class="md-form mt-3">
-            <input class="form-control" id="materialSubscriptionFormPasswords" type="text">
-            <label for="materialSubscriptionFormPasswords">Name</label>
-          </div>
+                  <div class="md-form mt-3">
+                    <input class="form-control" id="name" th:value="${basic_details.name}" type="text">
+                    <label for="name">Name</label>
+                  </div>
 
-          <!-- E-mai -->
-          <div class="md-form">
-            <input class="form-control" id="materialSubscriptionFormEmail" type="email">
-            <label for="materialSubscriptionFormEmail">E-mail</label>
-          </div>
+                  <!-- E-mail -->
+                  <div class="md-form">
+                    <input class="form-control" id="email" th:value="${basic_details.userName}" type="email">
+                    <label for="email">E-mail/Username</label>
+                  </div>
 
-          <!-- Sign in button -->
-          <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Sign in
-          </button>
+                  <!-- DOB -->
+                  <div class="md-form">
+                    <input class="form-control" id="dob" max="2099-09-13" min="1900-01-01"
+                           th:value="${basic_details.dob}" type="date">
+                    <label for="dob">Date of Birth</label>
+                  </div>
 
-          </form>
+                  <!-- Gender -->
+                  <span class="badge badge-danger" id="gender_warning"></span>
+                  <input id="gender_val" th:value="${basic_details.gender}" type="hidden"/>
+                  <div class="md-form">
+                    <select class="form-control input_user" id="gender" name="gender" required>
+                      <option value="opt">Select an Option</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="nts">Prefer Not to Say</option>
+                    </select>
+                  </div>
+                  <script>
+                    let val = document.getElementById("gender_val").value;
+                    document.getElementById("gender").value = val;
+                  </script>
+
+                  <!--  button -->
+                  <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">
+                    Update
+                  </button>
+
+                </form>
           <!-- Form -->
 
         </div>
@@ -119,6 +139,26 @@
 <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
 
 <th:block th:insert="includes/home-fragments::home-scripts"></th:block>
+<script>
+  function validateGender() {
+    var ddl = document.getElementById("gender");
+    if (ddl.selectedIndex === 0) {
+      document.getElementById("gender_warning").innerHTML = "Please Select your Gender";
+      return false;
+    } else {
+      document.getElementById("gender_warning").innerHTML = "";
+      return true;
+    }
+  }
+
+  function getDob() {
+    var date = new Date();
+    return (date.getMonth() + 1) + "-" + date.getDate() + "-" + (date.getFullYear() - 18);
+  }
+
+  document.getElementById("dob").prop("max", getDob());
+  document.getElementById("#dob").validate();
+</script>
 
 </body>
 

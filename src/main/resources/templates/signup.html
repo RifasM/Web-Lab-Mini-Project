@@ -74,12 +74,6 @@
                         <input class="form-control input_user" id="dob" max="2099-09-13" min="1900-01-01" name="dob"
                                placeholder="DOB" required
                                type="date" value="">
-                        <script>
-                            $(function () {
-                                $("input[type=date]").prop("max", getDob());
-                                $("#dob").validate();
-                            });
-                        </script>
                     </div>
                     <label class="input-group" id="age-errors"></label>
                     <div class="input-group mb-3">
@@ -160,6 +154,9 @@
         var date = new Date();
         return (date.getMonth() + 1) + "-" + date.getDate() + "-" + (date.getFullYear() - 18);
     }
+
+    document.getElementById("dob").prop("max", getDob());
+    document.getElementById("#dob").validate();
 
     function validate_and_submit() {
         if (validateGender() && validatePassword()) {
