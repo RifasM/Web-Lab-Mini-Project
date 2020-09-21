@@ -13,6 +13,7 @@ import web.mini.backend.repository.UserRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 public class WebController {
@@ -100,8 +101,45 @@ public class WebController {
     @RequestMapping("/profile")
     public ModelAndView profile(Authentication auth) {
         ModelAndView user_data = new ModelAndView("profile");
-        System.out.println(userRepository.findByUsername(auth.getName()));
+        user_data.addObject("username_exists", "no");
         user_data.addObject("basic_details", userRepository.findByUsername(auth.getName()));
         return user_data;
+    }
+
+    /**
+     * Update Profile Page
+     *
+     * @return updated profile page
+     */
+    @PostMapping("/profile")
+    public ModelAndView profile(String id,
+                                String email,
+                                String name,
+                                String dob,
+                                String gender) throws ParseException {
+        ModelAndView errors = new ModelAndView("profile");
+
+        User user = userRepository.findById(Long.parseLong(id)).orElseThrow();
+        User check = userRepository.findByUsername(email);
+
+        if (check != null && !user.getUserName().equals(email)) {
+            errors.addObject("username_exists", "yes");
+            return errors;
+        }
+
+        user.setUserName(email);
+        user.setName(name);
+        user.setDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
+        user.setGender(gender);
+        user.setUpdatedAt(new Date());
+        user.setUpdatedBy(email);
+
+        errors.addObject("basic_details", user);
+        errors.addObject("username_exists", "no");
+
+        userRepository.save(user);
+
+        return errors;
+
     }
 }

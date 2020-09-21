@@ -75,26 +75,29 @@
               <div class="card-body px-lg-5">
 
                 <!-- Form -->
-                <form action="#!">
+                <form method="post" th:action="@{/profile}">
 
-          <a href="#">Update your password</a>
+                    <a href="#">Update your password</a>
 
-          <!-- Name -->
-                  <div class="md-form mt-3">
-                    <input class="form-control" id="name" th:value="${basic_details.name}" type="text">
-                    <label for="name">Name</label>
-                  </div>
+                    <!-- Name -->
+                    <div class="md-form mt-3">
+                        <input class="form-control" id="name" name="name" th:value="${basic_details.name}" type="text">
+                        <label for="name">Name</label>
+                    </div>
 
-                  <!-- E-mail -->
-                  <div class="md-form">
-                    <input class="form-control" id="email" th:value="${basic_details.userName}" type="email">
-                    <label for="email">E-mail/Username</label>
-                  </div>
+                    <!-- E-mail -->
+                    <div class="md-form">
+                        <th:block th:if="${username_exists == 'yes'}"><span class="badge badge-danger">The given username exists</span>
+                        </th:block>
+                        <input class="form-control" id="email" name="email" th:value="${basic_details.userName}"
+                               type="email">
+                        <label for="email">E-mail/Username</label>
+                    </div>
 
                   <!-- DOB -->
                   <div class="md-form">
-                    <input class="form-control" id="dob" max="2099-09-13" min="1900-01-01"
-                           th:value="${basic_details.dob}" type="date">
+                      <input class="form-control" id="dob" max="2099-09-13" min="1900-01-01"
+                             name="dob" th:value="${basic_details.dob}" type="date">
                     <label for="dob">Date of Birth</label>
                   </div>
 
@@ -114,6 +117,7 @@
                     document.getElementById("gender").value = val;
                   </script>
 
+                    <input name="id" th:value="${basic_details.id}" type="hidden">
                   <!--  button -->
                   <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">
                     Update
