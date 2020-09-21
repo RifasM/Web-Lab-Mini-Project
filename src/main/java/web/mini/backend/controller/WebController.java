@@ -134,10 +134,10 @@ public class WebController {
         user.setUpdatedAt(new Date());
         user.setUpdatedBy(email);
 
+        userRepository.save(user);
+
         errors.addObject("basic_details", user);
         errors.addObject("username_exists", "no");
-
-        userRepository.save(user);
 
         return errors;
 
