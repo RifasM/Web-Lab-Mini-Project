@@ -64,22 +64,22 @@
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-user-circle"></i></span>
                         </div>
-                        <input class="form-control input_user" id="first_name" name="first_name"
-                               placeholder="Enter First Name" required type="text" value="">
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-user-circle"></i></span>
-                        </div>
-                        <input class="form-control input_user" id="last_name" name="last_name"
-                               placeholder="Enter Last Name" required type="text" value="">
+                        <input class="form-control input_user" id="name" name="name"
+                               placeholder="Name" required type="text" value="">
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-child"></i></span>
                         </div>
-                        <input class="form-control input_user" id="age" name="age" placeholder="Enter Your Age" required
-                               type="number" value="">
+                        <input class="form-control input_user" id="dob" max="2099-09-13" min="1900-01-01" name="dob"
+                               placeholder="DOB" required
+                               type="date" value="">
+                        <script>
+                            $(function () {
+                                $("input[type=date]").prop("max", getDob());
+                                $("#dob").validate();
+                            });
+                        </script>
                     </div>
                     <label class="input-group" id="age-errors"></label>
                     <div class="input-group mb-3">
@@ -156,18 +156,13 @@
         }
     }
 
-    function validateAge() {
-        var age = document.getElementById("age").value;
-        if (age >= 18) {
-            return true;
-        } else {
-            document.getElementById("age-errors").innerHTML = "<span class=\"badge badge-pill badge-danger\">Age should be Above 18</span>";
-            return false;
-        }
+    function getDob() {
+        var date = new Date();
+        return (date.getMonth() + 1) + "-" + date.getDate() + "-" + (date.getFullYear() - 18);
     }
 
     function validate_and_submit() {
-        if (validateGender() && validatePassword() && validateAge()) {
+        if (validateGender() && validatePassword()) {
             document.getElementById("registration_form").submit();
         } else {
             document.getElementById("errors").innerHTML = "<span class=\"badge badge-pill badge-danger\">Please Correct the following</span>";

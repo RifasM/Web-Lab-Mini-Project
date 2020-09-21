@@ -47,23 +47,67 @@
           </div>
 
           <div class="portfolio-info">
-            <h3>Project information</h3>
+            <h3>Personal information</h3>
             <ul>
-              <li><strong>Category</strong>: Web design</li>
-              <li><strong>Client</strong>: ASU Company</li>
-              <li><strong>Project date</strong>: 01 March, 2020</li>
-              <li><strong>Project URL</strong>: <a href="#">www.example.com</a></li>
+              <li><strong>Name</strong>:
+                <th:block th:text="${basic_details.name}"/>
+              </li>
+              <li><strong>Email</strong>:
+                <th:block th:text="${basic_details.userName}"/>
+              </li>
+              <li><a class="btn btn-outline-danger" th:href="@{/logout}">Logout</a></li>
             </ul>
           </div>
 
         </div>
 
         <div class="portfolio-description">
-          <h2>This is an example of portfolio detail</h2>
+          <h2>Your details</h2>
           <p>
-            Autem ipsum nam porro corporis rerum. Quis eos dolorem eos itaque inventore commodi labore quia quia. Exercitationem repudiandae officiis neque suscipit non officia eaque itaque enim. Voluptatem officia accusantium nesciunt est omnis tempora consectetur dignissimos. Sequi nulla at esse enim cum deserunt eius.
+            <!-- Material form subscription -->
+            <div class="card">
+
+              <h5 class="card-header info-color white-text text-center py-4">
+                <strong>Edit Details</strong>
+              </h5>
+
+              <!--Card content-->
+              <div class="card-body px-lg-5">
+
+                <!-- Form -->
+                <form action="#!">
+
+          <p>Update your details</p>
+
+          <p>
+            <a th:href="@{/home}">Go home instead</a>
           </p>
+
+          <!-- Name -->
+          <div class="md-form mt-3">
+            <input class="form-control" id="materialSubscriptionFormPasswords" type="text">
+            <label for="materialSubscriptionFormPasswords">Name</label>
+          </div>
+
+          <!-- E-mai -->
+          <div class="md-form">
+            <input class="form-control" id="materialSubscriptionFormEmail" type="email">
+            <label for="materialSubscriptionFormEmail">E-mail</label>
+          </div>
+
+          <!-- Sign in button -->
+          <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Sign in
+          </button>
+
+          </form>
+          <!-- Form -->
+
         </div>
+
+      </div>
+      <!-- Material form subscription -->
+      </p>
+      </div>
 
       </div>
     </section><!-- End Portfolio Details Section -->

@@ -7,10 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 import web.mini.backend.model.User;
 import web.mini.backend.repository.UserRepository;
 
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 @Controller
 public class WebController {
@@ -64,18 +66,16 @@ public class WebController {
     public String signup(String username,
                          String password,
                          String repassword,
-                         String first_name,
-                         String last_name,
-                         Date age,
-                         String gender) {
-        if(repassword.equals(password)){
+                         String name,
+                         String dob,
+                         String gender) throws ParseException {
+        if (repassword.equals(password)) {
             User user = new User();
 
             user.setUserName(username);
             user.setPassword(passwordEncoder.encode(password));
-            user.setFirstName(first_name);
-            user.setLastName(last_name);
-            user.setDob(age);
+            user.setName(name);
+            user.setDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
             user.setGender(gender);
             user.setEnabled(1);
             user.setRole("ROLE_USER");
@@ -98,7 +98,10 @@ public class WebController {
     }
 
     @RequestMapping("/profile")
-    public String profile(){
-        return "profile";
+    public ModelAndView profile(Authentication auth) {
+        ModelAndView user_data = new ModelAndView("profile");
+        System.out.println(userRepository.findByUsername(auth.getName()));
+        user_data.addObject("basic_details", userRepository.findByUsername(auth.getName()));
+        return user_data;
     }
 }
