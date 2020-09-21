@@ -76,8 +76,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        // raw = password
-        // hash = $2a$04$gjESNyb94FwBhFte44hls.uEflDlH7Rk1tHzt3uXCnLJm4yjDq/FO
+        // raw = Password@123
+        // hash = $2y$12$JC2kCe9r5GqKtQG/2JldZ.yXnE0vV7dAdTFtS61HR/vEje/hG3Hca
         auth.inMemoryAuthentication()
                 .withUser("user@pixies.org").password("$2y$12$JC2kCe9r5GqKtQG/2JldZ.yXnE0vV7dAdTFtS61HR/vEje/hG3Hca").roles("USER")
                 .and()
