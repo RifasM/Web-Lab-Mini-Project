@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,7 +55,8 @@ public class WebController {
      * @return rendered signup.html
      */
     @RequestMapping("/signup")
-    public String signup() {
+    public String signup(Model model) {
+        model.addAttribute("username_exists", "no");
         return "signup";
     }
 
@@ -64,28 +66,41 @@ public class WebController {
      * @return signup.html if failed, else home
      */
     @PostMapping("/signup")
-    public String signup(String username,
+    public String signup(String first_name,
+                         String last_name,
+                         String email,
+                         String username,
                          String password,
-                         String repassword,
-                         String name,
+                         String phone,
                          String dob,
-                         String gender) throws ParseException {
-        if (repassword.equals(password)) {
-            User user = new User();
+                         String gender,
+                         Model model) throws ParseException {
 
-            user.setUserName(username);
-            user.setPassword(passwordEncoder.encode(password));
-            user.setName(name);
-            user.setDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
-            user.setGender(gender);
-            user.setEnabled(1);
-            user.setRole("ROLE_USER");
+        User check = userRepository.findByUsername(username);
 
-            userRepository.save(user);
-
-            return "home";
+        if (check != null) {
+            model.addAttribute("username_exists", "yes");
+            return "signup";
         }
-        return "signup";
+
+        User user = new User();
+        user.setUserName(username);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setFirstName(first_name);
+        user.setLastName(last_name);
+        user.setEmail(email);
+        if (!phone.isEmpty())
+            user.setPhone(phone);
+        user.setDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
+        user.setGender(gender);
+        user.setEnabled(1);
+        user.setRole("ROLE_USER");
+
+        userRepository.save(user);
+
+        return "login";
+
+
     }
 
     /**
@@ -112,23 +127,29 @@ public class WebController {
      * @return updated profile page
      */
     @PostMapping("/profile")
-    public ModelAndView profile(String id,
-                                String email,
-                                String name,
-                                String dob,
-                                String gender) throws ParseException {
-        ModelAndView errors = new ModelAndView("profile");
+    public String profile(String id,
+                          String username,
+                          String email,
+                          String first_name,
+                          String last_name,
+                          String phone,
+                          String dob,
+                          String gender,
+                          Model errors) throws ParseException {
 
         User user = userRepository.findById(Long.parseLong(id)).orElseThrow();
-        User check = userRepository.findByUsername(email);
+        User check = userRepository.findByUsername(username);
 
-        if (check != null && !user.getUserName().equals(email)) {
-            errors.addObject("username_exists", "yes");
-            return errors;
+        if (check != null && !user.getUserName().equals(username)) {
+            errors.addAttribute("username_exists", "yes");
+            return "profile";
         }
 
-        user.setUserName(email);
-        user.setName(name);
+        user.setUserName(username);
+        user.setEmail(email);
+        user.setFirstName(first_name);
+        user.setLastName(last_name);
+        user.setPhone(phone);
         user.setDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
         user.setGender(gender);
         user.setUpdatedAt(new Date());
@@ -136,10 +157,10 @@ public class WebController {
 
         userRepository.save(user);
 
-        errors.addObject("basic_details", user);
-        errors.addObject("username_exists", "no");
+        errors.addAttribute("basic_details", user);
+        errors.addAttribute("username_exists", "no");
 
-        return errors;
+        return "redirect:/profile";
 
     }
 }

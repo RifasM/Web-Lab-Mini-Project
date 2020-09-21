@@ -12,12 +12,12 @@
     <th:block th:insert="includes/home-fragments::home-header"></th:block>
 
     <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background: #60a3bc !important;
+        body {
+            background: url("https://source.unsplash.com/random/1920x1920") top center;
+        }
+
+        #main {
+            margin: 10%;
         }
     </style>
 </head>
@@ -27,83 +27,153 @@
 
 <th:block th:insert="includes/home-fragments::navbar-home"/>
 
-<div class="container h-100">
-    <div class="d-flex justify-content-center h-100">
-        <div class="user_card" style="height: 650px;">
-            <div class="d-flex justify-content-center">
-                <div class="brand_logo_container">
-                    <img src="https://cdn.freebiesupply.com/logos/large/2x/pinterest-circle-logo-png-transparent.png"
-                         class="brand_logo" alt="Logo">
-                </div>
-            </div>
-            <div class="d-flex justify-content-center form_container" style="margin-top: 100px;">
-                <form id="registration_form" method="post" th:action="@{/signup}">
-                    <label class="input-group" id="errors"></label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        <input class="form-control input_user" id="username" name="username"
-                               placeholder="Email - your Username" required type="email" value="">
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
-                        </div>
-                        <input type="password" name="password" id="password" class="form-control input_pass" value="" placeholder="Password">
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
-                        </div>
-                        <input class="form-control input_pass" id="repassword" name="repassword"
-                               placeholder="Re-enter Password" required type="password" value="">
-                    </div>
-                    <label class="input-group" id="password_validity"></label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-user-circle"></i></span>
-                        </div>
-                        <input class="form-control input_user" id="name" name="name"
-                               placeholder="Name" required type="text" value="">
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-child"></i></span>
-                        </div>
-                        <input class="form-control input_user" id="dob" max="2099-09-13" min="1900-01-01" name="dob"
-                               placeholder="DOB" required
-                               type="date" value="">
-                    </div>
-                    <label class="input-group" id="age-errors"></label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-info"></i></span>
-                        </div>
-                        <select class="form-control input_user" id="gender" name="gender" required>
-                            <option value="opt">Select an Option</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="nts">Prefer Not to Say</option>
-                        </select>
-                    </div>
-                    <label class="input-group" id="gender_warning"></label>
-                    <div class="d-flex justify-content-center mt-3 login_container">
-                        <a class="btn login_btn" href="javascript:validate_and_submit()">Sign Up</a>
-                    </div>
-                </form>
-            </div>
+<div class="container row text-center" id="main">
+    <!-- Material form register -->
+    <div class="card">
 
-            <div class="mt-4">
-                <div class="d-flex justify-content-center links">
-                    Already have an account? <a th:href="@{/login}" class="ml-2">Sign In</a>
+        <h5 class="card-header info-color white-text text-center py-4">
+            <strong>Sign up</strong>
+        </h5>
+
+        <!--Card content-->
+        <div class="card-body px-lg-5 pt-0">
+            <span id="errors"></span>
+            <!-- Form -->
+            <form class="text-center" id="registration_form" method="post" style="color: #757575;"
+                  th:action="@{/signup}">
+
+                <div class="form-row">
+                    <div class="col">
+                        <!-- First name -->
+                        <div class="md-form">
+                            <input class="form-control" id="first_name" name="first_name" required type="text">
+                            <label for="first_name">First name</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- Last name -->
+                        <div class="md-form">
+                            <input class="form-control" id="last_name" name="last_name" required type="text">
+                            <label for="last_name">Last name</label>
+                        </div>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-center links">
-                    <a href="#">Forgot your password?</a>
+
+                <!-- E-mail -->
+                <div class="md-form mt-0">
+                    <input class="form-control" id="email" name="email" required type="email">
+                    <label for="email">E-mail</label>
                 </div>
-            </div>
+
+                <!-- E-mail -->
+                <div class="md-form mt-0">
+                    <input class="form-control" id="username" name="username" required type="text">
+                    <label for="username">Username</label>
+                    <small class="form-text text-md-center m-b-4" id="username-desc">
+                        <th:block th:if="${username_exists == 'yes'}"><span class="badge badge-danger">The given username exists</span>
+                        </th:block>
+                    </small>
+                </div>
+
+                <!-- Password -->
+                <div class="md-form">
+                    <input aria-describedby="password-desc" class="form-control" id="password" name="password"
+                           pattern="^(?=(.*[a-zA-Z].*){2,})(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9\S]{8,15}$" required
+                           type="password">
+                    <label for="password">Password</label>
+                    <small class="form-text text-muted mb-4" id="password-desc">
+                        At least 8 characters (15 max), 1 digit and 1 special character, space is not allowed.
+                    </small>
+                </div>
+
+                <!-- Password -->
+                <div class="md-form">
+                    <input aria-describedby="repassword-desc" class="form-control" id="repassword" name="repassword"
+                           pattern="^(?=(.*[a-zA-Z].*){2,})(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9\S]{8,15}$" required
+                           type="password">
+                    <label for="repassword">Re Enter Password</label>
+                    <small class="form-text text-muted mb-4" id="repassword-desc">
+
+                    </small>
+                </div>
+
+                <!-- Phone number -->
+                <div class="md-form">
+                    <input aria-describedby="phone-desc" class="form-control" id="phone" name="phone" type="number">
+                    <label for="phone">Phone number</label>
+                    <small class="form-text text-muted mb-4" id="phone-desc">
+                        Optional
+                    </small>
+                </div>
+
+                <!-- DOB -->
+                <div class="md-form">
+                    <input aria-describedby="dob-desc" class="form-control" id="dob" name="dob" type="date">
+                    <label for="dob">Date of Birth</label>
+                    <small class="form-text text-muted mb-4" id="dob-desc">
+
+                    </small>
+                </div>
+
+                <!-- Gender -->
+                <div class="md-form">
+                    <select aria-describedby="gender-desc" class="select-dropdown form-control" id="gender"
+                            name="gender" required>
+                        <option value="opt">Select an Option</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="nts">Prefer Not to Say</option>
+                    </select>
+                    <small class="form-text text-muted mb-4" id="gender-desc">
+
+                    </small>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="form-check">
+                    <input class="form-check-input" id="remember" type="checkbox">
+                    <label class="form-check-label" for="remember">Remember Me</label>
+                </div>
+
+                <!-- Sign up button -->
+                <a class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
+                   href="javascript:validate_and_submit()">Sign Up</a>
+
+                <!-- Login -->
+                <p>Already a member?
+                    <a th:href="@{/login}">Sign In</a>
+                </p>
+
+                <!-- Social register -->
+                <p>or sign up with:</p>
+
+                <a class="btn-floating btn-fb btn-sm" type="button">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a class="btn-floating btn-tw btn-sm" type="button">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a class="btn-floating btn-li btn-sm" type="button">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a class="btn-floating btn-git btn-sm" type="button">
+                    <i class="fab fa-github"></i>
+                </a>
+
+                <hr>
+
+                <!-- Terms of service -->
+                <p>By clicking
+                    <em>Sign up</em> you agree to our
+                    <a href="" target="_blank">terms of service</a>
+
+            </form>
+            <!-- Form -->
+
         </div>
+
     </div>
+    <!-- Material form register -->
 </div>
 <th:block th:replace="includes/home-fragments::footer"/>
 
@@ -131,10 +201,10 @@
         var secondpassword = document.getElementById("repassword").value;
 
         if (firstpassword === secondpassword && firstpassword !== "") {
-            document.getElementById("password_validity").innerHTML = "";
+            document.getElementById("repassword-desc").innerHTML = "";
             return true;
         } else {
-            document.getElementById("password_validity").innerHTML = "<p class=\"text-danger\">Passwords Do not Match</p>";
+            document.getElementById("repassword-desc").innerHTML = "<span class=\"badge badge-danger\">Passwords Do not Match</span>";
             return false;
         }
     }
@@ -142,10 +212,10 @@
     function validateGender() {
         var ddl = document.getElementById("gender");
         if (ddl.selectedIndex === 0) {
-            document.getElementById("gender_warning").innerHTML = "<p class=\"text-danger\">Please Select your Gender</p>";
+            document.getElementById("gender-desc").innerHTML = "<span class=\"badge badge-danger\">Please Select your Gender</span>";
             return false;
         } else {
-            document.getElementById("gender_warning").innerHTML = "";
+            document.getElementById("gender-desc").innerHTML = "";
             return true;
         }
     }
@@ -162,7 +232,7 @@
         if (validateGender() && validatePassword()) {
             document.getElementById("registration_form").submit();
         } else {
-            document.getElementById("errors").innerHTML = "<span class=\"badge badge-pill badge-danger\">Please Correct the following</span>";
+            document.getElementById("errors").innerHTML = "<span class=\"badge badge-danger\">Please Correct the following</span>";
         }
     }
 </script>

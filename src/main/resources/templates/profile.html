@@ -49,11 +49,20 @@
           <div class="portfolio-info">
             <h3>Personal information</h3>
             <ul>
-              <li><strong>Name</strong>:
-                <th:block th:text="${basic_details.name}"/>
+              <li><strong>Username</strong>:
+                <th:block th:text="${basic_details.userName}"/>
+              </li>
+              <li><strong>First Name</strong>:
+                <th:block th:text="${basic_details.firstName}"/>
+              </li>
+              <li><strong>Last Name</strong>:
+                <th:block th:text="${basic_details.lastName}"/>
               </li>
               <li><strong>Email</strong>:
-                <th:block th:text="${basic_details.userName}"/>
+                <th:block th:text="${basic_details.email}"/>
+              </li>
+              <li><strong>Phone</strong>:
+                <th:block th:text="${basic_details.phone}"/>
               </li>
               <li><a class="btn btn-outline-danger" th:href="@{/logout}">Logout</a></li>
             </ul>
@@ -67,37 +76,47 @@
             <!-- Material form subscription -->
             <div class="card">
 
-              <h5 class="card-header info-color white-text text-center py-4">
-                <strong>Edit Details</strong>
-              </h5>
-
               <!--Card content-->
               <div class="card-body px-lg-5">
 
                 <!-- Form -->
-                <form method="post" th:action="@{/profile}">
+                <form id="update_form" method="post" th:action="@{/profile}">
 
-                    <a href="#">Update your password</a>
+                  <a href="#">Update your password</a>
+                  <span class="badge badge-danger text-center" id="errors"></span>
 
-                    <!-- Name -->
-                    <div class="md-form mt-3">
-                        <input class="form-control" id="name" name="name" th:value="${basic_details.name}" type="text">
-                        <label for="name">Name</label>
-                    </div>
+                  <!-- Name -->
+                  <div class="md-form mt-3">
+                    <input class="form-control" id="first_name" name="first_name" th:value="${basic_details.firstName}"
+                           type="text">
+                    <label for="first_name">First Name</label>
+                  </div>
 
-                    <!-- E-mail -->
-                    <div class="md-form">
-                        <th:block th:if="${username_exists == 'yes'}"><span class="badge badge-danger">The given username exists</span>
-                        </th:block>
-                        <input class="form-control" id="email" name="email" th:value="${basic_details.userName}"
-                               type="email">
-                        <label for="email">E-mail/Username</label>
-                    </div>
+                  <div class="md-form mt-3">
+                    <input class="form-control" id="last_name" name="last_name" th:value="${basic_details.lastName}"
+                           type="text">
+                    <label for="last_name">Last Name</label>
+                  </div>
+
+                  <!-- Username -->
+                  <div class="md-form">
+                    <th:block th:if="${username_exists == 'yes'}"><span class="badge badge-danger">The given username exists</span>
+                    </th:block>
+                    <input class="form-control" id="username" name="username" th:value="${basic_details.userName}"
+                           type="text">
+                    <label for="username">Username</label>
+                  </div>
+
+                  <div class="md-form">
+                    <input class="form-control" id="email" name="email" th:value="${basic_details.email}"
+                           type="email">
+                    <label for="email">Username</label>
+                  </div>
 
                   <!-- DOB -->
                   <div class="md-form">
-                      <input class="form-control" id="dob" max="2099-09-13" min="1900-01-01"
-                             name="dob" th:value="${basic_details.dob}" type="date">
+                    <input class="form-control" id="dob" max="2099-09-13" min="1900-01-01"
+                           name="dob" th:value="${basic_details.dob}" type="date">
                     <label for="dob">Date of Birth</label>
                   </div>
 
@@ -112,16 +131,23 @@
                       <option value="nts">Prefer Not to Say</option>
                     </select>
                   </div>
+
+                  <div class="md-form">
+                    <input class="form-control" id="phone" name="phone" th:value="${basic_details.phone}"
+                           type="number">
+                    <label for="phone">Phone</label>
+                  </div>
                   <script>
                     let val = document.getElementById("gender_val").value;
                     document.getElementById("gender").value = val;
                   </script>
 
-                    <input name="id" th:value="${basic_details.id}" type="hidden">
+                  <input name="id" th:value="${basic_details.id}" type="hidden">
                   <!--  button -->
-                  <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">
+                  <a class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                     href="javascript:validate_and_submit()">
                     Update
-                  </button>
+                  </a>
 
                 </form>
           <!-- Form -->
@@ -162,6 +188,14 @@
 
   document.getElementById("dob").prop("max", getDob());
   document.getElementById("#dob").validate();
+
+  function validate_and_submit() {
+    if (validateGender()) {
+      document.getElementById("update_form").submit();
+    } else {
+      document.getElementById("errors").innerHTML = "<span class=\"badge badge-pill badge-danger\">Please Correct the following</span>";
+    }
+  }
 </script>
 
 </body>
