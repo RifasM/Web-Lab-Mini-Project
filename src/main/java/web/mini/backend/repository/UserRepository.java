@@ -7,6 +7,7 @@ import web.mini.backend.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("select u from User u where u.userName = ?1")
+    @Query("select u from User " +
+            "u where u.userName = ?1")
     User findByUsername(String username);
 }

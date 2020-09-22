@@ -91,8 +91,8 @@ public class UserController {
                         .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + userId));
 
         user.setUserName(userDetails.getUserName());
-        user.setLastName(userDetails.getLastName());
         user.setFirstName(userDetails.getFirstName());
+        user.setLastName(userDetails.getLastName());
         user.setUpdatedAt(new Date());
         final User updatedUser = userRepository.save(user);
         return ResponseEntity.ok(updatedUser);

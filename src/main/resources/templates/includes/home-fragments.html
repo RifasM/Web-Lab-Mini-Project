@@ -23,7 +23,12 @@
 
     <!-- Template Main CSS File -->
     <link href="css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+          integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+    <!-- Material Design Bootstrap -->
+    <link href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.19.1.min.css?ver=4.19.1"
+          rel="stylesheet">
 
     <!-- =======================================================
     * Template Name: Tempo - v2.1.0
@@ -43,7 +48,7 @@
 
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
-                    <li class="active"><a href="#">Home</a></li>
+                    <li class="active"><a th:href="@{/}">Home</a></li>
                     <li><a href="#about">About</a></li>
                     <!--li><a href="#services">Services</a></li-->
                     <li><a href="#portfolio">Portfolio</a></li>
@@ -68,6 +73,51 @@
                     </li-->
                     <li><a href="#contact">Contact</a></li>
 
+                </ul>
+            </nav><!-- .nav-menu -->
+
+        </div>
+    </header>
+</th:block>
+
+
+<th:block th:fragment="navbar-inner-page">
+    <header class="fixed-top header-inner-pages" id="header">
+        <style>
+            #main {
+                margin-top: 5%;
+            }
+        </style>
+        <div class="container d-flex align-items-center">
+
+            <h1 class="logo mr-auto"><a th:href="@{/}">Pixies</a></h1>
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <!-- <a href="index.html" class="logo mr-auto"><img src="img/logo.png" alt="" class="img-fluid"></a>-->
+
+            <nav class="nav-menu d-none d-lg-block">
+                <ul>
+                    <li class="active"><a th:href="@{/}">Home</a></li>
+                    <li><a th:href="@{/profile}">Profile</a></li>
+                    <li><a href="#footer">Contact</a></li>
+                    <li><a class="text-danger" th:href="@{/logout}">Logout</a></li>
+                    <!--li><a href="blog.html">Blog</a></li-->
+                    <!--li class="drop-down"><a href="">Drop Down</a>
+                      <ul>
+                        <li><a href="#">Drop Down 1</a></li>
+                        <li class="drop-down"><a href="#">Deep Drop Down</a>
+                          <ul>
+                            <li><a href="#">Deep Drop Down 1</a></li>
+                            <li><a href="#">Deep Drop Down 2</a></li>
+                            <li><a href="#">Deep Drop Down 3</a></li>
+                            <li><a href="#">Deep Drop Down 4</a></li>
+                            <li><a href="#">Deep Drop Down 5</a></li>
+                          </ul>
+                        </li>
+                        <li><a href="#">Drop Down 2</a></li>
+                        <li><a href="#">Drop Down 3</a></li>
+                        <li><a href="#">Drop Down 4</a></li>
+                      </ul>
+                    </li-->
                 </ul>
             </nav><!-- .nav-menu -->
 
@@ -160,8 +210,10 @@
     <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="vendor/venobox/venobox.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-
     <!-- Template Main JS File -->
     <script src="js/main.js"></script>
+    <!-- MDB core JavaScript -->
+    <script src="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/js/bundles/4.19.1/compiled.0.min.js?ver=4.19.1"
+            type="text/javascript"></script>
 </th:block>
 </html>
