@@ -6,6 +6,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * The type Post.
+ *
+ * @author Mohammed Rifas S
+ */
 @Entity
 @Table(name = "posts")
 public class Post implements Serializable {

@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * The type User.
  *
- * @author Raksha E P
+ * @author Mohammed Rifas S
  */
 @Entity
 @Table(name = "users")
