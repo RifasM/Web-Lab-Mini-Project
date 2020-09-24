@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * The type User.
  *
- * @author Mohammed Rifas S
+ * @author Raksha E P
  */
 @Entity
 @Table(name = "users")
@@ -42,7 +42,7 @@ public class User {
     @Column(name = "gender", nullable = false)
     private String gender;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
     private String phone;
 
     @Column(name = "user_role", nullable = false)
