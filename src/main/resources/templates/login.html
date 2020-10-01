@@ -37,7 +37,7 @@
           <!--Card content-->
           <div class="card-body px-lg-5 pt-0">
               <div class="badge badge-warning" id="errors"
-                   th:if="${(param.error != null) and (param.error[0] == 'true')}">
+                   th:if="${param.error}">
                   Incorrect Username or Password
               </div>
               <!-- Form -->
