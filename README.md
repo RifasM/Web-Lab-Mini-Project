@@ -8,18 +8,13 @@ An image sharing and social media service designed to enable saving and discover
 3. [Raksha E P](https://github.com/RakshaEP) 🤣
 
 ## Architecture
-- Backend (API's only) 
-    - [Spring Boot](https://github.com/RifasM/Web-Lab-Mini-Project)
-- Backend (Server)
-    - NodeJS*
+- Backend
+    - Spring Boot 🚀
 - FrontEnd
-    - ReactJS*
-    - HTML/CSS
+    - HTML/CSS ☃
 - Databases
-    - MySQL (OpenShift Persistent)
-    - MongoDB (Atlas Cluster)
+    - MySQL (OpenShift Persistent) 🛸
+    - MongoDB (Atlas Cluster) 🧲
+- Indexing and Posts
+    - ElasticSearch 👻
   
-### Note:
-```
-* Repositories coming up, will be updated soon. 👻
-```
