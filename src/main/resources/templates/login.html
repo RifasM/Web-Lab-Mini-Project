@@ -19,7 +19,8 @@
   <th:block th:insert="includes/home-fragments::navbar-home"/>
   <style>
       body {
-          background: url("https://source.unsplash.com/random/1920x1920") top center;
+          background: url("https://source.unsplash.com/random/900x600") top center;
+          background-size: cover;
       }
 
       #main {
@@ -35,7 +36,10 @@
 
           <!--Card content-->
           <div class="card-body px-lg-5 pt-0">
-
+              <div class="badge badge-warning" id="errors"
+                   th:if="${param.error}">
+                  Incorrect Username or Password
+              </div>
               <!-- Form -->
               <form method="post" style="color: #757575;" th:action="@{/login}">
 

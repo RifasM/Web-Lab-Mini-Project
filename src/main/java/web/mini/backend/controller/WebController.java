@@ -89,8 +89,7 @@ public class WebController {
         user.setFirstName(first_name);
         user.setLastName(last_name);
         user.setEmail(email);
-        if (!phone.isEmpty())
-            user.setPhone(phone);
+        user.setPhone(phone);
         user.setDob(new SimpleDateFormat("yyyy-MM-dd").parse(dob));
         user.setGender(gender);
         user.setEnabled(1);
