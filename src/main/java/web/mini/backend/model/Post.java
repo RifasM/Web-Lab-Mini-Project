@@ -1,19 +1,19 @@
 package web.mini.backend.model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * The type Post.
  *
  * @author Mohammed Rifas S
- */
-@Entity
-@Table(name = "posts")
-public class Post implements Serializable {
+ **/
+@Document(indexName = "pixies-posts", type = "post")
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -129,5 +129,25 @@ public class Post implements Serializable {
                 ", postDate=" + postDate +
                 ", postUser=" + postUser +
                 '}';
+    }
+
+    public Post(long id,
+                String postTitle,
+                String postDescription,
+                String postType,
+                String postUrl,
+                String tags,
+                int enabled,
+                Date postDate,
+                long postUser) {
+        this.id = id;
+        this.postTitle = postTitle;
+        this.postDescription = postDescription;
+        this.postType = postType;
+        this.postUrl = postUrl;
+        this.tags = tags;
+        this.enabled = enabled;
+        this.postDate = postDate;
+        this.postUser = postUser;
     }
 }
