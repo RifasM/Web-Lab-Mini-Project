@@ -1,6 +1,8 @@
 package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import web.mini.backend.exception.ResourceNotFoundException;
@@ -25,7 +27,7 @@ public class PostController {
      * @return the list
      */
     @GetMapping("/posts")
-    public List<Post> getAllPosts() {
+    public Iterable<Post> getAllPosts() {
         return postRepository.findAll();
     }
 
@@ -52,10 +54,10 @@ public class PostController {
      * @param userID the user id
      * @return the posts by user id
      */
-    @GetMapping("/post/user/{user_id}")
+    /*@GetMapping("/post/user/{user_id}")
     public List<Post> getPostsByUserId(@PathVariable(value = "user_id") Long userID) {
         return postRepository.findAllByUserId(userID);
-    }
+    }*/
 
     /**
      * Create post.
@@ -86,5 +88,15 @@ public class PostController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    @GetMapping("/post/user/{id}")
+    public Page<Post> findByAuthor(@PathVariable(value = "id") Long UserID, PageRequest pageRequest) {
+        return postRepository.findByPostUser(UserID, pageRequest);
+    }
+
+    @GetMapping("/post/{title}")
+    public List<Post> findByTitle(@PathVariable(value = "title") String title) {
+        return postRepository.findByPostTitle(title);
     }
 }
