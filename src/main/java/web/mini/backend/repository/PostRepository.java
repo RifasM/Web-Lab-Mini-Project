@@ -1,14 +1,22 @@
 package web.mini.backend.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 import web.mini.backend.model.Post;
 
 import java.util.List;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
-    @Query("select p from Post p where p.postUser = ?1")
-    List<Post> findAllByUserId(long userID);
+public interface PostRepository extends ElasticsearchRepository<Post, Long> {
+
+    Page<Post> findByPostUser(Long userID, Pageable pageable);
+
+    List<Post> findByPostTitle(String title);
+
+    /*
+    @Query("{\"bool\": {\"must\": [{\"match\": {\"authors.name\": \"?0\"}}]}}")
+    Page<Article> findByAuthorsNameUsingCustomQuery(String name, Pageable pageable);
+    */
 }
