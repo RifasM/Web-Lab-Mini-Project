@@ -1,22 +1,23 @@
 package web.mini.backend.model;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 import java.util.List;
 
 /**
- * The type Post.
+ * The type Board.
  *
  * @author Mohammed Rifas S
  **/
 @Document(indexName = "pixies-boards")
 public class Board {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String id;
 
     private long userId;
 
@@ -30,13 +31,18 @@ public class Board {
 
     private Boolean privateBoard;
 
-    public Board(long id,
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    public Board(String id,
                  long userId,
                  String boardName,
                  List<Long> postID,
                  String boardDescription,
                  String boardCoverUrl,
-                 Boolean privateBoard) {
+                 Boolean privateBoard,
+                 Date createdAt) {
         this.id = id;
         this.userId = userId;
         this.boardName = boardName;
@@ -44,13 +50,14 @@ public class Board {
         this.boardDescription = boardDescription;
         this.boardCoverUrl = boardCoverUrl;
         this.privateBoard = privateBoard;
+        this.createdAt = createdAt;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -102,6 +109,14 @@ public class Board {
         this.privateBoard = privateBoard;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public String toString() {
         return "Board{" +
@@ -112,6 +127,7 @@ public class Board {
                 ", boardDescription='" + boardDescription + '\'' +
                 ", boardCoverUrl='" + boardCoverUrl + '\'' +
                 ", privateBoard=" + privateBoard +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }

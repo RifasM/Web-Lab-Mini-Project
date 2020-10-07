@@ -4,8 +4,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
@@ -20,8 +18,7 @@ import java.util.Map;
 @Document(indexName = "pixies-posts")
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String id;
 
     private String postTitle;
 
@@ -53,12 +50,32 @@ public class Post {
         this.postUser = postUser;
     }
 
-    public long getId() {
-        return id;
+    public Post(String id,
+                String postTitle,
+                String postDescription,
+                String postType,
+                String postUrl,
+                String tags,
+                int enabled,
+                long postUser,
+                List<Map<Long, Integer>> postLikesUserIds,
+                List<Map<Long, String>> postCommentsUserIds,
+                Date postDate) {
+        this.id = id;
+        this.postTitle = postTitle;
+        this.postDescription = postDescription;
+        this.postType = postType;
+        this.postUrl = postUrl;
+        this.tags = tags;
+        this.enabled = enabled;
+        this.postUser = postUser;
+        this.postLikesUserIds = postLikesUserIds;
+        this.postCommentsUserIds = postCommentsUserIds;
+        this.postDate = postDate;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
     public String getPostTitle() {
@@ -117,28 +134,8 @@ public class Post {
         this.postDate = postDate;
     }
 
-    public Post(long id,
-                String postTitle,
-                String postDescription,
-                String postType,
-                String postUrl,
-                String tags,
-                int enabled,
-                long postUser,
-                List<Map<Long, Integer>> postLikesUserIds,
-                List<Map<Long, String>> postCommentsUserIds,
-                Date postDate) {
+    public void setId(String id) {
         this.id = id;
-        this.postTitle = postTitle;
-        this.postDescription = postDescription;
-        this.postType = postType;
-        this.postUrl = postUrl;
-        this.tags = tags;
-        this.enabled = enabled;
-        this.postUser = postUser;
-        this.postLikesUserIds = postLikesUserIds;
-        this.postCommentsUserIds = postCommentsUserIds;
-        this.postDate = postDate;
     }
 
     public List<Map<Long, Integer>> getPostLikesUserIds() {
