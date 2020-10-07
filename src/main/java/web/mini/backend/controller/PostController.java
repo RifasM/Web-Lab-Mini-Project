@@ -1,6 +1,5 @@
 package web.mini.backend.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +17,11 @@ import java.util.Map;
 @RequestMapping("/api/v1/")
 public class PostController {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
+
+    public PostController(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
 
     /**
      * Get all post list.
@@ -54,10 +56,10 @@ public class PostController {
      * @param userID the user id
      * @return the posts by user id
      */
-    /*@GetMapping("/post/user/{user_id}")
-    public List<Post> getPostsByUserId(@PathVariable(value = "user_id") Long userID) {
-        return postRepository.findAllByUserId(userID);
-    }*/
+    @GetMapping("/post/user/{userID}")
+    public Page<Post> findByAuthor(@PathVariable(value = "userID") Long userID, PageRequest pageRequest) {
+        return postRepository.findByPostUser(userID, pageRequest);
+    }
 
     /**
      * Create post.
@@ -75,10 +77,10 @@ public class PostController {
      *
      * @param postID the post id
      * @return the map
-     * @throws Exception the exception
+     * @throws ResourceNotFoundException the exception
      */
     @DeleteMapping("/post/{id}")
-    public Map<String, Boolean> deletePost(@PathVariable(value = "id") Long postID) throws Exception {
+    public Map<String, Boolean> deletePost(@PathVariable(value = "id") Long postID) throws ResourceNotFoundException {
         Post post =
                 postRepository
                         .findById(postID)
@@ -90,11 +92,12 @@ public class PostController {
         return response;
     }
 
-    @GetMapping("/post/user/{id}")
-    public Page<Post> findByAuthor(@PathVariable(value = "id") Long UserID, PageRequest pageRequest) {
-        return postRepository.findByPostUser(UserID, pageRequest);
-    }
-
+    /**
+     * Create post.
+     *
+     * @param title the post
+     * @return the post
+     */
     @GetMapping("/post/{title}")
     public List<Post> findByTitle(@PathVariable(value = "title") String title) {
         return postRepository.findByPostTitle(title);
