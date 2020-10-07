@@ -41,7 +41,7 @@ public class PostController {
      * @throws ResourceNotFoundException the resource not found exception
      */
     @GetMapping("/post/{id}")
-    public ResponseEntity<Post> getPostsById(@PathVariable(value = "id") Long postID)
+    public ResponseEntity<Post> getPostsById(@PathVariable(value = "id") String postID)
             throws ResourceNotFoundException {
         Post post =
                 postRepository
@@ -57,7 +57,7 @@ public class PostController {
      * @return the posts by user id
      */
     @GetMapping("/post/user/{userID}")
-    public Page<Post> findByAuthor(@PathVariable(value = "userID") Long userID, PageRequest pageRequest) {
+    public Page<Post> findByUser(@PathVariable(value = "userID") Long userID, PageRequest pageRequest) {
         return postRepository.findByPostUser(userID, pageRequest);
     }
 
@@ -80,7 +80,7 @@ public class PostController {
      * @throws ResourceNotFoundException the exception
      */
     @DeleteMapping("/post/{id}")
-    public Map<String, Boolean> deletePost(@PathVariable(value = "id") Long postID) throws ResourceNotFoundException {
+    public Map<String, Boolean> deletePost(@PathVariable(value = "id") String postID) throws ResourceNotFoundException {
         Post post =
                 postRepository
                         .findById(postID)

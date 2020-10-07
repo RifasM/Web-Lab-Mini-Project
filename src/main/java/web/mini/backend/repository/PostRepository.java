@@ -9,7 +9,7 @@ import web.mini.backend.model.Post;
 import java.util.List;
 
 @Repository
-public interface PostRepository extends ElasticsearchRepository<Post, Long> {
+public interface PostRepository extends ElasticsearchRepository<Post, String> {
 
     Page<Post> findByPostUser(Long userID, Pageable pageable);
 

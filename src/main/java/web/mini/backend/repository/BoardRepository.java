@@ -7,7 +7,7 @@ import web.mini.backend.model.Board;
 
 import java.util.List;
 
-public interface BoardRepository extends ElasticsearchRepository<Board, Long> {
+public interface BoardRepository extends ElasticsearchRepository<Board, String> {
 
     Page<Board> findByUserId(Long userID, Pageable pageable);
 
