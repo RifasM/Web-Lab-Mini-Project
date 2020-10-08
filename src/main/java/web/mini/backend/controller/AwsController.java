@@ -1,9 +1,6 @@
 package web.mini.backend.controller;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -13,47 +10,62 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import web.mini.backend.BackendApplication;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("api/v1/")
 public class AwsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BackendApplication.class);
 
-    @Value("${aws.access_key}")
-    private String accessKey;
+    /*
+    Make a file .aws/config in home directory
+    Fill it with
+    [default]
+    aws_access_key_id={YOUR_ACCESS_KEY_ID}
+    aws_secret_access_key={YOUR_SECRET_ACCESS_KEY}
 
-    @Value("${aws.secret_key}")
-    private String secretKey;
+    and then execute
+
+    export AWS_CREDENTIAL_PROFILES_FILE=/home/ubuntu/.aws/config
+     */
 
     private final AmazonS3 s3client = AmazonS3ClientBuilder
             .standard()
-            .withCredentials(new AWSStaticCredentialsProvider(credentials))
             .withRegion(Regions.AP_SOUTH_1)
             .build();
 
-    private final AWSCredentials credentials = new BasicAWSCredentials(
-            accessKey,
-            secretKey
-    );
-    @Value("${aws.bucket_name}")
-    private String bucketName;
+    private final String bucketName = "web-mini";
+
+    private File convertMultiPartFileToFile(final MultipartFile multipartFile) {
+        final File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        try (final FileOutputStream outputStream = new FileOutputStream(file)) {
+            outputStream.write(multipartFile.getBytes());
+        } catch (final IOException ex) {
+            LOGGER.error("Error converting the multi-part file to file = " + ex.getMessage());
+        }
+        return file;
+    }
 
     @PostMapping("/s3/upload")
-    public ResponseEntity<String> uploadFileToS3Bucket(@RequestBody File file) {
+    public ResponseEntity<String> uploadFileToS3Bucket(@RequestParam MultipartFile multipartFile) {
         try {
+            final File file = convertMultiPartFileToFile(multipartFile);
             final String uniqueFileName = LocalDateTime.now() + "_" + file.getName();
             LOGGER.info("Uploading file with name= " + uniqueFileName);
-            final PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, uniqueFileName, file);
-            s3client.putObject(putObjectRequest);
+            final PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucketName, uniqueFileName, file);
+            this.s3client.putObject(putObjectRequest);
             LOGGER.info("File upload completed.");
+            file.delete();
             return ResponseEntity.accepted().body("Uploaded Successfully");
         } catch (AmazonServiceException e) {
             LOGGER.info("File upload failed.");
@@ -65,8 +77,8 @@ public class AwsController {
     @GetMapping("/s3/{file}")
     public File retrieveFileFromS3Bucket(@PathVariable(name = "file") String file) {
         try {
-            final GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName, file);
-            S3Object s3object = s3client.getObject(getObjectRequest);
+            final GetObjectRequest getObjectRequest = new GetObjectRequest(this.bucketName, file);
+            S3Object s3object = this.s3client.getObject(getObjectRequest);
             S3ObjectInputStream inputStream = s3object.getObjectContent();
             LOGGER.info("File {} retrieval completed.", file);
             return new File(String.valueOf(inputStream));
