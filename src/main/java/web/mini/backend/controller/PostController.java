@@ -4,11 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Post;
 import web.mini.backend.repository.PostRepository;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +18,7 @@ import java.util.Map;
 public class PostController {
 
     private final PostRepository postRepository;
+    private AwsController awsController;
 
     public PostController(PostRepository postRepository) {
         this.postRepository = postRepository;
@@ -64,12 +65,23 @@ public class PostController {
     /**
      * Create post.
      *
-     * @param post the post
-     * @return the post
+     * @param post          the post
+     * @param multipartFile the post file
+     * @return the status
      */
     @PostMapping("/post")
-    public Post createPost(@Valid @RequestBody Post post) {
-        return postRepository.save(post);
+    public ResponseEntity<String> createPost(@RequestParam Post post, @RequestParam MultipartFile multipartFile) {
+        ResponseEntity<String> status = awsController.uploadFileToS3Bucket(multipartFile, "posts");
+        if (status.getStatusCode().is2xxSuccessful()) {
+            try {
+                post.setPostUrl(status.getBody());
+                postRepository.save(post);
+            } catch (Exception e) {
+                return ResponseEntity.status(500).body("Error: " + e.getMessage());
+            }
+        }
+        
+        return ResponseEntity.badRequest().body("Error");
     }
 
     /**
