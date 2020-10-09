@@ -57,16 +57,17 @@ public class AwsController {
     }
 
     @PostMapping("/s3/upload")
-    public ResponseEntity<String> uploadFileToS3Bucket(@RequestParam MultipartFile multipartFile) {
+    public ResponseEntity<String> uploadFileToS3Bucket(@RequestParam MultipartFile multipartFile, @RequestParam String bucketSubName) {
         try {
             final File file = convertMultiPartFileToFile(multipartFile);
-            final String uniqueFileName = LocalDateTime.now() + "_" + file.getName();
+            final String uniqueFileName = (LocalDateTime.now() + "_" + file.getName()).replace(" ", "_");
             LOGGER.info("Uploading file with name= " + uniqueFileName);
-            final PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucketName, uniqueFileName, file);
+            final PutObjectRequest putObjectRequest = new PutObjectRequest(this.bucketName +
+                    "/" + bucketSubName, uniqueFileName, file);
             this.s3client.putObject(putObjectRequest);
             LOGGER.info("File upload completed.");
             file.delete();
-            return ResponseEntity.accepted().body("Uploaded Successfully");
+            return ResponseEntity.ok().body(uniqueFileName);
         } catch (AmazonServiceException e) {
             LOGGER.info("File upload failed.");
             LOGGER.error("Error: {} while uploading file.", e.getMessage());
