@@ -75,10 +75,12 @@ public class AwsController {
         }
     }
 
-    @GetMapping("/s3/{file}")
-    public File retrieveFileFromS3Bucket(@PathVariable(name = "file") String file) {
+    @GetMapping("/s3/{bucketSubName}/{file}")
+    public File retrieveFileFromS3Bucket(@PathVariable(name = "file") String file,
+                                         @PathVariable(name = "bucketSubName") String bucketSubName) {
         try {
-            final GetObjectRequest getObjectRequest = new GetObjectRequest(this.bucketName, file);
+            final GetObjectRequest getObjectRequest = new GetObjectRequest(this.bucketName
+                    + "/" + bucketSubName, file);
             S3Object s3object = this.s3client.getObject(getObjectRequest);
             S3ObjectInputStream inputStream = s3object.getObjectContent();
             LOGGER.info("File {} retrieval completed.", file);
