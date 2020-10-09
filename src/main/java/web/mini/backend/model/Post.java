@@ -1,48 +1,46 @@
 package web.mini.backend.model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The type Post.
  *
  * @author Mohammed Rifas S
- */
-@Entity
-@Table(name = "posts")
-public class Post implements Serializable {
+ **/
+@Document(indexName = "pixies-posts")
+public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String id;
 
-    @Column(name = "post_title", nullable = false)
     private String postTitle;
 
-    @Column(name = "post_description", nullable = false)
     private String postDescription;
 
-    @Column(name = "post_type", nullable = false)
     private String postType;
 
-    @Column(name = "post_url", nullable = false)
     private String postUrl;
 
-    @Column(name = "post_tags", nullable = false)
     private String tags;
 
-    @Column(name = "post_enabled", nullable = false)
     private int enabled;
+
+    private long postUser;
+
+    private List<Map<Long, Integer>> postLikesUserIds;
+
+    private List<Map<Long, String>> postCommentsUserIds;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "post_created_at", nullable = false)
     private Date postDate;
-
-    @Column(name = "post_user")
-    private long postUser;
 
     public long getPostUser() {
         return postUser;
@@ -52,12 +50,32 @@ public class Post implements Serializable {
         this.postUser = postUser;
     }
 
-    public long getId() {
-        return id;
+    public Post(String id,
+                String postTitle,
+                String postDescription,
+                String postType,
+                String postUrl,
+                String tags,
+                int enabled,
+                long postUser,
+                List<Map<Long, Integer>> postLikesUserIds,
+                List<Map<Long, String>> postCommentsUserIds,
+                Date postDate) {
+        this.id = id;
+        this.postTitle = postTitle;
+        this.postDescription = postDescription;
+        this.postType = postType;
+        this.postUrl = postUrl;
+        this.tags = tags;
+        this.enabled = enabled;
+        this.postUser = postUser;
+        this.postLikesUserIds = postLikesUserIds;
+        this.postCommentsUserIds = postCommentsUserIds;
+        this.postDate = postDate;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
     public String getPostTitle() {
@@ -116,6 +134,26 @@ public class Post implements Serializable {
         this.postDate = postDate;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public List<Map<Long, Integer>> getPostLikesUserIds() {
+        return postLikesUserIds;
+    }
+
+    public void setPostLikesUserIds(List<Map<Long, Integer>> postLikesUserIds) {
+        this.postLikesUserIds = postLikesUserIds;
+    }
+
+    public List<Map<Long, String>> getPostCommentsUserIds() {
+        return postCommentsUserIds;
+    }
+
+    public void setPostCommentsUserIds(List<Map<Long, String>> postCommentsUserIds) {
+        this.postCommentsUserIds = postCommentsUserIds;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -126,8 +164,10 @@ public class Post implements Serializable {
                 ", postUrl='" + postUrl + '\'' +
                 ", tags='" + tags + '\'' +
                 ", enabled=" + enabled +
-                ", postDate=" + postDate +
                 ", postUser=" + postUser +
+                ", postLikesUserIds=" + postLikesUserIds +
+                ", postCommentsUserIds=" + postCommentsUserIds +
+                ", postDate=" + postDate +
                 '}';
     }
 }

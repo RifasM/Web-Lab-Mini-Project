@@ -16,6 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Post.
+ *
+ * @author Mohammed Rifas S
+ **/
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
