@@ -8,6 +8,7 @@ import com.amazonaws.services.s3.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Controller
 public class AwsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BackendApplication.class);
 
@@ -53,9 +55,7 @@ public class AwsController {
     }
 
     public ResponseEntity<String> uploadFileToS3Bucket(MultipartFile multipartFile, String bucketSubName) {
-        System.out.println("uploading here");
         try {
-            System.out.println("here");
             final File file = convertMultiPartFileToFile(multipartFile);
             final String uniqueFileName = (LocalDateTime.now() + "_" + file.getName()).replace(" ", "_");
             LOGGER.info("Uploading file with name= " + uniqueFileName);

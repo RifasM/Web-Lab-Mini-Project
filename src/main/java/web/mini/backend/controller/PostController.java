@@ -9,6 +9,7 @@ import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Post;
 import web.mini.backend.repository.PostRepository;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,29 +88,19 @@ public class PostController {
                 Long.parseLong(postUser),
                 null,
                 null,
-                null);
+                new Date());
 
-        System.out.println(post);
-        System.out.println(postFile);
+        ResponseEntity<String> status = awsController.uploadFileToS3Bucket(postFile,
+                "posts");
 
-        try {
-            System.out.println("calling");
-            ResponseEntity<String> status = awsController.uploadFileToS3Bucket(postFile,
-                    "posts");
-            System.out.println("post upload: " + status);
-
-            if (status.getStatusCode().is2xxSuccessful()) {
-                try {
-                    post.setPostUrl(status.getBody());
-                    postRepository.save(post);
-                    System.out.println(post);
-                } catch (Exception e) {
-                    return ResponseEntity.status(500).body("Error: " + e.getMessage());
-                }
+        if (status.getStatusCode().is2xxSuccessful()) {
+            try {
+                post.setPostUrl(status.getBody());
+                postRepository.save(post);
+                return ResponseEntity.ok().body("created successfully");
+            } catch (Exception e) {
+                return ResponseEntity.status(500).body("Error: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.toString());
         }
         return ResponseEntity.badRequest().body("Error");
     }
