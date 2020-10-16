@@ -70,11 +70,13 @@ public class PostController {
      * @return the status
      */
     @PostMapping("/post")
-    public ResponseEntity<String> createPost(@RequestParam Post post, @RequestParam MultipartFile multipartFile) {
-        ResponseEntity<String> status = awsController.uploadFileToS3Bucket(multipartFile, "posts");
+    public ResponseEntity<String> createPost(@RequestBody Post post, @RequestParam MultipartFile multipartFile) {
+        ResponseEntity<String> status = this.awsController.uploadFileToS3Bucket(multipartFile,
+                "posts");
         if (status.getStatusCode().is2xxSuccessful()) {
             try {
                 post.setPostUrl(status.getBody());
+                System.out.println(post);
                 postRepository.save(post);
             } catch (Exception e) {
                 return ResponseEntity.status(500).body("Error: " + e.getMessage());
@@ -99,8 +101,17 @@ public class PostController {
                         .orElseThrow(() -> new ResourceNotFoundException("Post not found on :: " + postID));
 
         postRepository.delete(post);
+        int status = this.awsController.deleteFileFromS3Bucket(post.getPostUrl(), "posts").getStatusCodeValue();
+
         Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
+
+        if (status != 500)
+            response.put("deleted", Boolean.TRUE);
+        else {
+            response.put("deleted from database", Boolean.TRUE);
+            response.put("deleted from s3", Boolean.FALSE);
+        }
+
         return response;
     }
 
