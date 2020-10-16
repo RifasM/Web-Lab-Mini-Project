@@ -34,7 +34,7 @@ public class Post {
 
     private long postUser;
 
-    private List<Map<Long, Integer>> postLikesUserIds;
+    private List<Map<Long, Integer>> postLikesUserIds; // Integer here is to specify type of like, thumbs, heart, etc
 
     private List<Map<Long, String>> postCommentsUserIds;
 
