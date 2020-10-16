@@ -18,10 +18,11 @@ import java.util.Map;
 public class PostController {
 
     private final PostRepository postRepository;
-    private AwsController awsController;
+    private final AwsController awsController;
 
-    public PostController(PostRepository postRepository) {
+    public PostController(PostRepository postRepository, AwsController awsController) {
         this.postRepository = postRepository;
+        this.awsController = awsController;
     }
 
     /**
@@ -65,24 +66,51 @@ public class PostController {
     /**
      * Create post.
      *
-     * @param post          the post
-     * @param multipartFile the post file
+     * @param postFile the post file
      * @return the status
      */
     @PostMapping("/post")
-    public ResponseEntity<String> createPost(@RequestBody Post post, @RequestParam MultipartFile multipartFile) {
-        ResponseEntity<String> status = this.awsController.uploadFileToS3Bucket(multipartFile,
-                "posts");
-        if (status.getStatusCode().is2xxSuccessful()) {
-            try {
-                post.setPostUrl(status.getBody());
-                System.out.println(post);
-                postRepository.save(post);
-            } catch (Exception e) {
-                return ResponseEntity.status(500).body("Error: " + e.getMessage());
+    public ResponseEntity<String> createPost(@RequestParam String postTitle,
+                                             @RequestParam String postDescription,
+                                             @RequestParam String postType,
+                                             @RequestParam String tags,
+                                             @RequestParam String postUser,
+                                             @RequestParam MultipartFile postFile) {
+        Post post = new Post(
+                null,
+                postTitle,
+                postDescription,
+                postType,
+                null,
+                tags,
+                1,
+                Long.parseLong(postUser),
+                null,
+                null,
+                null);
+
+        System.out.println(post);
+        System.out.println(postFile);
+
+        try {
+            System.out.println("calling");
+            ResponseEntity<String> status = awsController.uploadFileToS3Bucket(postFile,
+                    "posts");
+            System.out.println("post upload: " + status);
+
+            if (status.getStatusCode().is2xxSuccessful()) {
+                try {
+                    post.setPostUrl(status.getBody());
+                    postRepository.save(post);
+                    System.out.println(post);
+                } catch (Exception e) {
+                    return ResponseEntity.status(500).body("Error: " + e.getMessage());
+                }
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.toString());
         }
-        
         return ResponseEntity.badRequest().body("Error");
     }
 
