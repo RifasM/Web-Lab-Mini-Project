@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Pixies - Create Post</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <th:block th:insert="includes/home-fragments::home-header"></th:block>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<th:block style="color: #fff;" th:insert="includes/home-fragments::navbar-inner-page"></th:block>
+
+<main id="main">
+
+    <div class="card-body px-lg-5 col-md-6" style="margin-left: auto; margin-right: auto;">
+        <h1 class="mb-3">Create New Post</h1>
+        <div>Enter the Following Details to Continue</div>
+        <div>
+            <form enctype="multipart/form-data" method="post">
+                <div class="md-form">
+                    <input class="form-control" id="postTitle" name="postTitle" required type="text">
+                    <label for="postTitle">Post Title</label>
+                </div>
+
+                <div class="md-form">
+                    <input class="form-control" id="postDescription" name="postDescription" required type="text">
+                    <label for="postDescription">Post Caption</label>
+                </div>
+
+                <div class="md-form">
+                    <p class="form-control-plaintext">Post Type</p>
+                    <select class="form-control" id="postType" name="postType" required>
+                        <option value="image">Image</option>
+                        <option value="video">Video</option>
+                        <option value="gif">Gif</option>
+                    </select>
+                </div>
+
+                <div class="md-form">
+                    <input class="form-control" id="tags" name="tags" type="text">
+                    <label for="tags">Post Tags</label>
+                </div>
+
+                <div class="md-form">
+                    <p class="form-control-plaintext">Post File</p>
+                    <input class="form-control" id="postFile" name="postFile" required type="file">
+                </div>
+
+                <input id="postUser" name="postUser" th:value="${#authentication.name}" type="hidden">
+
+                <input class="btn btn-outline-success btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit"
+                       value="Create Post">
+            </form>
+        </div>
+
+    </div>
+
+</main><!-- End #main -->
+
+<th:block th:insert="includes/home-fragments::footer"></th:block>
+
+<a class="back-to-top" href="#"><i class="ri-arrow-up-line"></i></a>
+
+<th:block th:insert="includes/home-fragments::home-scripts"></th:block>
+
+</body>
+
+</html>

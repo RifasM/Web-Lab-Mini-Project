@@ -50,6 +50,16 @@ public class WebController {
     }
 
     /**
+     * Return Post Creation Page
+     *
+     * @return rendered createPost.html
+     */
+    @RequestMapping("/createPost")
+    public String createPost() {
+        return "createPost";
+    }
+
+    /**
      * Return Register Page
      *
      * @return rendered signup.html
