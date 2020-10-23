@@ -25,7 +25,7 @@
         <h1 class="mb-3">Create New Post</h1>
         <div>Enter the Following Details to Continue</div>
         <div>
-            <form enctype="multipart/form-data" method="post">
+            <form enctype="multipart/form-data" method="post" th:action="@{/createPost}">
                 <div class="md-form">
                     <input class="form-control" id="postTitle" name="postTitle" required type="text">
                     <label for="postTitle">Post Title</label>

@@ -1,14 +1,19 @@
 package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import web.mini.backend.model.Post;
 import web.mini.backend.model.User;
 import web.mini.backend.repository.UserRepository;
 
@@ -23,6 +28,9 @@ public class WebController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PostController postController;
 
     /**
      * Return Landing Page
@@ -51,11 +59,43 @@ public class WebController {
 
     /**
      * Return Post Creation Page
+     * Get Mapping
      *
      * @return rendered createPost.html
      */
-    @RequestMapping("/createPost")
-    public String createPost() {
+    @GetMapping("/createPost")
+    public String createPostPage() {
+        return "createPost";
+    }
+
+    /**
+     * Handle Post Creation Page request
+     * Post Mapping
+     *
+     * @return rendered createPost.html
+     */
+    @PostMapping("/createPost")
+    public String createPostProcess(@RequestParam String postTitle,
+                                    @RequestParam String postDescription,
+                                    @RequestParam String postType,
+                                    @RequestParam String tags,
+                                    @RequestParam String postUser,
+                                    @RequestParam MultipartFile postFile) {
+        Post post = new Post(
+                null,
+                postTitle,
+                postDescription,
+                postType,
+                null,
+                tags,
+                1,
+                userRepository.findByUsername(postUser).getId(),
+                null,
+                null,
+                new Date());
+
+        ResponseEntity<String> result = postController.createPost(post, postFile);
+
         return "createPost";
     }
 

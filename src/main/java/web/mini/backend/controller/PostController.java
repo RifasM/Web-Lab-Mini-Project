@@ -8,8 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Post;
 import web.mini.backend.repository.PostRepository;
+import web.mini.backend.repository.UserRepository;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +19,14 @@ import java.util.Map;
 public class PostController {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
     private final AwsController awsController;
 
-    public PostController(PostRepository postRepository, AwsController awsController) {
+    public PostController(PostRepository postRepository,
+                          UserRepository userRepository,
+                          AwsController awsController) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
         this.awsController = awsController;
     }
 
@@ -71,24 +75,8 @@ public class PostController {
      * @return the status
      */
     @PostMapping("/post")
-    public ResponseEntity<String> createPost(@RequestParam String postTitle,
-                                             @RequestParam String postDescription,
-                                             @RequestParam String postType,
-                                             @RequestParam String tags,
-                                             @RequestParam String postUser,
+    public ResponseEntity<String> createPost(@RequestParam Post post,
                                              @RequestParam MultipartFile postFile) {
-        Post post = new Post(
-                null,
-                postTitle,
-                postDescription,
-                postType,
-                null,
-                tags,
-                1,
-                Long.parseLong(postUser),
-                null,
-                null,
-                new Date());
 
         ResponseEntity<String> status = awsController.uploadFileToS3Bucket(postFile,
                 "posts");
