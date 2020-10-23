@@ -93,17 +93,19 @@ public class WebController {
                 null,
                 tags,
                 1,
-                userRepository.findByUsername(postUser).getId(),
+                postUser,
                 null,
                 null,
                 new Date());
 
         ResponseEntity<String> result = postController.createPost(post, postFile);
 
+        System.out.println(result);
+
         if (result.getStatusCode().is2xxSuccessful())
             return "postTemplates/createPost";
         else
-            return "postTemplates/createPost?error=true";
+            return "error";
     }
 
     /**
