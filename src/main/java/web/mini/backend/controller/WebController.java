@@ -7,14 +7,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Post;
 import web.mini.backend.model.User;
+import web.mini.backend.repository.PostRepository;
 import web.mini.backend.repository.UserRepository;
 
 import java.text.ParseException;
@@ -28,6 +27,9 @@ public class WebController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Autowired
     private PostController postController;
@@ -57,6 +59,7 @@ public class WebController {
         return "login";
     }
 
+
     /**
      * Return Post Creation Page
      * Get Mapping
@@ -67,6 +70,7 @@ public class WebController {
     public String createPostPage() {
         return "createPost";
     }
+
 
     /**
      * Handle Post Creation Page request
@@ -96,8 +100,28 @@ public class WebController {
 
         ResponseEntity<String> result = postController.createPost(post, postFile);
 
-        return "createPost";
+        if (result.getStatusCode().is2xxSuccessful())
+            return "postTemplates/createPost";
+        else
+            return "postTemplates/createPost?error=true";
     }
+
+    /**
+     * Return Post Page
+     *
+     * @param post_id postID to view
+     * @return rendered viewPost.html
+     */
+    @GetMapping("/viewPost/{post_id}")
+    public ModelAndView createPostPage(@PathVariable(value = "post_id") String post_id)
+            throws ResourceNotFoundException {
+        ModelAndView post_data = new ModelAndView("postTemplates/viewPost");
+        Post post = postRepository.findById(post_id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found on :: " + post_id));
+        post_data.addObject("post_data", post);
+        return post_data;
+    }
+
 
     /**
      * Return Register Page
@@ -148,8 +172,6 @@ public class WebController {
         userRepository.save(user);
 
         return "login";
-
-
     }
 
     /**

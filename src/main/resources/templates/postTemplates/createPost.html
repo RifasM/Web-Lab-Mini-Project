@@ -24,6 +24,10 @@
     <div class="card-body px-lg-5 col-md-6" style="margin-left: auto; margin-right: auto;">
         <h1 class="mb-3">Create New Post</h1>
         <div>Enter the Following Details to Continue</div>
+        <div class="badge badge-warning" id="errors"
+             th:if="${param.error}">
+            An Error Occurred
+        </div>
         <div>
             <form enctype="multipart/form-data" method="post" th:action="@{/createPost}">
                 <div class="md-form">
