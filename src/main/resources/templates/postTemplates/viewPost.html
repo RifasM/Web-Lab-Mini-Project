@@ -21,19 +21,43 @@
 
 <main id="main">
 
-    <div class="card-body px-lg-5 col-md-6" style="margin-left: auto; margin-right: auto;">
-        <h1 class="mb-3" th:text="${post_data.postTitle}"></h1>
-        <div>
-            <h5 class="m-b-2" th:text="${post_data.postDescription}"></h5>
-            <h5 class="m-b-2" th:text="${post_data.postUser}"></h5>
-            <h5 class="m-b-2" th:text="${post_data.tags}"></h5>
-            <img th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}">
-            <h5 class="m-b-2" th:text="${post_data.postDate}"></h5>
-            <h5 class="m-b-2" th:text="${post_data.postLikesUserIds}"></h5>
-            <h5 class="m-b-2" th:text="${post_data.postCommentsUserIds}"></h5>
-        </div>
+    <section class="portfolio" id="portfolio">
+        <div class="container">
 
-    </div>
+            <div class="section-title">
+                <h3 th:text="${post_data.postTitle}"></h3>
+                <p th:text="${post_data.postDescription}"></p>
+            </div>
+
+            <div class="row portfolio-container">
+                <div class="col-lg-8 col-md-8 portfolio-item filter-app">
+                    <img class="img-fluid" th:alt="${post_data.postDescription}"
+                         th:if="${post_data.postType == 'image' || post_data.postType == 'gif'}"
+                         th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"/>
+                    <video autoplay loop th:if="${post_data.postType == 'video'}">
+                        <source th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"
+                                type="vi/mp4">
+                    </video>
+                    <div class="portfolio-info">
+                        <p th:text="'Posted By: '+ ${post_data.postUser}"></p>
+                        <p th:text="'Posted On: '+ ${post_data.postDate}"></p>
+                        <small th:text="'Tags: ' + ${post_data.tags}"></small>
+                        <a class="venobox preview-link" data-gall="portfolioGallery" href="#"
+                           th:title="${post_data.postLikesUserIds}"><i class="bx bxs-heart"></i></a>
+                        <a class="details-link" href="#" th:title="${post_data.postCommentsUserIds}"><i
+                                class="bx bxs-comment"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 portfolio-item filter-app">
+                    <h4>><span>Comments</span></h4
+                    <p>comment 1</p>
+                    <p>comment 2</p>
+                    <p>comment 3</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
 </main><!-- End #main -->
 
