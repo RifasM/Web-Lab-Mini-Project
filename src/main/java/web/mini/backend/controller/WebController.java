@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import web.mini.backend.model.Post;
 import web.mini.backend.model.User;
 import web.mini.backend.repository.PostRepository;
 import web.mini.backend.repository.UserRepository;
@@ -40,7 +41,7 @@ public class WebController {
     public String index() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && !("anonymousUser").equals(auth.getName())) {
-            return "home";
+            return "redirect:/home";
         }
 
         return "index";
@@ -114,7 +115,9 @@ public class WebController {
      * @return rendered home.html
      */
     @RequestMapping("/home")
-    public String authLogin() {
+    public String authLogin(Model model) {
+        Iterable<Post> posts = postController.getAllPosts();
+        model.addAttribute("posts", posts);
         return "home";
     }
 
