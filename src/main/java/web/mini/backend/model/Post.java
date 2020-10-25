@@ -32,7 +32,7 @@ public class Post {
 
     private int enabled;
 
-    private long postUser;
+    private String postUser;
 
     private List<Map<Long, Integer>> postLikesUserIds; // Integer here is to specify type of like, thumbs, heart, etc
 
@@ -42,14 +42,6 @@ public class Post {
     @Temporal(TemporalType.TIMESTAMP)
     private Date postDate;
 
-    public long getPostUser() {
-        return postUser;
-    }
-
-    public void setPostUser(long postUser) {
-        this.postUser = postUser;
-    }
-
     public Post(String id,
                 String postTitle,
                 String postDescription,
@@ -57,7 +49,7 @@ public class Post {
                 String postUrl,
                 String tags,
                 int enabled,
-                long postUser,
+                String postUser,
                 List<Map<Long, Integer>> postLikesUserIds,
                 List<Map<Long, String>> postCommentsUserIds,
                 Date postDate) {
@@ -124,6 +116,14 @@ public class Post {
 
     public void setEnabled(int enabled) {
         this.enabled = enabled;
+    }
+
+    public String getPostUser() {
+        return postUser;
+    }
+
+    public void setPostUser(String postUser) {
+        this.postUser = postUser;
     }
 
     public Date getPostDate() {

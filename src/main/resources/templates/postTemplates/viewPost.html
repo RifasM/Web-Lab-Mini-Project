@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Pixies - Create Post</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <th:block th:insert="includes/home-fragments::home-header"></th:block>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<th:block style="color: #fff;" th:insert="includes/home-fragments::navbar-inner-page"></th:block>
+
+<main id="main">
+
+    <section class="portfolio" id="portfolio">
+        <div class="container">
+
+            <div class="section-title">
+                <h3 th:text="${post_data.postTitle}"></h3>
+                <p th:text="${post_data.postDescription}"></p>
+            </div>
+
+            <div class="row portfolio-container">
+                <div class="col-lg-8 col-md-8 portfolio-item filter-app">
+                    <img class="img-fluid" th:alt="${post_data.postDescription}"
+                         th:if="${post_data.postType == 'image' || post_data.postType == 'gif'}"
+                         th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"/>
+                    <video autoplay loop th:if="${post_data.postType == 'video'}">
+                        <source th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"
+                                type="vi/mp4">
+                    </video>
+                    <div class="portfolio-info">
+                        <p th:text="'Posted By: '+ ${post_data.postUser}"></p>
+                        <p th:text="'Posted On: '+ ${post_data.postDate}"></p>
+                        <small th:text="'Tags: ' + ${post_data.tags}"></small>
+                        <a class="venobox preview-link" data-gall="portfolioGallery" href="#"
+                           th:title="${post_data.postLikesUserIds}"><i class="bx bxs-heart"></i></a>
+                        <a class="details-link" href="#" th:title="${post_data.postCommentsUserIds}"><i
+                                class="bx bxs-comment"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 portfolio-item filter-app">
+                    <h4><span>Comments</span></h4>
+                    <p>comment 1</p>
+                    <p>comment 2</p>
+                    <p>comment 3</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+
+<th:block th:insert="includes/home-fragments::footer"></th:block>
+
+<a class="back-to-top" href="#"><i class="ri-arrow-up-line"></i></a>
+
+<th:block th:insert="includes/home-fragments::home-scripts"></th:block>
+
+</body>
+
+</html>

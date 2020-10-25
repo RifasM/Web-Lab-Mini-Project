@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import web.mini.backend.BackendApplication;
 
@@ -20,7 +22,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("api/v1/")
 public class AwsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(BackendApplication.class);
 
@@ -53,8 +54,7 @@ public class AwsController {
         return file;
     }
 
-    @PostMapping("/s3/upload")
-    public ResponseEntity<String> uploadFileToS3Bucket(@RequestParam MultipartFile multipartFile, @RequestParam String bucketSubName) {
+    public ResponseEntity<String> uploadFileToS3Bucket(MultipartFile multipartFile, String bucketSubName) {
         try {
             final File file = convertMultiPartFileToFile(multipartFile);
             final String uniqueFileName = (LocalDateTime.now() + "_" + file.getName()).replace(" ", "_");

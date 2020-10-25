@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Post;
 import web.mini.backend.repository.PostRepository;
+import web.mini.backend.repository.UserRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +19,15 @@ import java.util.Map;
 public class PostController {
 
     private final PostRepository postRepository;
-    private AwsController awsController;
+    private final UserRepository userRepository;
+    private final AwsController awsController;
 
-    public PostController(PostRepository postRepository) {
+    public PostController(PostRepository postRepository,
+                          UserRepository userRepository,
+                          AwsController awsController) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.awsController = awsController;
     }
 
     /**
@@ -65,24 +71,25 @@ public class PostController {
     /**
      * Create post.
      *
-     * @param post          the post
-     * @param multipartFile the post file
+     * @param postFile the post file
      * @return the status
      */
     @PostMapping("/post")
-    public ResponseEntity<String> createPost(@RequestBody Post post, @RequestParam MultipartFile multipartFile) {
-        ResponseEntity<String> status = this.awsController.uploadFileToS3Bucket(multipartFile,
+    public ResponseEntity<String> createPost(@RequestParam Post post,
+                                             @RequestParam MultipartFile postFile) {
+
+        ResponseEntity<String> status = awsController.uploadFileToS3Bucket(postFile,
                 "posts");
+
         if (status.getStatusCode().is2xxSuccessful()) {
             try {
                 post.setPostUrl(status.getBody());
-                System.out.println(post);
                 postRepository.save(post);
+                return ResponseEntity.ok().body("created successfully");
             } catch (Exception e) {
                 return ResponseEntity.status(500).body("Error: " + e.getMessage());
             }
         }
-        
         return ResponseEntity.badRequest().body("Error");
     }
 
