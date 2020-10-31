@@ -19,7 +19,7 @@ public class Board {
     @Id
     private String id;
 
-    private long userId;
+    private String userId;
 
     private String boardName;
 
@@ -36,7 +36,7 @@ public class Board {
     private Date createdAt;
 
     public Board(String id,
-                 long userId,
+                 String userId,
                  String boardName,
                  List<Long> postID,
                  String boardDescription,
@@ -61,11 +61,11 @@ public class Board {
         this.id = id;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
