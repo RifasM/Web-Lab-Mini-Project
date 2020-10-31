@@ -5,11 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
 import web.mini.backend.repository.BoardRepository;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +19,9 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private AwsController awsController;
 
     /**
      * Get all boards list.
@@ -58,15 +61,40 @@ public class BoardController {
         return boardRepository.findByUserId(userID, pageRequest);
     }
 
+    public static Map<String, Boolean> getStringBooleanMap(int status) {
+        Map<String, Boolean> response = new HashMap<>();
+
+        if (status != 500)
+            response.put("deleted", Boolean.TRUE);
+        else {
+            response.put("deleted from database", Boolean.TRUE);
+            response.put("deleted from s3", Boolean.FALSE);
+        }
+
+        return response;
+    }
+
     /**
-     * Create post.
+     * Create board.
      *
      * @param board the post
      * @return the post
      */
     @PostMapping("/board")
-    public Board createBoard(@Valid @RequestBody Board board) {
-        return boardRepository.save(board);
+    public ResponseEntity<String> createBoard(@RequestParam Board board,
+                                              @RequestParam MultipartFile boardCoverFile) {
+        ResponseEntity<String> status = awsController.uploadFileToS3Bucket(boardCoverFile,
+                "boards");
+        if (status.getStatusCode().is2xxSuccessful()) {
+            try {
+                board.setBoardCoverUrl(status.getBody());
+                boardRepository.save(board);
+                return ResponseEntity.ok().body("created successfully");
+            } catch (Exception e) {
+                return ResponseEntity.status(500).body("Error: " + e.getMessage());
+            }
+        }
+        return ResponseEntity.badRequest().body("Error");
     }
 
     /**
@@ -84,8 +112,10 @@ public class BoardController {
                         .orElseThrow(() -> new ResourceNotFoundException("Post not found on :: " + boardID));
 
         boardRepository.delete(board);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+
+        int status = this.awsController.deleteFileFromS3Bucket(board.getBoardCoverUrl(),
+                "boards").getStatusCodeValue();
+
+        return getStringBooleanMap(status);
     }
 }

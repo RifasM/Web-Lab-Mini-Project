@@ -33,7 +33,7 @@ public class PostWebController {
      */
     @GetMapping("/createPost")
     public String createPostPage() {
-        return "createPost";
+        return "postTemplates/createPost";
     }
 
 
