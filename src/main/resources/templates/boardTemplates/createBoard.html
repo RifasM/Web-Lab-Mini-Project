@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Pixies - Create Post</title>
+    <title>Pixies - Create Board</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -22,47 +22,48 @@
 <main id="main">
 
     <div class="card-body px-lg-5 col-md-6" style="margin-left: auto; margin-right: auto;">
-        <h1 class="mb-3">Create New Post</h1>
+        <h1 class="mb-3">Create New Board</h1>
         <div>Enter the Following Details to Continue</div>
         <div class="badge badge-warning" id="errors"
              th:if="${param.error}">
             An Error Occurred
         </div>
         <div>
-            <form enctype="multipart/form-data" method="post" th:action="@{/createPost}">
+            <form enctype="multipart/form-data" method="post" th:action="@{/createBoard}">
                 <div class="md-form">
-                    <input class="form-control" id="postTitle" name="postTitle" required type="text">
-                    <label for="postTitle">Post Title</label>
+                    <input class="form-control" id="boardName" name="boardName" required type="text">
+                    <label for="boardName">Board Name</label>
                 </div>
 
                 <div class="md-form">
-                    <input class="form-control" id="postDescription" name="postDescription" required type="text">
-                    <label for="postDescription">Post Caption</label>
+                    <input class="form-control" id="boardDescription" name="boardDescription" required type="text">
+                    <label for="boardDescription">Board Description</label>
                 </div>
 
                 <div class="md-form">
-                    <p class="form-control-plaintext">Post Type</p>
-                    <select class="form-control" id="postType" name="postType" required>
-                        <option value="image">Image</option>
-                        <option value="video">Video</option>
-                        <option value="gif">Gif</option>
-                    </select>
+                    <p for="privateBoard">Board Type</p>
+                    <div class="custom-control switch">
+                        <label>
+                            Private
+                            <input checked data-off="Private"
+                                   data-offstyle="success" data-on="Public"
+                                   data-onstyle="primary" id="privateBoard"
+                                   name="privateBoard" type="checkbox">
+                            <span class="lever"></span>
+                            Public
+                        </label>
+                    </div>
                 </div>
 
                 <div class="md-form">
-                    <input class="form-control" id="tags" name="tags" type="text">
-                    <label for="tags">Post Tags</label>
+                    <p class="custom-file-label">Board Cover</p>
+                    <input class="form-control custom-file-input" id="boardCoverUrl" name="boardCoverUrl" type="file">
                 </div>
 
-                <div class="md-form">
-                    <p class="custom-file-label">Post File</p>
-                    <input class="custom-file-input" id="postFile" name="postFile" required type="file">
-                </div>
-
-                <input id="postUser" name="postUser" th:value="${#authentication.name}" type="hidden">
+                <input id="userId" name="userId" th:value="${#authentication.name}" type="hidden">
 
                 <input class="btn btn-outline-success btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit"
-                       value="Create Post">
+                       value="Create Board">
             </form>
         </div>
 
