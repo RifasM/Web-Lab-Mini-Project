@@ -73,6 +73,7 @@ public class BoardController {
 
         return response;
     }
+
     /**
      * Create board.
      *
