@@ -44,8 +44,9 @@ public class BoardWebController {
     public String createPostProcess(@RequestParam String boardName,
                                     @RequestParam String boardDescription,
                                     @RequestParam String userId,
-                                    @RequestParam String privateBoard,
-                                    @RequestParam MultipartFile boardCoverUrl) {
+                                    @RequestParam(required = false, defaultValue = "true") String privateBoard,
+                                    @RequestParam(required = false) MultipartFile boardCoverUrl) {
+
         Board board = new Board(
                 null,
                 userId,

@@ -1,8 +1,6 @@
 package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,8 +55,8 @@ public class BoardController {
      * @return the posts by user id
      */
     @GetMapping("/board/user/{userID}")
-    public Page<Board> findByUser(@PathVariable(value = "userID") Long userID, PageRequest pageRequest) {
-        return boardRepository.findByUserId(userID, pageRequest);
+    public Iterable<Board> findByUser(@PathVariable(value = "userID") String userID) {
+        return boardRepository.findByUserId(userID);
     }
 
     public static Map<String, Boolean> getStringBooleanMap(int status) {
@@ -83,16 +81,21 @@ public class BoardController {
     @PostMapping("/board")
     public ResponseEntity<String> createBoard(@RequestParam Board board,
                                               @RequestParam MultipartFile boardCoverFile) {
-        ResponseEntity<String> status = awsController.uploadFileToS3Bucket(boardCoverFile,
-                "boards");
-        if (status.getStatusCode().is2xxSuccessful()) {
-            try {
-                board.setBoardCoverUrl(status.getBody());
-                boardRepository.save(board);
-                return ResponseEntity.ok().body("created successfully");
-            } catch (Exception e) {
-                return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        if (!boardCoverFile.isEmpty()) {
+            ResponseEntity<String> status = awsController.uploadFileToS3Bucket(boardCoverFile,
+                    "boards");
+            if (status.getStatusCode().is2xxSuccessful()) {
+                try {
+                    board.setBoardCoverUrl(status.getBody());
+                    boardRepository.save(board);
+                    return ResponseEntity.ok().body("created successfully");
+                } catch (Exception e) {
+                    return ResponseEntity.status(500).body("Error: " + e.getMessage());
+                }
             }
+        } else {
+            boardRepository.save(board);
+            return ResponseEntity.ok().body("created successfully");
         }
         return ResponseEntity.badRequest().body("Error");
     }
