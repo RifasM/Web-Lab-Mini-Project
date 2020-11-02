@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface BoardRepository extends ElasticsearchRepository<Board, String> {
 
-    Iterable<Board> findByUserId(String userId);
+    List<Board> findByUserId(String userId);
+
+    Board findBoardByIdAndUserId(String boardId, String userId);
 
     List<Board> findByBoardDescription(String boardDescription);
 }

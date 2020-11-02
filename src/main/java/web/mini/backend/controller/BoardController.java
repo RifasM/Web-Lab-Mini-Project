@@ -9,6 +9,7 @@ import web.mini.backend.model.Board;
 import web.mini.backend.repository.BoardRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,7 +40,7 @@ public class BoardController {
      * @throws ResourceNotFoundException the resource not found exception
      */
     @GetMapping("/board/{id}")
-    public ResponseEntity<Board> getPostsById(@PathVariable(value = "id") String boardID)
+    public ResponseEntity<Board> getBoardById(@PathVariable(value = "id") String boardID)
             throws ResourceNotFoundException {
         Board board =
                 boardRepository
@@ -52,10 +53,10 @@ public class BoardController {
      * Gets board by user id.
      *
      * @param userID the user id
-     * @return the posts by user id
+     * @return the boards by user id
      */
     @GetMapping("/board/user/{userID}")
-    public Iterable<Board> findByUser(@PathVariable(value = "userID") String userID) {
+    public List<Board> findByUser(@PathVariable(value = "userID") String userID) {
         return boardRepository.findByUserId(userID);
     }
 
@@ -70,6 +71,18 @@ public class BoardController {
         }
 
         return response;
+    }
+
+    /**
+     * Gets board by user id and board name.
+     *
+     * @param userID  the user id
+     * @param boardId the name of the board to find
+     * @return the boards by user id
+     */
+    @GetMapping("/board/{boardId}/{userID}")
+    public Board findByUserAndBoard(@PathVariable(value = "userID") String userID, @PathVariable(value = "boardId") String boardId) {
+        return boardRepository.findBoardByIdAndUserId(boardId, userID);
     }
 
     /**
