@@ -2,7 +2,10 @@ package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +27,8 @@ public class PostWebController {
     @Autowired
     private PostController postController;
 
+    @Autowired
+    private BoardController boardController;
 
     /**
      * Return Post Creation Page
@@ -32,7 +37,9 @@ public class PostWebController {
      * @return rendered createPost.html
      */
     @GetMapping("/createPost")
-    public String createPostPage() {
+    public String createPostPage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("boards", boardController.findByUser(auth.getName()));
         return "postTemplates/createPost";
     }
 
