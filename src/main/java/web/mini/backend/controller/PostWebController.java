@@ -13,16 +13,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import web.mini.backend.exception.ResourceNotFoundException;
+import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
+import web.mini.backend.repository.BoardRepository;
 import web.mini.backend.repository.PostRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class PostWebController {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private BoardRepository boardRepository;
 
     @Autowired
     private PostController postController;
@@ -39,7 +46,8 @@ public class PostWebController {
     @GetMapping("/createPost")
     public String createPostPage(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("boards", boardController.findByUser(auth.getName()));
+        List<Board> board = boardController.findByUser(auth.getName());
+        model.addAttribute("boards", board);
         return "postTemplates/createPost";
     }
 
@@ -54,9 +62,10 @@ public class PostWebController {
     public String createPostProcess(@RequestParam String postTitle,
                                     @RequestParam String postDescription,
                                     @RequestParam String postType,
+                                    @RequestParam String boardId,
                                     @RequestParam String tags,
                                     @RequestParam String postUser,
-                                    @RequestParam MultipartFile postFile) {
+                                    @RequestParam MultipartFile postFile) throws ResourceNotFoundException {
         Post post = new Post(
                 null,
                 postTitle,
@@ -69,12 +78,22 @@ public class PostWebController {
                 null,
                 null,
                 new Date());
-
         ResponseEntity<String> result = postController.createPost(post, postFile);
 
-        if (result.getStatusCode().is2xxSuccessful())
-            return "postTemplates/createPost";
-        else
+        if (result.getStatusCode().is2xxSuccessful()) {
+            Board board = boardController.getBoardById(boardId).getBody();
+            if (board != null) {
+                List<String> postIDs = new ArrayList<>();
+                if (board.getPostID() != null)
+                    postIDs = board.getPostID();
+
+                postIDs.add(post.getId());
+                board.setPostID(postIDs);
+                boardRepository.save(board);
+                return "redirect:/createPost";
+            } else
+                return "error";
+        } else
             return "error";
     }
 

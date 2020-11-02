@@ -51,7 +51,7 @@
 
                 <div class="md-form">
                     <p class="form-control-plaintext">Save to Board</p>
-                    <select class="form-control" id="boardName" name="boardName" required>
+                    <select class="form-control" id="boardId" name="boardId" required>
                         <option th:each="board : ${boards}" th:text="${board.boardName}"
                                 th:value="${board.id}"></option>
                     </select>
