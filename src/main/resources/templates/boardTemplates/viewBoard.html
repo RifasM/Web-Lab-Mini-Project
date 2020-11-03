@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Pixies - View Board</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <th:block th:insert="includes/home-fragments::home-header"></th:block>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<th:block style="color: #fff;" th:insert="includes/home-fragments::navbar-inner-page"></th:block>
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <!--section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li>Portfolio Details</li>
+        </ol>
+        <h2>Portfolio Details</h2>
+
+      </div>
+    </section--><!-- End Breadcrumbs -->
+
+    <!-- ======= Portfolio Details Section ======= -->
+    <section class="portfolio-details" id="portfolio-details">
+        <section class="container">
+
+            <div class="portfolio-details-container">
+
+                <div class="owl-carousel portfolio-details-carousel">
+                    <img alt="" class="img-fluid" style="height: 50vh;"
+                         th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/boards/'+${board_data.boardCoverUrl}">
+                </div>
+
+                <div class="portfolio-info">
+                    <h3 th:text="${board_data.boardName}"></h3>
+                    <ul>
+                        <li>
+                            <th:block th:text="${board_data.boardDescription}"/>
+                        </li>
+                        <li>
+                            <th:block th:if="${board_data.privateBoard}">
+                                <p class="text-success">This is a Private Board, this is only visible to you</p>
+                            </th:block>
+                            <th:block th:unless="${board_data.privateBoard}">
+                                <p class="text-info">This is a Public Board, and is visible to others with the link</p>
+                            </th:block>
+                        </li>
+                        <th:block th:if="${#authentication.name == board_data.userId}">
+                            <li><a class="btn btn-rounded btn-outline-info" href="#">Update Board</a></li>
+                            <li><a class="btn btn-rounded btn-outline-danger" href="#">Delete Board</a></li>
+                        </th:block>
+                    </ul>
+                </div>
+
+            </div>
+
+            <section class="blog" id="blog">
+                <div class="container">
+
+                    <h2 class="mb-3">Posts in this Board</h2>
+
+                    <div class="row">
+
+                        <div class="col-lg-8 entries">
+
+                            <div class="row">
+
+                                <div class="col-md-6 d-flex align-items-stretch" th:each="post: ${posts}">
+                                    <article class="entry">
+
+                                        <div class="entry-img">
+                                            <a th:href="'/viewPost/'+ ${post.id}">
+                                                <img class="img-fluid" th:alt="${post.postDescription}"
+                                                     th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post.postUrl}">
+                                            </a>
+                                        </div>
+
+                                        <h2 class="entry-title">
+                                            <a th:href="'/viewPost/'+ ${post.id}" th:text="${post.postTitle}"></a>
+                                        </h2>
+
+                                        <div class="entry-meta">
+                                            <ul>
+                                                <li class="d-flex align-items-center"><i class="icofont-user"></i> <a
+                                                        href="#"
+                                                        th:text="${post.postUser}"></a>
+                                                </li>
+                                                <li class="d-flex align-items-center"><i class="icofont-tags"></i><a
+                                                        href="#"
+                                                        th:text="${post.tags}"></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="entry-content">
+                                            <p th:text="${post.postDescription}"></p>
+                                            <div class="read-more">
+                                                <a th:href="'/viewPost/'+ ${post.id}">View Post</a>
+                                            </div>
+                                        </div>
+
+                                    </article><!-- End blog entry -->
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            </div>
+        </section><!-- End Portfolio Details Section -->
+
+</main><!-- End #main -->
+
+<th:block th:insert="includes/home-fragments::footer"></th:block>
+
+<a class="back-to-top" href="#"><i class="ri-arrow-up-line"></i></a>
+
+<th:block th:insert="includes/home-fragments::home-scripts"></th:block>
+<script>
+    function validateGender() {
+        var ddl = document.getElementById("gender");
+        if (ddl.selectedIndex === 0) {
+            document.getElementById("gender_warning").innerHTML = "Please Select your Gender";
+            return false;
+        } else {
+            document.getElementById("gender_warning").innerHTML = "";
+            return true;
+        }
+    }
+
+    function getDob() {
+        var date = new Date();
+        return (date.getMonth() + 1) + "-" + date.getDate() + "-" + (date.getFullYear() - 18);
+    }
+
+    document.getElementById("dob").prop("max", getDob());
+    document.getElementById("#dob").validate();
+
+    function validate_and_submit() {
+        if (validateGender()) {
+            document.getElementById("update_form").submit();
+        } else {
+            document.getElementById("errors").innerHTML = "<span class=\"badge badge-pill badge-danger\">Please Correct the following</span>";
+        }
+    }
+</script>
+
+</body>
+
+</html>
