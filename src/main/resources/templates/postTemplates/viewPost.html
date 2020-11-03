@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Pixies - Create Post</title>
+    <title>Pixies - View Post</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -54,6 +54,19 @@
                     <p>comment 1</p>
                     <p>comment 2</p>
                     <p>comment 3</p>
+                </div>
+            </div>
+            <div class="row text-center" th:if="${#authentication.name == post_data.postUser}">
+                <div class="col-md-5">
+                    <a class="btn btn-outline-danger btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                       th:href="@{/deletePost/{id}(id = ${post_data.id})}">Delete Post</a>
+                </div>
+
+                <div class="col-md-2"></div>
+
+                <div class="col-md-5">
+                    <a class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" href="#">Update
+                        Post</a>
                 </div>
             </div>
         </div>

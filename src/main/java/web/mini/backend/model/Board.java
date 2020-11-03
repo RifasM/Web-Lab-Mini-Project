@@ -19,11 +19,11 @@ public class Board {
     @Id
     private String id;
 
-    private long userId;
+    private String userId;
 
     private String boardName;
 
-    private List<Long> postID;
+    private List<String> postID;
 
     private String boardDescription;
 
@@ -36,9 +36,9 @@ public class Board {
     private Date createdAt;
 
     public Board(String id,
-                 long userId,
+                 String userId,
                  String boardName,
-                 List<Long> postID,
+                 List<String> postID,
                  String boardDescription,
                  String boardCoverUrl,
                  Boolean privateBoard,
@@ -61,11 +61,11 @@ public class Board {
         this.id = id;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -77,11 +77,11 @@ public class Board {
         this.boardName = boardName;
     }
 
-    public List<Long> getPostID() {
+    public List<String> getPostID() {
         return postID;
     }
 
-    public void setPostID(List<Long> postID) {
+    public void setPostID(List<String> postID) {
         this.postID = postID;
     }
 

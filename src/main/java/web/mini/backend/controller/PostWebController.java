@@ -2,18 +2,22 @@ package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import web.mini.backend.exception.ResourceNotFoundException;
+import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
+import web.mini.backend.repository.BoardRepository;
 import web.mini.backend.repository.PostRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class PostWebController {
@@ -22,19 +26,13 @@ public class PostWebController {
     private PostRepository postRepository;
 
     @Autowired
+    private BoardRepository boardRepository;
+
+    @Autowired
     private PostController postController;
 
-
-    /**
-     * Return Post Creation Page
-     * Get Mapping
-     *
-     * @return rendered createPost.html
-     */
-    @GetMapping("/createPost")
-    public String createPostPage() {
-        return "createPost";
-    }
+    @Autowired
+    private BoardController boardController;
 
 
     /**
@@ -47,9 +45,10 @@ public class PostWebController {
     public String createPostProcess(@RequestParam String postTitle,
                                     @RequestParam String postDescription,
                                     @RequestParam String postType,
+                                    @RequestParam String boardId,
                                     @RequestParam String tags,
                                     @RequestParam String postUser,
-                                    @RequestParam MultipartFile postFile) {
+                                    @RequestParam MultipartFile postFile) throws ResourceNotFoundException {
         Post post = new Post(
                 null,
                 postTitle,
@@ -62,13 +61,37 @@ public class PostWebController {
                 null,
                 null,
                 new Date());
-
         ResponseEntity<String> result = postController.createPost(post, postFile);
 
-        if (result.getStatusCode().is2xxSuccessful())
-            return "postTemplates/createPost";
-        else
+        if (result.getStatusCode().is2xxSuccessful()) {
+            Board board = boardController.getBoardById(boardId).getBody();
+            if (board != null) {
+                List<String> postIDs = new ArrayList<>();
+                if (board.getPostID() != null)
+                    postIDs = board.getPostID();
+
+                postIDs.add(post.getId());
+                board.setPostID(postIDs);
+                boardRepository.save(board);
+                return "redirect:/createPost";
+            } else
+                return "error";
+        } else
             return "error";
+    }
+
+    /**
+     * Return Post Creation Page
+     * Get Mapping
+     *
+     * @return rendered createPost.html
+     */
+    @GetMapping("/createPost")
+    public String createPostPage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<Board> board = boardController.findByUser(auth.getName());
+        model.addAttribute("boards", board);
+        return "postTemplates/createPost";
     }
 
     /**
@@ -78,7 +101,7 @@ public class PostWebController {
      * @return rendered viewPost.html
      */
     @GetMapping("/viewPost/{post_id}")
-    public ModelAndView createPostPage(@PathVariable(value = "post_id") String post_id)
+    public ModelAndView postPage(@PathVariable(value = "post_id") String post_id)
             throws ResourceNotFoundException {
         ModelAndView post_data = new ModelAndView("postTemplates/viewPost");
         Post post = postRepository.findById(post_id)
@@ -87,5 +110,23 @@ public class PostWebController {
         return post_data;
     }
 
+    /**
+     * Return Home Page after deleting the post
+     *
+     * @param post_id postID to delete
+     * @return redirect to home
+     */
+    @RequestMapping("/deletePost/{post_id}")
+    public String deletePost(@PathVariable(value = "post_id") String post_id)
+            throws ResourceNotFoundException {
+        Post post = postController.getPostsById(post_id).getBody();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+        if (post != null && post.getPostUser().equals(auth.getName())) {
+            postController.deletePost(post_id);
+            return "redirect:/";
+        }
+
+        return "error";
+    }
 }

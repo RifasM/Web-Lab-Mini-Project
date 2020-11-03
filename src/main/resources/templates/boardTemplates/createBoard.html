@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Pixies - Create Board</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <th:block th:insert="includes/home-fragments::home-header"></th:block>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<th:block style="color: #fff;" th:insert="includes/home-fragments::navbar-inner-page"></th:block>
+
+<main id="main">
+
+    <div class="card-body px-lg-5 col-md-6" style="margin-left: auto; margin-right: auto;">
+        <h1 class="mb-3">Create New Board</h1>
+        <div>Enter the Following Details to Continue</div>
+        <div class="badge badge-warning" id="errors"
+             th:if="${param.error}">
+            An Error Occurred
+        </div>
+        <div>
+            <form enctype="multipart/form-data" method="post" th:action="@{/createBoard}">
+                <div class="md-form">
+                    <input class="form-control" id="boardName" name="boardName" required type="text">
+                    <label for="boardName">Board Name</label>
+                </div>
+
+                <div class="md-form">
+                    <input class="form-control" id="boardDescription" name="boardDescription" required type="text">
+                    <label for="boardDescription">Board Description</label>
+                </div>
+
+                <div class="md-form">
+                    <p for="privateBoard">Board Type</p>
+                    <div class="custom-control switch">
+                        <label>
+                            Private
+                            <input checked data-off="Private"
+                                   data-offstyle="success" data-on="Public"
+                                   data-onstyle="primary" id="privateBoard"
+                                   name="privateBoard" type="checkbox">
+                            <span class="lever"></span>
+                            Public
+                        </label>
+                    </div>
+                </div>
+
+                <div class="md-form">
+                    <p class="custom-file-label">Board Cover</p>
+                    <input class="form-control custom-file-input" id="boardCoverUrl" name="boardCoverUrl" type="file">
+                </div>
+
+                <input id="userId" name="userId" th:value="${#authentication.name}" type="hidden">
+
+                <input class="btn btn-outline-success btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit"
+                       value="Create Board">
+            </form>
+        </div>
+
+    </div>
+
+</main><!-- End #main -->
+
+<th:block th:insert="includes/home-fragments::footer"></th:block>
+
+<a class="back-to-top" href="#"><i class="ri-arrow-up-line"></i></a>
+
+<th:block th:insert="includes/home-fragments::home-scripts"></th:block>
+
+</body>
+
+</html>

@@ -10,9 +10,10 @@ import web.mini.backend.model.Post;
 import web.mini.backend.repository.PostRepository;
 import web.mini.backend.repository.UserRepository;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static web.mini.backend.controller.BoardController.getStringBooleanMap;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -110,16 +111,7 @@ public class PostController {
         postRepository.delete(post);
         int status = this.awsController.deleteFileFromS3Bucket(post.getPostUrl(), "posts").getStatusCodeValue();
 
-        Map<String, Boolean> response = new HashMap<>();
-
-        if (status != 500)
-            response.put("deleted", Boolean.TRUE);
-        else {
-            response.put("deleted from database", Boolean.TRUE);
-            response.put("deleted from s3", Boolean.FALSE);
-        }
-
-        return response;
+        return getStringBooleanMap(status);
     }
 
     /**

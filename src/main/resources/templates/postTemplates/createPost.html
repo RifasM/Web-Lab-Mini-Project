@@ -50,13 +50,22 @@
                 </div>
 
                 <div class="md-form">
+                    <p class="form-control-plaintext">Save to Board</p>
+                    <select class="form-control" id="boardId" name="boardId" required>
+                        <option th:each="board : ${boards}" th:text="${board.boardName}"
+                                th:value="${board.id}"></option>
+                    </select>
+                    <p class="form-control-plaintext"><a th:href="@{/createBoard}">Create New Board</a></p>
+                </div>
+
+                <div class="md-form">
                     <input class="form-control" id="tags" name="tags" type="text">
                     <label for="tags">Post Tags</label>
                 </div>
 
                 <div class="md-form">
-                    <p class="form-control-plaintext">Post File</p>
-                    <input class="form-control" id="postFile" name="postFile" required type="file">
+                    <p class="custom-file-label">Post File</p>
+                    <input class="custom-file-input" id="postFile" name="postFile" required type="file">
                 </div>
 
                 <input id="postUser" name="postUser" th:value="${#authentication.name}" type="hidden">

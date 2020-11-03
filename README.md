@@ -1,4 +1,6 @@
 # Web Lab Mini Project - Intranet Based Social Networking
+[![CodeFactor](https://www.codefactor.io/repository/github/rifasm/web-lab-mini-project/badge)](https://www.codefactor.io/repository/github/rifasm/web-lab-mini-project)
+
 Description:\
 An image sharing and social media service designed to enable saving and discovery of information (Ideas, Discovery, Randomness) on the Intranet using images and, on a smaller scale, GIFs and videos.
 ---
