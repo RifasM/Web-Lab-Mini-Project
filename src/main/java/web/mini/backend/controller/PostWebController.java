@@ -6,10 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import web.mini.backend.exception.ResourceNotFoundException;
@@ -113,5 +110,23 @@ public class PostWebController {
         return post_data;
     }
 
+    /**
+     * Return Home Page after deleting the post
+     *
+     * @param post_id postID to delete
+     * @return redirect to home
+     */
+    @RequestMapping("/deletePost/{post_id}")
+    public String deletePost(@PathVariable(value = "post_id") String post_id)
+            throws ResourceNotFoundException {
+        Post post = postController.getPostsById(post_id).getBody();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+        if (post != null && post.getPostUser().equals(auth.getName())) {
+            postController.deletePost(post_id);
+            return "redirect:/";
+        }
+
+        return "error";
+    }
 }
