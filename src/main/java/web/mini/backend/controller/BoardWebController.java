@@ -43,7 +43,7 @@ public class BoardWebController {
      * @return rendered createBoard.html
      */
     @GetMapping("/createBoard")
-    public String createPostPage() {
+    public String createBoardPage() {
         return "boardTemplates/createBoard";
     }
 
@@ -54,11 +54,11 @@ public class BoardWebController {
      * @return rendered createBoard.html
      */
     @PostMapping("/createBoard")
-    public String createPostProcess(@RequestParam String boardName,
-                                    @RequestParam String boardDescription,
-                                    @RequestParam String userId,
-                                    @RequestParam(required = false, defaultValue = "true") String privateBoard,
-                                    @RequestParam(required = false) MultipartFile boardCoverUrl) {
+    public String createBoardProcess(@RequestParam String boardName,
+                                     @RequestParam String boardDescription,
+                                     @RequestParam String userId,
+                                     @RequestParam(required = false, defaultValue = "true") String privateBoard,
+                                     @RequestParam(required = false) MultipartFile boardCoverUrl) {
 
         Board board = new Board(
                 null,
@@ -87,7 +87,7 @@ public class BoardWebController {
      * @return rendered viewBoard.html
      */
     @GetMapping("/viewBoard/{board_id}")
-    public String createPostPage(@PathVariable(value = "board_id") String board_id, Model model)
+    public String viewBoard(@PathVariable(value = "board_id") String board_id, Model model)
             throws ResourceNotFoundException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity<Board> board = boardController.getBoardById(board_id);

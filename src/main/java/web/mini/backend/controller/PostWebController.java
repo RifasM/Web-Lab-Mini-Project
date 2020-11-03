@@ -34,20 +34,6 @@ public class PostWebController {
     @Autowired
     private BoardController boardController;
 
-    /**
-     * Return Post Creation Page
-     * Get Mapping
-     *
-     * @return rendered createPost.html
-     */
-    @GetMapping("/createPost")
-    public String createPostPage(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        List<Board> board = boardController.findByUser(auth.getName());
-        model.addAttribute("boards", board);
-        return "postTemplates/createPost";
-    }
-
 
     /**
      * Handle Post Creation Page request
@@ -95,13 +81,27 @@ public class PostWebController {
     }
 
     /**
+     * Return Post Creation Page
+     * Get Mapping
+     *
+     * @return rendered createPost.html
+     */
+    @GetMapping("/createPost")
+    public String createPostPage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<Board> board = boardController.findByUser(auth.getName());
+        model.addAttribute("boards", board);
+        return "postTemplates/createPost";
+    }
+
+    /**
      * Return Post Page
      *
      * @param post_id postID to view
      * @return rendered viewPost.html
      */
     @GetMapping("/viewPost/{post_id}")
-    public ModelAndView createPostPage(@PathVariable(value = "post_id") String post_id)
+    public ModelAndView postPage(@PathVariable(value = "post_id") String post_id)
             throws ResourceNotFoundException {
         ModelAndView post_data = new ModelAndView("postTemplates/viewPost");
         Post post = postRepository.findById(post_id)
