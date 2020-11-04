@@ -58,7 +58,8 @@ public class BoardWebController {
                                      @RequestParam String boardDescription,
                                      @RequestParam String userId,
                                      @RequestParam(required = false, defaultValue = "true") String privateBoard,
-                                     @RequestParam(required = false) MultipartFile boardCoverUrl) {
+                                     @RequestParam(required = false) MultipartFile boardCoverUrl,
+                                     Model model) {
 
         Board board = new Board(
                 null,
@@ -73,9 +74,10 @@ public class BoardWebController {
         ResponseEntity<String> result = boardController.createBoard(board,
                 boardCoverUrl);
 
-        if (result.getStatusCode().is2xxSuccessful())
+        if (result.getStatusCode().is2xxSuccessful()) {
+            model.addAttribute("success", board.getId());
             return "boardTemplates/createBoard";
-        else
+        } else
             return "error";
     }
 
@@ -92,25 +94,35 @@ public class BoardWebController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity<Board> board = boardController.getBoardById(board_id);
 
-        // Check if board is private and requesting User is not the board owner, then raise error
-        if (Objects.requireNonNull(board.getBody()).getPrivateBoard() && !auth.getName().equals(board.getBody().getUserId())) {
-            return "error";
+        if (board.getStatusCode().is2xxSuccessful()) {
+            // Check if board is private and requesting User is not the board owner, then raise error
+            if (Objects.requireNonNull(board.getBody()).getPrivateBoard() && !auth.getName().equals(board.getBody().getUserId())) {
+                return "error";
+            }
+
+            // TODO: Upload this image to S3
+            if (board.getBody().getBoardCoverUrl() == null)
+                board.getBody().setBoardCoverUrl("no-board-cover.png");
+
+            List<Post> post_list = new ArrayList<>();
+
+            if (board.getBody().getPostID() != null) {
+                for (String post_id : board.getBody().getPostID()) {
+                    ResponseEntity<Post> result = postController.getPostsById(post_id);
+                    if (result.getStatusCode().is2xxSuccessful())
+                        post_list.add(result.getBody());
+                    else
+                        board.getBody().getPostID().remove(post_id);
+                }
+                boardRepository.save(board.getBody());
+            }
+
+            model.addAttribute("posts", post_list);
+            model.addAttribute("board_data", board.getBody());
+
+
+            return "boardTemplates/viewBoard";
         }
-
-        List<Post> post_list = new ArrayList<>();
-        for (String post_id : board.getBody().getPostID()) {
-            ResponseEntity<Post> result = postController.getPostsById(post_id);
-            if (result.getStatusCode().is2xxSuccessful())
-                post_list.add(result.getBody());
-            else
-                board.getBody().getPostID().remove(post_id);
-        }
-        boardRepository.save(board.getBody());
-
-        model.addAttribute("posts", post_list);
-        model.addAttribute("board_data", board.getBody());
-
-
-        return "boardTemplates/viewBoard";
+        return "error";
     }
 }

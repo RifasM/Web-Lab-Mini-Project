@@ -116,6 +116,11 @@
                                     </article><!-- End blog entry -->
                                 </div>
 
+                                <div class="col-md-11 d-flex align-items-stretch"
+                                     th:if="${posts.isEmpty() || posts == null}">
+                                    <h5 class="mb-3">Looks like you haven't created any posts in this board. <a
+                                            th:href="@{/createPost}">Create one now</a></h5>
+                                </div>
                             </div>
                         </div>
                     </div>
