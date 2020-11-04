@@ -48,7 +48,8 @@ public class PostWebController {
                                     @RequestParam String boardId,
                                     @RequestParam String tags,
                                     @RequestParam String postUser,
-                                    @RequestParam MultipartFile postFile) throws ResourceNotFoundException {
+                                    @RequestParam MultipartFile postFile,
+                                    Model model) throws ResourceNotFoundException {
         Post post = new Post(
                 null,
                 postTitle,
@@ -73,9 +74,11 @@ public class PostWebController {
                 postIDs.add(post.getId());
                 board.setPostID(postIDs);
                 boardRepository.save(board);
-                return "redirect:/createPost";
+                model.addAttribute("success", post.getId());
             } else
-                return "error";
+                model.addAttribute("error", result.getBody());
+            return "postTemplates/createPost";
+
         } else
             return "error";
     }

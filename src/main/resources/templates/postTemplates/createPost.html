@@ -22,12 +22,26 @@
 <main id="main">
 
     <div class="card-body px-lg-5 col-md-6" style="margin-left: auto; margin-right: auto;">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${success}">
+            <strong>Post Created Successfully!</strong> View your post <a
+                th:href="@{/viewPost/{id}(id = ${success})}">here</a>
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${error}">
+            <strong>Oops, an error occurred</strong>
+            <!-- TODO: Remove this error p tag -->
+            <p th:text="'ERROR: '+${error}"></p>
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
         <h1 class="mb-3">Create New Post</h1>
         <div>Enter the Following Details to Continue</div>
-        <div class="badge badge-warning" id="errors"
-             th:if="${param.error}">
-            An Error Occurred
-        </div>
+
         <div>
             <form enctype="multipart/form-data" method="post" th:action="@{/createPost}">
                 <div class="md-form">
