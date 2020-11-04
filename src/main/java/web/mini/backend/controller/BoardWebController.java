@@ -74,11 +74,12 @@ public class BoardWebController {
         ResponseEntity<String> result = boardController.createBoard(board,
                 boardCoverUrl);
 
-        if (result.getStatusCode().is2xxSuccessful()) {
+        if (result.getStatusCode().is2xxSuccessful())
             model.addAttribute("success", board.getId());
-            return "boardTemplates/createBoard";
-        } else
-            return "error";
+        else
+            model.addAttribute("error", result.getBody());
+
+        return "boardTemplates/createBoard";
     }
 
     /**

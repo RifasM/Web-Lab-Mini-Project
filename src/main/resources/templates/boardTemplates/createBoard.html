@@ -30,13 +30,18 @@
             </button>
         </div>
 
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${error}">
+            <strong>Oops, an error occurred</strong>
+            <!-- TODO: Remove this error p tag -->
+            <p th:text="'ERROR: '+${error}"></p>
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
         <h1 class="mb-3">Create New Board</h1>
         <div>Enter the Following Details to Continue</div>
 
-        <div class="badge badge-warning" id="errors"
-             th:if="${param.error}">
-            An Error Occurred
-        </div>
         <div>
             <form enctype="multipart/form-data" method="post" th:action="@{/createBoard}">
                 <div class="md-form">
