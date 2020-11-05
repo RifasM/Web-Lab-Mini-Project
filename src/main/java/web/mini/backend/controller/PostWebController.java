@@ -132,4 +132,54 @@ public class PostWebController {
 
         return "error";
     }
+
+    /**
+     * Handle Post Edit Page request
+     * Get Mapping
+     *
+     * @return rendered editPost.html
+     */
+    @GetMapping("/editPost/{post_id}")
+    public String editPost(@PathVariable(value = "post_id") String post_id, Model model)
+            throws ResourceNotFoundException {
+        ResponseEntity<Post> post = postController.getPostsById(post_id);
+        if (post.getStatusCode().is2xxSuccessful())
+            model.addAttribute("post_data", post.getBody());
+        else
+            return "errorPages/404";
+
+        return "postTemplates/editPost";
+    }
+
+    /**
+     * Handle Post Edit Page request
+     * Post Mapping
+     *
+     * @return rendered editPost.html
+     */
+    @PostMapping("/editPost/{post_id}")
+    public String createPostProcess(@PathVariable String post_id,
+                                    @RequestParam String postTitle,
+                                    @RequestParam String postDescription,
+                                    @RequestParam String tags,
+                                    Model model) throws ResourceNotFoundException {
+        ResponseEntity<Post> request = postController.getPostsById(post_id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (request.getStatusCode().is2xxSuccessful() && request.getBody() != null) {
+            Post post = request.getBody();
+            if (post.getPostUser().equals(auth.getName())) {
+                post.setPostTitle(postTitle);
+                post.setPostDescription(postDescription);
+                post.setTags(tags);
+                postRepository.save(post);
+                model.addAttribute("success", post_id);
+            } else
+                model.addAttribute("error", "unauthorised");
+
+            model.addAttribute("post_data", post);
+            return "postTemplates/editPost";
+        }
+
+        return "errorPages/404";
+    }
 }

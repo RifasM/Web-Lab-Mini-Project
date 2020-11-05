@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Pixies - Edit Post</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <th:block th:insert="includes/home-fragments::home-header"></th:block>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<th:block style="color: #fff;" th:insert="includes/home-fragments::navbar-inner-page"></th:block>
+
+<main id="main">
+
+    <div class="card-body px-lg-5 col-md-6" style="margin-left: auto; margin-right: auto;">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${success}">
+            <strong>Post Updated Successfully!</strong> View your post <a
+                th:href="@{/viewPost/{id}(id = ${success})}">here</a>
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${error}">
+            <strong>Oops, an error occurred</strong>
+            <!-- TODO: Remove this error p tag -->
+            <p th:text="'ERROR: '+${error}"></p>
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <h1 class="mb-3">Edit Post</h1>
+        <div>Enter the Following Details to Continue</div>
+
+        <div>
+            <form enctype="multipart/form-data" method="post" th:action="@{/editPost/{id}(id = ${post_data.id})}">
+                <div class="md-form">
+                    <input class="form-control" id="postTitle" name="postTitle" required
+                           th:value="${post_data.postTitle}" type="text">
+                    <label for="postTitle">Post Title</label>
+                </div>
+
+                <div class="md-form">
+                    <input class="form-control" id="postDescription" name="postDescription" required
+                           th:value="${post_data.postDescription}" type="text">
+                    <label for="postDescription">Post Caption</label>
+                </div>
+
+                <div class="md-form">
+                    <input class="form-control" id="tags" name="tags" th:value="${post_data.tags}" type="text">
+                    <label for="tags">Post Tags</label>
+                </div>
+
+                <input class="btn btn-outline-success btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit"
+                       value="Update Post">
+            </form>
+        </div>
+
+    </div>
+
+</main><!-- End #main -->
+
+<th:block th:insert="includes/home-fragments::footer"></th:block>
+
+<a class="back-to-top" href="#"><i class="ri-arrow-up-line"></i></a>
+
+<th:block th:insert="includes/home-fragments::home-scripts"></th:block>
+
+</body>
+
+</html>
