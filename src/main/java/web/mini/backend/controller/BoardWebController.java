@@ -6,10 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
@@ -180,5 +177,25 @@ public class BoardWebController {
                 return "errorPages/404";
         }
         return "boardTemplates/editBoard";
+    }
+
+    /**
+     * Return Home Page after deleting the board
+     *
+     * @param board_id boardID to delete
+     * @return redirect to home
+     */
+    @RequestMapping("/deleteBoard/{board_id}")
+    public String deleteBoard(@PathVariable(value = "board_id") String board_id)
+            throws ResourceNotFoundException {
+        Board board = boardController.getBoardById(board_id).getBody();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (board != null && board.getUserId().equals(auth.getName())) {
+            boardController.deleteBoard(board_id);
+            return "redirect:/";
+        }
+
+        return "errorPages/404";
     }
 }

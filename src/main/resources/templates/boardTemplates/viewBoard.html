@@ -62,7 +62,8 @@
                         <th:block th:if="${#authentication.name == board_data.userId}">
                             <li><a class="btn btn-rounded btn-outline-info"
                                    th:href="@{/editBoard/{id}(id = ${board_data.id})}">Update Board</a></li>
-                            <li><a class="btn btn-rounded btn-outline-danger" href="#">Delete Board</a></li>
+                            <li><a class="btn btn-rounded btn-outline-danger"
+                                   th:href="@{/deleteBoard/{id}(id = ${board_data.id})}">Delete Board</a></li>
                         </th:block>
                     </ul>
                 </div>
@@ -137,34 +138,6 @@
 <a class="back-to-top" href="#"><i class="ri-arrow-up-line"></i></a>
 
 <th:block th:insert="includes/home-fragments::home-scripts"></th:block>
-<script>
-    function validateGender() {
-        var ddl = document.getElementById("gender");
-        if (ddl.selectedIndex === 0) {
-            document.getElementById("gender_warning").innerHTML = "Please Select your Gender";
-            return false;
-        } else {
-            document.getElementById("gender_warning").innerHTML = "";
-            return true;
-        }
-    }
-
-    function getDob() {
-        var date = new Date();
-        return (date.getMonth() + 1) + "-" + date.getDate() + "-" + (date.getFullYear() - 18);
-    }
-
-    document.getElementById("dob").prop("max", getDob());
-    document.getElementById("#dob").validate();
-
-    function validate_and_submit() {
-        if (validateGender()) {
-            document.getElementById("update_form").submit();
-        } else {
-            document.getElementById("errors").innerHTML = "<span class=\"badge badge-pill badge-danger\">Please Correct the following</span>";
-        }
-    }
-</script>
 
 </body>
 
