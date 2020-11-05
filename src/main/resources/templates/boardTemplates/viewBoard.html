@@ -60,7 +60,8 @@
                             </th:block>
                         </li>
                         <th:block th:if="${#authentication.name == board_data.userId}">
-                            <li><a class="btn btn-rounded btn-outline-info" href="#">Update Board</a></li>
+                            <li><a class="btn btn-rounded btn-outline-info"
+                                   th:href="@{/editBoard/{id}(id = ${board_data.id})}">Update Board</a></li>
                             <li><a class="btn btn-rounded btn-outline-danger" href="#">Delete Board</a></li>
                         </th:block>
                     </ul>
@@ -127,9 +128,8 @@
                 </div>
             </section>
 
-            </div>
         </section><!-- End Portfolio Details Section -->
-
+    </section>
 </main><!-- End #main -->
 
 <th:block th:insert="includes/home-fragments::footer"></th:block>

@@ -126,4 +126,59 @@ public class BoardWebController {
         }
         return "error";
     }
+
+    /**
+     * Return Board edit Page
+     * Post Mapping
+     *
+     * @return rendered editBoard.html
+     */
+    @PostMapping("/editBoard/{board_id}")
+    public String editBoardPage(@PathVariable(value = "board_id") String board_id,
+                                @RequestParam String boardName,
+                                @RequestParam String boardDescription,
+                                @RequestParam(required = false, defaultValue = "true") String privateBoard,
+                                @RequestParam(required = false) MultipartFile boardCoverUrl,
+                                Model model) throws ResourceNotFoundException {
+        ResponseEntity<Board> request = boardController.getBoardById(board_id);
+        if (request.getStatusCode().is2xxSuccessful()) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (Objects.requireNonNull(request.getBody()).getUserId().equals(auth.getName())) {
+                Board board = request.getBody();
+                board.setBoardName(boardName);
+                board.setBoardDescription(boardDescription);
+                board.setPrivateBoard(Boolean.parseBoolean(privateBoard));
+                ResponseEntity<Board> status = boardController.updateBoard(board, boardCoverUrl);
+                if (status.getStatusCode().is2xxSuccessful())
+                    model.addAttribute("success", board_id);
+                else
+                    model.addAttribute("error", status.getBody());
+
+                model.addAttribute("board_data", status.getBody());
+            } else {
+                return "errorPages/404";
+            }
+        }
+        return "boardTemplates/editBoard";
+    }
+
+    /**
+     * Return Board edit Page
+     * Post Mapping
+     *
+     * @return rendered editBoard.html
+     */
+    @GetMapping("/editBoard/{board_id}")
+    public String editBoardPage(@PathVariable(value = "board_id") String board_id,
+                                Model model) throws ResourceNotFoundException {
+        ResponseEntity<Board> request = boardController.getBoardById(board_id);
+        if (request.getStatusCode().is2xxSuccessful()) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (Objects.requireNonNull(request.getBody()).getUserId().equals(auth.getName()))
+                model.addAttribute("board_data", request.getBody());
+            else
+                return "errorPages/404";
+        }
+        return "boardTemplates/editBoard";
+    }
 }
