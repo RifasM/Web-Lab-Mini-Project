@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
@@ -104,13 +103,17 @@ public class PostWebController {
      * @return rendered viewPost.html
      */
     @GetMapping("/viewPost/{post_id}")
-    public ModelAndView postPage(@PathVariable(value = "post_id") String post_id)
-            throws ResourceNotFoundException {
-        ModelAndView post_data = new ModelAndView("postTemplates/viewPost");
-        Post post = postRepository.findById(post_id)
-                .orElseThrow(() -> new ResourceNotFoundException("Post not found on :: " + post_id));
-        post_data.addObject("post_data", post);
-        return post_data;
+    public String postPage(@PathVariable(value = "post_id") String post_id,
+                           Model model) {
+        try {
+            ResponseEntity<Post> request = postController.getPostsById(post_id);
+            if (request.getStatusCode().is2xxSuccessful())
+                model.addAttribute("post_data", request.getBody());
+        } catch (ResourceNotFoundException e) {
+            return "errorPages/404";
+        }
+
+        return "postTemplates/viewPost";
     }
 
     /**
@@ -130,7 +133,7 @@ public class PostWebController {
             return "redirect:/";
         }
 
-        return "error";
+        return "errorPages/404";
     }
 
     /**
