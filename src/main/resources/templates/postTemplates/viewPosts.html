@@ -34,7 +34,7 @@
 
                 <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" th:each="post: ${posts}">
                     <div class="icon-box">
-                        <a th:href="@{/viewPost{id}(id = ${post.id})}">
+                        <a th:href="@{/viewPost/{id}(id = ${post.id})}">
                             <div class="icon">
                                 <img class="img-fluid" style="max-height: 100px; max-width: inherit"
                                      th:alt="${post.postDescription}"
