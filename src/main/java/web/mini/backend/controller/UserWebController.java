@@ -20,12 +20,26 @@ public class UserWebController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Return the profile page for that user
+     *
+     * @param model Model to add the attributes to render onto the page
+     * @param auth  Get the authentication details of the current user
+     * @return The rendered profile page
+     */
     @RequestMapping("/profile")
     public String profile(Model model, Authentication auth) {
-        model.addAttribute("basic_details", userRepository.findByUsername(auth.getName()));
+        model.addAttribute("firstName", userRepository.findByUsername(auth.getName()).getFirstName());
         return "userTemplates/profile";
     }
 
+    /**
+     * Return the Profile Edit Page
+     * Get Mapping
+     *
+     * @param auth Get the authentication details of the current user
+     * @return The rendered edit profile page
+     */
     @RequestMapping("/editProfile")
     public ModelAndView editProfile(Authentication auth) {
         ModelAndView user_data = new ModelAndView("userTemplates/editProfile");
