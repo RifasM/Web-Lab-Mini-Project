@@ -165,11 +165,11 @@ public class PostWebController {
      * @return rendered editPost.html
      */
     @PostMapping("/editPost/{post_id}")
-    public String createPostProcess(@PathVariable String post_id,
-                                    @RequestParam String postTitle,
-                                    @RequestParam String postDescription,
-                                    @RequestParam String tags,
-                                    Model model) throws ResourceNotFoundException {
+    public String editPost(@PathVariable String post_id,
+                           @RequestParam String postTitle,
+                           @RequestParam String postDescription,
+                           @RequestParam String tags,
+                           Model model) throws ResourceNotFoundException {
         ResponseEntity<Post> request = postController.getPostsById(post_id);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (request.getStatusCode().is2xxSuccessful() && request.getBody() != null) {

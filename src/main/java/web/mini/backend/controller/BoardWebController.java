@@ -103,7 +103,7 @@ public class BoardWebController {
                 return "error";
             }
 
-            // TODO: Upload this image to S3
+            // Use the no board url as default
             if (board.getBody().getBoardCoverUrl() == null)
                 board.getBody().setBoardCoverUrl("no-board-cover.png");
 
