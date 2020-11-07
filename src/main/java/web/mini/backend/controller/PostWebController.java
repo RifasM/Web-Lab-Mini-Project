@@ -13,6 +13,7 @@ import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
 import web.mini.backend.repository.BoardRepository;
 import web.mini.backend.repository.PostRepository;
+import web.mini.backend.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +33,9 @@ public class PostWebController {
 
     @Autowired
     private BoardController boardController;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     /**
@@ -184,5 +188,22 @@ public class PostWebController {
         }
 
         return "errorPages/404";
+    }
+
+    /**
+     * View all the posts of the current logged in user
+     *
+     * @param model Model to add the attributes to render onto the page
+     * @param auth  Get the authentication details of the current user
+     * @return the rendered view posts page
+     */
+    @RequestMapping("/viewPosts")
+    public String viewAllUserPosts(Model model,
+                                   Authentication auth) {
+        List<Post> posts = postController.findByUser(auth.getName());
+        model.addAttribute("firstName", userRepository.findByUsername(auth.getName()).getFirstName());
+        model.addAttribute("posts", posts);
+
+        return "postTemplates/viewPosts";
     }
 }

@@ -26,7 +26,7 @@
 
             <div class="section-title">
                 <h2>Profile</h2>
-                <h3>Welcome, <span th:text="${firstName}"></span></h3>
+                <h3>Welcome <span th:text="${firstName}"></span></h3>
                 <p>View and manage your profile, board and posts</p>
             </div>
 
@@ -43,7 +43,7 @@
 
                 <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
                     <div class="icon-box">
-                        <a href="">
+                        <a th:href="@{/viewPosts}">
                             <div class="icon"><i class="bx bxs-file-image"></i></div>
                             <h4 class="title">Your Posts</h4>
                             <p class="description">View all your posts</p>
