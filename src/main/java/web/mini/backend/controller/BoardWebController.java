@@ -3,7 +3,6 @@ package web.mini.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +12,7 @@ import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
 import web.mini.backend.repository.BoardRepository;
 import web.mini.backend.repository.PostRepository;
+import web.mini.backend.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +32,10 @@ public class BoardWebController {
 
     @Autowired
     private BoardController boardController;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     /**
      * Return Board Creation Page
@@ -87,9 +91,10 @@ public class BoardWebController {
      * @return rendered viewBoard.html
      */
     @GetMapping("/viewBoard/{board_id}")
-    public String viewBoard(@PathVariable(value = "board_id") String board_id, Model model)
+    public String viewBoard(@PathVariable(value = "board_id") String board_id,
+                            Model model,
+                            Authentication auth)
             throws ResourceNotFoundException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity<Board> board = boardController.getBoardById(board_id);
 
         if (board.getStatusCode().is2xxSuccessful()) {
@@ -136,10 +141,10 @@ public class BoardWebController {
                                 @RequestParam String boardDescription,
                                 @RequestParam(required = false, defaultValue = "true") String privateBoard,
                                 @RequestParam(required = false) MultipartFile boardCoverUrl,
-                                Model model) throws ResourceNotFoundException {
+                                Model model,
+                                Authentication auth) throws ResourceNotFoundException {
         ResponseEntity<Board> request = boardController.getBoardById(board_id);
         if (request.getStatusCode().is2xxSuccessful()) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (Objects.requireNonNull(request.getBody()).getUserId().equals(auth.getName())) {
                 Board board = request.getBody();
                 board.setBoardName(boardName);
@@ -167,10 +172,11 @@ public class BoardWebController {
      */
     @GetMapping("/editBoard/{board_id}")
     public String editBoardPage(@PathVariable(value = "board_id") String board_id,
-                                Model model) throws ResourceNotFoundException {
+                                Model model,
+                                Authentication auth)
+            throws ResourceNotFoundException {
         ResponseEntity<Board> request = boardController.getBoardById(board_id);
         if (request.getStatusCode().is2xxSuccessful()) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (Objects.requireNonNull(request.getBody()).getUserId().equals(auth.getName()))
                 model.addAttribute("board_data", request.getBody());
             else
@@ -186,10 +192,10 @@ public class BoardWebController {
      * @return redirect to home
      */
     @RequestMapping("/deleteBoard/{board_id}")
-    public String deleteBoard(@PathVariable(value = "board_id") String board_id)
+    public String deleteBoard(@PathVariable(value = "board_id") String board_id,
+                              Authentication auth)
             throws ResourceNotFoundException {
         Board board = boardController.getBoardById(board_id).getBody();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (board != null && board.getUserId().equals(auth.getName())) {
             boardController.deleteBoard(board_id);
@@ -197,5 +203,22 @@ public class BoardWebController {
         }
 
         return "errorPages/404";
+    }
+
+    /**
+     * View all the boards of the current logged in user
+     *
+     * @param model Model to add the attributes to render onto the page
+     * @param auth  Get the authentication details of the current user
+     * @return the rendered view boards page
+     */
+    @RequestMapping("/viewBoards")
+    public String viewAllBoards(Model model,
+                                Authentication auth) {
+        List<Board> board = boardController.findByUser(auth.getName());
+        model.addAttribute("boards", board);
+        model.addAttribute("firstName", userRepository.findByUsername(auth.getName()).getFirstName());
+
+        return "boardTemplates/viewBoards";
     }
 }
