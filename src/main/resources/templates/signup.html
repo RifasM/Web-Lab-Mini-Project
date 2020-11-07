@@ -30,6 +30,9 @@
 <th:block th:insert="includes/home-fragments::navbar-home"/>
 
 <div class="container row text-center" id="main">
+    <div class="col-md-11" id="errors">
+
+    </div>
     <!-- Material form register -->
     <div class="card">
 
@@ -39,7 +42,6 @@
 
         <!--Card content-->
         <div class="card-body px-lg-5 pt-0">
-            <span id="errors"></span>
             <!-- Form -->
             <form class="text-center" id="registration_form" method="post" style="color: #757575;"
                   th:action="@{/signup}">
@@ -110,7 +112,7 @@
 
                 <!-- DOB -->
                 <div class="md-form">
-                    <input aria-describedby="dob-desc" class="form-control" id="dob" name="dob" type="date">
+                    <input aria-describedby="dob-desc" class="form-control" id="dob" name="dob" required type="date">
                     <label for="dob">Date of Birth</label>
                     <small class="form-text text-muted mb-4" id="dob-desc">
 
@@ -138,8 +140,8 @@
                 </div>
 
                 <!-- Sign up button -->
-                <a class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
-                   href="javascript:validate_and_submit()">Sign Up</a>
+                <input class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" id="submit"
+                       type="submit" value="Sign Up">
 
                 <!-- Login -->
                 <p>Already a member?
@@ -181,6 +183,7 @@
 
 <th:block th:insert="includes/home-fragments::home-scripts"></th:block>
 
+
 <script type="text/javascript">
     /*//setup before functions
     var typingTimer;                //timer identifier
@@ -197,6 +200,38 @@
     $input.on('keydown', function () {
         clearTimeout(typingTimer);
     });*/
+    $(document).ready(function () {
+        $("#submit").click(function () {
+            if (validateGender() && validatePassword() && validateAge()) {
+                return true;
+            } else {
+                document.getElementById("errors").innerHTML = "<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">\n" +
+                    "            <strong>Correct the following errors</strong>\n" +
+                    "            <button aria-label=\"Close\" class=\"close\" data-dismiss=\"alert\" type=\"button\">\n" +
+                    "                <span aria-hidden=\"true\">&times;</span>\n" +
+                    "            </button>\n" +
+                    "        </div>";
+                return false;
+            }
+        });
+
+    });
+
+    function validateAge() {
+        const bday = document.getElementById("dob");
+        const dateString = bday.value;
+        const parts = dateString.split("/"); // not testing if the format is correct here
+        const now = new Date();
+        const birthday = new Date(now.getFullYear(), parts[1] - 1, parts[0]);
+        let age = now.getFullYear() - parts[2];
+        if (now < birthday)
+            age--;
+        if (age < 18) {
+            document.getElementById("dob-desc").innerHTML = "<span class=\"badge badge-danger\">You must be over 18 to register</span>"
+            return false
+        }
+        return true;
+    }
 
     function validatePassword() {
         var firstpassword = document.getElementById("password").value;
@@ -222,21 +257,6 @@
         }
     }
 
-    function getDob() {
-        var date = new Date();
-        return (date.getMonth() + 1) + "-" + date.getDate() + "-" + (date.getFullYear() - 18);
-    }
-
-    document.getElementById("dob").prop("max", getDob());
-    document.getElementById("#dob").validate();
-
-    function validate_and_submit() {
-        if (validateGender() && validatePassword()) {
-            document.getElementById("registration_form").submit();
-        } else {
-            document.getElementById("errors").innerHTML = "<span class=\"badge badge-danger\">Please Correct the following</span>";
-        }
-    }
 </script>
 
 </body>

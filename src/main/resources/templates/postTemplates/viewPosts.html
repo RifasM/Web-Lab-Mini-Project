@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Pixies - Posts</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <th:block th:insert="includes/home-fragments::home-header"></th:block>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<th:block th:insert="includes/home-fragments::navbar-inner-page"/>
+<!-- End Header -->
+
+<main id="main">
+
+    <section class="services" id="services">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>Posts</h2>
+                <h3>Welcome <span th:text="${firstName}"></span></h3>
+                <p>View your posts</p>
+            </div>
+
+            <div class="row justify-content-center">
+
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" th:each="post: ${posts}">
+                    <div class="icon-box">
+                        <a th:href="@{/viewPost/{id}(id = ${post.id})}">
+                            <div class="icon">
+                                <img class="img-fluid" style="max-height: 100px; max-width: inherit"
+                                     th:alt="${post.postDescription}"
+                                     th:if="${post.postType == 'image' || post.postType == 'gif'}"
+                                     th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post.postUrl}"/>
+                                <video autoplay loop style="max-height: 100px; max-width: inherit"
+                                       th:if="${post.postType == 'video'}">
+                                    <source th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post.postUrl}"
+                                            type="vi/mp4">
+                                </video>
+                            </div>
+                            <h4 class="title" th:text="${post.postTitle}"></h4>
+
+                            <p class="description" th:text="${post.postDescription}"></p>
+
+                            <p class="description" th:text="${post.tags}"></p>
+
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+</main><!-- End #main -->
+
+<th:block th:insert="includes/home-fragments::footer"></th:block>
+
+<a class="back-to-top" href="#"><i class="ri-arrow-up-line"></i></a>
+
+<th:block th:insert="includes/home-fragments::home-scripts"></th:block>
+
+</body>
+
+</html>

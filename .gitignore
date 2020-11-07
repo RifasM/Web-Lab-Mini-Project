@@ -33,3 +33,5 @@ build/
 
 ##
 src/main/resources/application.properties
+# AWS Credentials File
+/config

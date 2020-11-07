@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Pixies - Profile</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <th:block th:insert="includes/home-fragments::home-header"></th:block>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<th:block th:insert="includes/home-fragments::navbar-inner-page"/>
+<!-- End Header -->
+
+<main id="main">
+
+    <section class="services" id="services">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>Profile</h2>
+                <h3>Welcome <span th:text="${firstName}"></span></h3>
+                <p>View and manage your profile, board and posts</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                    <div class="icon-box">
+                        <a th:href="@{/viewBoards}">
+                            <div class="icon"><i class="bx bx-cabinet"></i></div>
+                            <h4 class="title">Your Boards</h4>
+                            <p class="description">View all your boards</p>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                    <div class="icon-box">
+                        <a th:href="@{/viewPosts}">
+                            <div class="icon"><i class="bx bxs-file-image"></i></div>
+                            <h4 class="title">Your Posts</h4>
+                            <p class="description">View all your posts</p>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-6 mt-4">
+                    <div class="icon-box">
+                        <i class="ri-settings-4-line" style="color: #ffbb2c;"></i>
+                        <h3><a href="">Settings</a></h3>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6 mt-4">
+                    <div class="icon-box">
+                        <i class="ri-lock-password-line" style="color: #5578ff;"></i>
+                        <h3><a href="">Update Password</a></h3>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6 mt-4">
+                    <div class="icon-box">
+                        <i class="ri-user-2-fill" style="color: #03e86a;"></i>
+                        <h3><a th:href="@{/editProfile}">Edit Profile</a></h3>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6 mt-4">
+                    <div class="icon-box">
+                        <i class="ri-logout-circle-r-line" style="color: #1fa8d4;"></i>
+                        <h3><a th:href="@{/logout}">Logout</a></h3>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6 mt-4">
+                    <div class="icon-box">
+                        <i class="ri-error-warning-fill" style="color: #ff6179;"></i>
+                        <h3><a href="">Raise a Issue</a></h3>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-6 mt-4">
+                    <div class="icon-box">
+                        <i class="ri-delete-bin-2-line" style="color: #ff4747;"></i>
+                        <h3><a href="">Delete Your account</a></h3>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section><!-- End Features Section -->
+
+</main><!-- End #main -->
+
+<th:block th:insert="includes/home-fragments::footer"></th:block>
+
+<a class="back-to-top" href="#"><i class="ri-arrow-up-line"></i></a>
+
+<th:block th:insert="includes/home-fragments::home-scripts"></th:block>
+
+</body>
+
+</html>

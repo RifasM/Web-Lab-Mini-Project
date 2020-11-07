@@ -1,7 +1,5 @@
 package web.mini.backend.controller;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +36,7 @@ public class PostController {
      */
     @GetMapping("/posts")
     public Iterable<Post> getAllPosts() {
-        return postRepository.findAll();
+        return postRepository.findAllByOrderByPostDateDesc();
     }
 
     /**
@@ -61,12 +59,12 @@ public class PostController {
     /**
      * Gets post by user id.
      *
-     * @param userID the user id
+     * @param userName the user's name for which posts are to be fetched
      * @return the posts by user id
      */
     @GetMapping("/post/user/{userID}")
-    public Page<Post> findByUser(@PathVariable(value = "userID") Long userID, PageRequest pageRequest) {
-        return postRepository.findByPostUser(userID, pageRequest);
+    public List<Post> findByUser(@PathVariable(value = "userID") String userName) {
+        return postRepository.findByPostUser(userName);
     }
 
     /**
@@ -115,7 +113,7 @@ public class PostController {
     }
 
     /**
-     * Create post.
+     * Find post.
      *
      * @param title the post
      * @return the post

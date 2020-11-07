@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Pixies - Create Post</title>
+    <title>Pixies - Edit Post</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -23,7 +23,7 @@
 
     <div class="card-body px-lg-5 col-md-6" style="margin-left: auto; margin-right: auto;">
         <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${success}">
-            <strong>Post Created Successfully!</strong> View your post <a
+            <strong>Post Updated Successfully!</strong> View your post <a
                 th:href="@{/viewPost/{id}(id = ${success})}">here</a>
             <button aria-label="Close" class="close" data-dismiss="alert" type="button">
                 <span aria-hidden="true">&times;</span>
@@ -39,53 +39,30 @@
             </button>
         </div>
 
-        <h1 class="mb-3">Create New Post</h1>
+        <h1 class="mb-3">Edit Post</h1>
         <div>Enter the Following Details to Continue</div>
 
         <div>
-            <form enctype="multipart/form-data" method="post" th:action="@{/createPost}">
+            <form enctype="multipart/form-data" method="post" th:action="@{/editPost/{id}(id = ${post_data.id})}">
                 <div class="md-form">
-                    <input class="form-control" id="postTitle" name="postTitle" required type="text">
+                    <input class="form-control" id="postTitle" name="postTitle" required
+                           th:value="${post_data.postTitle}" type="text">
                     <label for="postTitle">Post Title</label>
                 </div>
 
                 <div class="md-form">
-                    <input class="form-control" id="postDescription" name="postDescription" required type="text">
+                    <input class="form-control" id="postDescription" name="postDescription" required
+                           th:value="${post_data.postDescription}" type="text">
                     <label for="postDescription">Post Caption</label>
                 </div>
 
                 <div class="md-form">
-                    <p class="form-control-plaintext">Post Type</p>
-                    <select class="form-control" id="postType" name="postType" required>
-                        <option value="image">Image</option>
-                        <option value="video">Video</option>
-                        <option value="gif">Gif</option>
-                    </select>
-                </div>
-
-                <div class="md-form">
-                    <p class="form-control-plaintext">Save to Board</p>
-                    <select class="form-control" id="boardId" name="boardId" required>
-                        <option th:each="board : ${boards}" th:text="${board.boardName}"
-                                th:value="${board.id}"></option>
-                    </select>
-                    <p class="form-control-plaintext"><a th:href="@{/createBoard}">Create New Board</a></p>
-                </div>
-
-                <div class="md-form">
-                    <input class="form-control" id="tags" name="tags" type="text">
+                    <input class="form-control" id="tags" name="tags" th:value="${post_data.tags}" type="text">
                     <label for="tags">Post Tags</label>
                 </div>
 
-                <div class="md-form">
-                    <p class="custom-file-label">Post File</p>
-                    <input class="custom-file-input" id="postFile" name="postFile" required type="file">
-                </div>
-
-                <input id="postUser" name="postUser" th:value="${#authentication.name}" type="hidden">
-
                 <input class="btn btn-outline-success btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit"
-                       value="Create Post">
+                       value="Update Post">
             </form>
         </div>
 

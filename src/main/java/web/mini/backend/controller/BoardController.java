@@ -134,4 +134,33 @@ public class BoardController {
 
         return getStringBooleanMap(status);
     }
+
+    @PutMapping("/board")
+    public ResponseEntity<Board> updateBoard(Board newBoard,
+                                             MultipartFile boardCoverFile)
+            throws ResourceNotFoundException {
+        Board board =
+                boardRepository
+                        .findById(newBoard.getId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Post not found on :: " + newBoard.getId()));
+        board.setBoardName(newBoard.getBoardName());
+        board.setBoardDescription(newBoard.getBoardDescription());
+        board.setPrivateBoard(newBoard.getPrivateBoard());
+
+        if (!boardCoverFile.isEmpty()) {
+            ResponseEntity<String> status = awsController.uploadFileToS3Bucket(boardCoverFile,
+                    "boards");
+            if (status.getStatusCode().is2xxSuccessful()) {
+                this.awsController.deleteFileFromS3Bucket(newBoard.getBoardCoverUrl(),
+                        "boards");
+                board.setBoardCoverUrl(status.getBody());
+            }
+
+            return ResponseEntity.status(500).body(board);
+        }
+
+        boardRepository.save(board);
+
+        return ResponseEntity.ok().body(board);
+    }
 }

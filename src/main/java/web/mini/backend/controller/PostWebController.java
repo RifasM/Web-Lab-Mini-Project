@@ -8,12 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
 import web.mini.backend.repository.BoardRepository;
 import web.mini.backend.repository.PostRepository;
+import web.mini.backend.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +34,9 @@ public class PostWebController {
     @Autowired
     private BoardController boardController;
 
+    @Autowired
+    private UserRepository userRepository;
+
 
     /**
      * Handle Post Creation Page request
@@ -48,7 +51,8 @@ public class PostWebController {
                                     @RequestParam String boardId,
                                     @RequestParam String tags,
                                     @RequestParam String postUser,
-                                    @RequestParam MultipartFile postFile) throws ResourceNotFoundException {
+                                    @RequestParam MultipartFile postFile,
+                                    Model model) throws ResourceNotFoundException {
         Post post = new Post(
                 null,
                 postTitle,
@@ -73,9 +77,11 @@ public class PostWebController {
                 postIDs.add(post.getId());
                 board.setPostID(postIDs);
                 boardRepository.save(board);
-                return "redirect:/createPost";
+                model.addAttribute("success", post.getId());
             } else
-                return "error";
+                model.addAttribute("error", result.getBody());
+            return "postTemplates/createPost";
+
         } else
             return "error";
     }
@@ -101,13 +107,17 @@ public class PostWebController {
      * @return rendered viewPost.html
      */
     @GetMapping("/viewPost/{post_id}")
-    public ModelAndView postPage(@PathVariable(value = "post_id") String post_id)
-            throws ResourceNotFoundException {
-        ModelAndView post_data = new ModelAndView("postTemplates/viewPost");
-        Post post = postRepository.findById(post_id)
-                .orElseThrow(() -> new ResourceNotFoundException("Post not found on :: " + post_id));
-        post_data.addObject("post_data", post);
-        return post_data;
+    public String postPage(@PathVariable(value = "post_id") String post_id,
+                           Model model) {
+        try {
+            ResponseEntity<Post> request = postController.getPostsById(post_id);
+            if (request.getStatusCode().is2xxSuccessful())
+                model.addAttribute("post_data", request.getBody());
+        } catch (ResourceNotFoundException e) {
+            return "errorPages/404";
+        }
+
+        return "postTemplates/viewPost";
     }
 
     /**
@@ -127,6 +137,73 @@ public class PostWebController {
             return "redirect:/";
         }
 
-        return "error";
+        return "errorPages/404";
+    }
+
+    /**
+     * Handle Post Edit Page request
+     * Get Mapping
+     *
+     * @return rendered editPost.html
+     */
+    @GetMapping("/editPost/{post_id}")
+    public String editPost(@PathVariable(value = "post_id") String post_id, Model model)
+            throws ResourceNotFoundException {
+        ResponseEntity<Post> post = postController.getPostsById(post_id);
+        if (post.getStatusCode().is2xxSuccessful())
+            model.addAttribute("post_data", post.getBody());
+        else
+            return "errorPages/404";
+
+        return "postTemplates/editPost";
+    }
+
+    /**
+     * Handle Post Edit Page request
+     * Post Mapping
+     *
+     * @return rendered editPost.html
+     */
+    @PostMapping("/editPost/{post_id}")
+    public String editPost(@PathVariable String post_id,
+                           @RequestParam String postTitle,
+                           @RequestParam String postDescription,
+                           @RequestParam String tags,
+                           Model model) throws ResourceNotFoundException {
+        ResponseEntity<Post> request = postController.getPostsById(post_id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (request.getStatusCode().is2xxSuccessful() && request.getBody() != null) {
+            Post post = request.getBody();
+            if (post.getPostUser().equals(auth.getName())) {
+                post.setPostTitle(postTitle);
+                post.setPostDescription(postDescription);
+                post.setTags(tags);
+                postRepository.save(post);
+                model.addAttribute("success", post_id);
+            } else
+                model.addAttribute("error", "unauthorised");
+
+            model.addAttribute("post_data", post);
+            return "postTemplates/editPost";
+        }
+
+        return "errorPages/404";
+    }
+
+    /**
+     * View all the posts of the current logged in user
+     *
+     * @param model Model to add the attributes to render onto the page
+     * @param auth  Get the authentication details of the current user
+     * @return the rendered view posts page
+     */
+    @RequestMapping("/viewPosts")
+    public String viewAllUserPosts(Model model,
+                                   Authentication auth) {
+        List<Post> posts = postController.findByUser(auth.getName());
+        model.addAttribute("firstName", userRepository.findByUsername(auth.getName()).getFirstName());
+        model.addAttribute("posts", posts);
+
+        return "postTemplates/viewPosts";
     }
 }

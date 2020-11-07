@@ -2081,11 +2081,43 @@ section {
   border: 0 !important;
   border-radius: 0.25rem 0 0 0.25rem !important;
 }
+
 .input_user,
 .input_pass:focus {
   box-shadow: none !important;
   outline: 0px !important;
 }
-.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #2BA1AA !important;
+}
+
+/*--------------------------------------------------------------
+# Create Post button
+--------------------------------------------------------------*/
+.create-post {
+  position: fixed;
+  display: inline;
+  right: 50%;
+  width: fit-content;
+  bottom: 15px;
+  z-index: 99999;
+  transition: 0.5s;
+}
+
+.create-post div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  width: 150px;
+  height: 40px;
+  border-radius: 50px;
+  background: #007bff;
+  color: #fff;
+  transition: all 0.4s;
+}
+
+.create-post:hover {
+  bottom: 19px;
 }

@@ -3,19 +3,16 @@ package web.mini.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
 import web.mini.backend.repository.BoardRepository;
 import web.mini.backend.repository.PostRepository;
+import web.mini.backend.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +32,10 @@ public class BoardWebController {
 
     @Autowired
     private BoardController boardController;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     /**
      * Return Board Creation Page
@@ -58,7 +59,8 @@ public class BoardWebController {
                                      @RequestParam String boardDescription,
                                      @RequestParam String userId,
                                      @RequestParam(required = false, defaultValue = "true") String privateBoard,
-                                     @RequestParam(required = false) MultipartFile boardCoverUrl) {
+                                     @RequestParam(required = false) MultipartFile boardCoverUrl,
+                                     Model model) {
 
         Board board = new Board(
                 null,
@@ -74,9 +76,11 @@ public class BoardWebController {
                 boardCoverUrl);
 
         if (result.getStatusCode().is2xxSuccessful())
-            return "boardTemplates/createBoard";
+            model.addAttribute("success", board.getId());
         else
-            return "error";
+            model.addAttribute("error", result.getBody());
+
+        return "boardTemplates/createBoard";
     }
 
     /**
@@ -87,30 +91,134 @@ public class BoardWebController {
      * @return rendered viewBoard.html
      */
     @GetMapping("/viewBoard/{board_id}")
-    public String viewBoard(@PathVariable(value = "board_id") String board_id, Model model)
+    public String viewBoard(@PathVariable(value = "board_id") String board_id,
+                            Model model,
+                            Authentication auth)
             throws ResourceNotFoundException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         ResponseEntity<Board> board = boardController.getBoardById(board_id);
 
-        // Check if board is private and requesting User is not the board owner, then raise error
-        if (Objects.requireNonNull(board.getBody()).getPrivateBoard() && !auth.getName().equals(board.getBody().getUserId())) {
-            return "error";
-        }
+        if (board.getStatusCode().is2xxSuccessful()) {
+            // Check if board is private and requesting User is not the board owner, then raise error
+            if (Objects.requireNonNull(board.getBody()).getPrivateBoard() && !auth.getName().equals(board.getBody().getUserId())) {
+                return "error";
+            }
 
-        List<Post> post_list = new ArrayList<>();
-        for (String post_id : board.getBody().getPostID()) {
-            ResponseEntity<Post> result = postController.getPostsById(post_id);
-            if (result.getStatusCode().is2xxSuccessful())
-                post_list.add(result.getBody());
+            // Use the no board url as default
+            if (board.getBody().getBoardCoverUrl() == null)
+                board.getBody().setBoardCoverUrl("no-board-cover.png");
+
+            List<Post> post_list = new ArrayList<>();
+
+            if (board.getBody().getPostID() != null) {
+                for (String post_id : board.getBody().getPostID()) {
+                    ResponseEntity<Post> result = postController.getPostsById(post_id);
+                    if (result.getStatusCode().is2xxSuccessful())
+                        post_list.add(result.getBody());
+                    else
+                        board.getBody().getPostID().remove(post_id);
+                }
+                boardRepository.save(board.getBody());
+            }
+
+            model.addAttribute("posts", post_list);
+            model.addAttribute("board_data", board.getBody());
+
+
+            return "boardTemplates/viewBoard";
+        }
+        return "error";
+    }
+
+    /**
+     * Return Board edit Page
+     * Post Mapping
+     *
+     * @return rendered editBoard.html
+     */
+    @PostMapping("/editBoard/{board_id}")
+    public String editBoardPage(@PathVariable(value = "board_id") String board_id,
+                                @RequestParam String boardName,
+                                @RequestParam String boardDescription,
+                                @RequestParam(required = false, defaultValue = "true") String privateBoard,
+                                @RequestParam(required = false) MultipartFile boardCoverUrl,
+                                Model model,
+                                Authentication auth) throws ResourceNotFoundException {
+        ResponseEntity<Board> request = boardController.getBoardById(board_id);
+        if (request.getStatusCode().is2xxSuccessful()) {
+            if (Objects.requireNonNull(request.getBody()).getUserId().equals(auth.getName())) {
+                Board board = request.getBody();
+                board.setBoardName(boardName);
+                board.setBoardDescription(boardDescription);
+                board.setPrivateBoard(Boolean.parseBoolean(privateBoard));
+                ResponseEntity<Board> status = boardController.updateBoard(board, boardCoverUrl);
+                if (status.getStatusCode().is2xxSuccessful())
+                    model.addAttribute("success", board_id);
+                else
+                    model.addAttribute("error", status.getBody());
+
+                model.addAttribute("board_data", status.getBody());
+            } else {
+                return "errorPages/404";
+            }
+        }
+        return "boardTemplates/editBoard";
+    }
+
+    /**
+     * Return Board edit Page
+     * Post Mapping
+     *
+     * @return rendered editBoard.html
+     */
+    @GetMapping("/editBoard/{board_id}")
+    public String editBoardPage(@PathVariable(value = "board_id") String board_id,
+                                Model model,
+                                Authentication auth)
+            throws ResourceNotFoundException {
+        ResponseEntity<Board> request = boardController.getBoardById(board_id);
+        if (request.getStatusCode().is2xxSuccessful()) {
+            if (Objects.requireNonNull(request.getBody()).getUserId().equals(auth.getName()))
+                model.addAttribute("board_data", request.getBody());
             else
-                board.getBody().getPostID().remove(post_id);
+                return "errorPages/404";
         }
-        boardRepository.save(board.getBody());
+        return "boardTemplates/editBoard";
+    }
 
-        model.addAttribute("posts", post_list);
-        model.addAttribute("board_data", board.getBody());
+    /**
+     * Return Home Page after deleting the board
+     *
+     * @param board_id boardID to delete
+     * @return redirect to home
+     */
+    @RequestMapping("/deleteBoard/{board_id}")
+    public String deleteBoard(@PathVariable(value = "board_id") String board_id,
+                              Authentication auth)
+            throws ResourceNotFoundException {
+        Board board = boardController.getBoardById(board_id).getBody();
 
+        if (board != null && board.getUserId().equals(auth.getName())) {
+            boardController.deleteBoard(board_id);
+            return "redirect:/";
+        }
 
-        return "boardTemplates/viewBoard";
+        return "errorPages/404";
+    }
+
+    /**
+     * View all the boards of the current logged in user
+     *
+     * @param model Model to add the attributes to render onto the page
+     * @param auth  Get the authentication details of the current user
+     * @return the rendered view boards page
+     */
+    @RequestMapping("/viewBoards")
+    public String viewAllBoards(Model model,
+                                Authentication auth) {
+        List<Board> board = boardController.findByUser(auth.getName());
+        model.addAttribute("boards", board);
+        model.addAttribute("firstName", userRepository.findByUsername(auth.getName()).getFirstName());
+
+        return "boardTemplates/viewBoards";
     }
 }
