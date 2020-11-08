@@ -1,12 +1,16 @@
 package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import web.mini.backend.model.ResetPassword;
 import web.mini.backend.model.User;
 import web.mini.backend.repository.UserRepository;
 
@@ -19,6 +23,9 @@ public class UserWebController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordController passwordController;
 
     /**
      * Return the profile page for that user
@@ -88,6 +95,27 @@ public class UserWebController {
         errors.addAttribute("username_exists", "no");
 
         return "redirect:/profile";
+    }
 
+    /**
+     * Get Mapping to render the forgot password page
+     *
+     * @return The rendered forgot password page
+     */
+    @GetMapping("/forgotPassword")
+    public String forgotPassword() {
+        return "passwordTemplates/forgotPassword";
+    }
+
+    @PostMapping("/forgotPassword")
+    public String forgotPassword(@RequestParam String username,
+                                 @RequestParam String email,
+                                 Model model) {
+        ResponseEntity<ResetPassword> reset = passwordController.getResetLink(username, email);
+        if (reset.getStatusCode().is2xxSuccessful())
+            model.addAttribute("success", true);
+        else
+            model.addAttribute("error", reset.getBody());
+        return "passwordTemplates/forgotPassword";
     }
 }
