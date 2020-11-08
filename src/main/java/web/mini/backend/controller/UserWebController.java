@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.ResetPassword;
 import web.mini.backend.model.User;
 import web.mini.backend.repository.UserRepository;
@@ -14,6 +15,7 @@ import web.mini.backend.repository.UserRepository;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 @Controller
 public class UserWebController {
@@ -23,6 +25,9 @@ public class UserWebController {
 
     @Autowired
     private PasswordController passwordController;
+
+    @Autowired
+    private UserController userController;
 
 
     /**
@@ -126,15 +131,15 @@ public class UserWebController {
     }
 
     /**
-     * Get mapping for rest password page
+     * Get mapping for reset password page
      *
      * @param token The token received in the mail
      * @param model Model to add the attributes
      * @return Rendered reset password page
      */
     @GetMapping("/resetPassword/{token}")
-    public String resetPassword(@PathVariable(value = "token") String token,
-                                Model model) {
+    public String resetPasswordGet(@PathVariable(value = "token") String token,
+                                   Model model) {
         ResponseEntity<ResetPassword> reset = passwordController.validateToken(token);
 
         if (reset.getStatusCode().is2xxSuccessful())
@@ -143,7 +148,33 @@ public class UserWebController {
             model.addAttribute("error", true);
 
         return "passwordTemplates/resetPassword";
+    }
 
+    /**
+     * Post mapping for reset password page
+     *
+     * @param token The token received in the mail
+     * @param model Model to add the attributes
+     * @return Rendered reset password page after resting the password
+     */
+    @PostMapping("/resetPassword/{token}")
+    public String resetPasswordPost(@PathVariable(value = "token") String token,
+                                    Model model) throws ResourceNotFoundException {
+        ResponseEntity<ResetPassword> reset = passwordController.validateToken(token);
+        if (reset.getStatusCode().is2xxSuccessful()) {
+            User user = userRepository.findById(
+                    Objects.requireNonNull(reset.getBody()).getUser())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found for token "
+                            + token + "with User ID: " + reset.getBody().getUser()));
 
+            String encryptedPassword = userController.passwordEncoder().encode(user.getPassword());
+            user.setPassword(encryptedPassword);
+
+            userRepository.save(user);
+            model.addAttribute("success", true);
+        } else
+            model.addAttribute("error", true);
+
+        return "passwordTemplates/resetPassword";
     }
 }

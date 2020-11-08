@@ -82,7 +82,7 @@
                 <!-- Password -->
                 <div class="md-form">
                     <input aria-describedby="password-desc" class="form-control" id="password" name="password"
-                           pattern="^(?=(.*[a-zA-Z].*){2,})(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9\S]{8,15}$" required
+                           pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,15}$" required
                            type="password">
                     <label for="password">Password</label>
                     <small class="form-text text-muted mb-4" id="password-desc">
@@ -93,7 +93,7 @@
                 <!-- Password -->
                 <div class="md-form">
                     <input aria-describedby="repassword-desc" class="form-control" id="repassword" name="repassword"
-                           pattern="^(?=(.*[a-zA-Z].*){2,})(?=.*\d.*)(?=.*\W.*)[a-zA-Z0-9\S]{8,15}$" required
+                           pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,15}$" required
                            type="password">
                     <label for="repassword">Re Enter Password</label>
                     <small class="form-text text-muted mb-4" id="repassword-desc">
