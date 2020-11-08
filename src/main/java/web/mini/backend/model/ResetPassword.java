@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "password-reset")
+@Table(name = "reset_password")
 public class ResetPassword {
     // Set expiration to be 30 minutes,
     // else use 60 * 2 for 2 hours
@@ -16,9 +16,7 @@ public class ResetPassword {
 
     private String token;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "id")
-    private User user;
+    private long userId;
 
     private Date expiryDate;
 
@@ -42,12 +40,12 @@ public class ResetPassword {
         this.token = token;
     }
 
-    public User getUser() {
-        return user;
+    public long getUser() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(long userId) {
+        this.userId = userId;
     }
 
     public Date getExpiryDate() {
@@ -63,7 +61,7 @@ public class ResetPassword {
         return "ResetPassword{" +
                 "id=" + id +
                 ", token='" + token + '\'' +
-                ", user=" + user +
+                ", user=" + userId +
                 ", expiryDate=" + expiryDate +
                 '}';
     }

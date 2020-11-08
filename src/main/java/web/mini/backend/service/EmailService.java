@@ -19,7 +19,8 @@ public class EmailService {
     private static final Logger LOGGER = LoggerFactory.getLogger(BackendApplication.class);
     private final TemplateEngine templateEngine;
     private final JavaMailSender javaMailSender;
-    @Value("application.server.url")
+
+    @Value("${application.server.url}")
     private String serverUrl;
 
     public EmailService(TemplateEngine templateEngine, JavaMailSender javaMailSender) {
