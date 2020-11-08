@@ -31,6 +31,13 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
+    /**
+     * Send the mail to the provided username with the template resetPassword
+     *
+     * @param user User model to obtain username and other details to send email to
+     * @param uuid the token to send to reset the password
+     * @return Response entity with success or a failure message
+     */
     public ResponseEntity<String> sendMail(User user, String uuid) {
         try {
             String server = InetAddress.getLoopbackAddress().getHostName();
@@ -51,10 +58,13 @@ public class EmailService {
             helper.setText(process, true);
             helper.setTo(user.getEmail());
             javaMailSender.send(mimeMessage);
+
+            LOGGER.info("Reset Password Email Sent to " + user.getEmail());
             return ResponseEntity.ok().body("Sent");
         } catch (MessagingException e) {
             LOGGER.error("Failed To send Reset Password Email to " + user.getEmail() + ". Cause: " + e.getMessage());
         }
+        LOGGER.warn("Failed To send Reset Password Email to " + user.getEmail());
         return ResponseEntity.status(500).body("error");
     }
 }
