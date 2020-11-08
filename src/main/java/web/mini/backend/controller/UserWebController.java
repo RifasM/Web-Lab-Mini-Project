@@ -5,10 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import web.mini.backend.model.ResetPassword;
 import web.mini.backend.model.User;
@@ -26,6 +23,7 @@ public class UserWebController {
 
     @Autowired
     private PasswordController passwordController;
+
 
     /**
      * Return the profile page for that user
@@ -107,6 +105,14 @@ public class UserWebController {
         return "passwordTemplates/forgotPassword";
     }
 
+    /**
+     * Post Mapping to render the forgot password page
+     *
+     * @param username Username of the requesting user
+     * @param email    Email of the requesting user
+     * @param model    Model to add the attributes to render on the html page
+     * @return rendered HTML page
+     */
     @PostMapping("/forgotPassword")
     public String forgotPassword(@RequestParam String username,
                                  @RequestParam String email,
@@ -117,5 +123,27 @@ public class UserWebController {
         else
             model.addAttribute("error", reset.getBody());
         return "passwordTemplates/forgotPassword";
+    }
+
+    /**
+     * Get mapping for rest password page
+     *
+     * @param token The token received in the mail
+     * @param model Model to add the attributes
+     * @return Rendered reset password page
+     */
+    @GetMapping("/resetPassword/{token}")
+    public String resetPassword(@PathVariable(value = "token") String token,
+                                Model model) {
+        ResponseEntity<ResetPassword> reset = passwordController.validateToken(token);
+
+        if (reset.getStatusCode().is2xxSuccessful())
+            model.addAttribute("valid", true);
+        else
+            model.addAttribute("error", true);
+
+        return "passwordTemplates/resetPassword";
+
+
     }
 }

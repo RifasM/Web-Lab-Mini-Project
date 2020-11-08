@@ -48,10 +48,10 @@ public class PasswordController {
             resetPassword.setToken(token);
             resetPassword.setUser(user.getId());
             resetPassword.setExpiryDate(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(ResetPassword.getEXPIRATION())));
-            resetPasswordRepository.save(resetPassword);
 
             ResponseEntity<String> result = emailService.sendMail(user, token);
 
+            resetPasswordRepository.save(resetPassword);
 
             if (result.getStatusCode().is2xxSuccessful())
                 return ResponseEntity.ok().body(resetPassword);
@@ -69,8 +69,10 @@ public class PasswordController {
     public ResponseEntity<ResetPassword> validateToken(@RequestParam String token) {
         ResetPassword resetPassword = resetPasswordRepository.findByToken(token);
 
-        if (resetPassword.getExpiryDate().before(Calendar.getInstance().getTime()))
+        if (resetPassword.getExpiryDate().before(Calendar.getInstance().getTime())) {
+            resetPasswordRepository.delete(resetPassword);
             return ResponseEntity.badRequest().body(null);
+        }
 
         return ResponseEntity.ok().body(resetPassword);
     }

@@ -2,7 +2,8 @@ package web.mini.backend.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,15 +14,17 @@ import web.mini.backend.BackendApplication;
 import web.mini.backend.model.User;
 
 import javax.mail.MessagingException;
+import java.net.InetAddress;
+import java.util.Objects;
 
 @Service
 public class EmailService {
+    @Autowired
+    private Environment environment;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BackendApplication.class);
     private final TemplateEngine templateEngine;
     private final JavaMailSender javaMailSender;
-
-    @Value("${application.server.url}")
-    private String serverUrl;
 
     public EmailService(TemplateEngine templateEngine, JavaMailSender javaMailSender) {
         this.templateEngine = templateEngine;
@@ -30,10 +33,16 @@ public class EmailService {
 
     public ResponseEntity<String> sendMail(User user, String uuid) {
         try {
+            String server = InetAddress.getLoopbackAddress().getHostName();
+
+            int port = Integer.parseInt(Objects.requireNonNull(environment.getProperty("server.port")));
+            if (port != 80)
+                server += ":" + port;
+
             Context context = new Context();
             context.setVariable("user", user);
-            context.setVariable("serverUrl", serverUrl);
             context.setVariable("uuid", uuid);
+            context.setVariable("server", server);
 
             String process = templateEngine.process("emailTemplates/resetPassword", context);
             javax.mail.internet.MimeMessage mimeMessage = javaMailSender.createMimeMessage();
