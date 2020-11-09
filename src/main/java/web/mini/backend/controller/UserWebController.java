@@ -1,24 +1,34 @@
 package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import web.mini.backend.exception.ResourceNotFoundException;
+import web.mini.backend.model.ResetPassword;
 import web.mini.backend.model.User;
 import web.mini.backend.repository.UserRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 @Controller
 public class UserWebController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordController passwordController;
+
+    @Autowired
+    private UserController userController;
+
 
     /**
      * Return the profile page for that user
@@ -88,6 +98,83 @@ public class UserWebController {
         errors.addAttribute("username_exists", "no");
 
         return "redirect:/profile";
+    }
 
+    /**
+     * Get Mapping to render the forgot password page
+     *
+     * @return The rendered forgot password page
+     */
+    @GetMapping("/forgotPassword")
+    public String forgotPassword() {
+        return "passwordTemplates/forgotPassword";
+    }
+
+    /**
+     * Post Mapping to render the forgot password page
+     *
+     * @param username Username of the requesting user
+     * @param email    Email of the requesting user
+     * @param model    Model to add the attributes to render on the html page
+     * @return rendered HTML page
+     */
+    @PostMapping("/forgotPassword")
+    public String forgotPassword(@RequestParam String username,
+                                 @RequestParam String email,
+                                 Model model) {
+        ResponseEntity<ResetPassword> reset = passwordController.getResetLink(username, email);
+        if (reset.getStatusCode().is2xxSuccessful())
+            model.addAttribute("success", true);
+        else
+            model.addAttribute("error", reset.getBody());
+        return "passwordTemplates/forgotPassword";
+    }
+
+    /**
+     * Get mapping for reset password page
+     *
+     * @param token The token received in the mail
+     * @param model Model to add the attributes
+     * @return Rendered reset password page
+     */
+    @GetMapping("/resetPassword/{token}")
+    public String resetPasswordGet(@PathVariable(value = "token") String token,
+                                   Model model) {
+        ResponseEntity<ResetPassword> reset = passwordController.validateToken(token);
+
+        if (reset.getStatusCode().is2xxSuccessful())
+            model.addAttribute("valid", true);
+        else
+            model.addAttribute("error", true);
+
+        return "passwordTemplates/resetPassword";
+    }
+
+    /**
+     * Post mapping for reset password page
+     *
+     * @param token The token received in the mail
+     * @param model Model to add the attributes
+     * @return Rendered reset password page after resting the password
+     */
+    @PostMapping("/resetPassword/{token}")
+    public String resetPasswordPost(@PathVariable(value = "token") String token,
+                                    Model model) throws ResourceNotFoundException {
+        ResponseEntity<ResetPassword> reset = passwordController.validateToken(token);
+        if (reset.getStatusCode().is2xxSuccessful()) {
+            User user = userRepository.findById(
+                    Objects.requireNonNull(reset.getBody()).getUser())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found for token "
+                            + token + "with User ID: " + reset.getBody().getUser()));
+
+            String encryptedPassword = userController.passwordEncoder().encode(user.getPassword());
+            user.setPassword(encryptedPassword);
+
+            userRepository.save(user);
+            model.addAttribute("success", true);
+        } else
+            model.addAttribute("error", true);
+
+        return "passwordTemplates/resetPassword";
     }
 }
