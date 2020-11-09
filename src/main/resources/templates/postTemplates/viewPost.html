@@ -20,58 +20,222 @@
 <th:block style="color: #fff;" th:insert="includes/home-fragments::navbar-inner-page"></th:block>
 
 <main id="main">
-
-    <section class="portfolio" id="portfolio">
+    <!-- ======= Blog Section ======= -->
+    <section class="blog" id="blog">
         <div class="container">
 
-            <div class="section-title">
-                <h3 th:text="${post_data.postTitle}"></h3>
-                <p th:text="${post_data.postDescription}"></p>
+            <div class="row">
+
+                <div class="col-lg-8 entries">
+
+                    <article class="entry entry-single">
+
+                        <div class="entry-img">
+                            <img class="img-fluid" th:alt="${post_data.postDescription}"
+                                 th:if="${post_data.postType == 'image' || post_data.postType == 'gif'}"
+                                 th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"/>
+                            <video autoplay loop th:if="${post_data.postType == 'video'}">
+                                <source th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"
+                                        type="vi/mp4">
+                            </video>
+                        </div>
+
+                        <h2 class="entry-title" th:text="${post_data.postTitle}"></h2>
+
+                        <div class="entry-meta">
+                            <ul>
+                                <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="#"
+                                                                                                      th:text="${post_data.postUser}"></a>
+                                </li>
+                                <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i><span
+                                        th:text="${post_data.postDate}"></span></li>
+                                <li class="d-flex align-items-center"><i class="icofont-comment"></i>
+                                    <p th:text="${post_data.postLikesUserIds}"></p></li>
+                                <li class="d-flex align-items-center"><i class="icofont-heart"></i>
+                                    <p th:text="${post_data.postCommentsUserIds}"></p></li>
+                            </ul>
+                        </div>
+
+                        <div class="entry-content">
+                            <p th:text="${post_data.postDescription}"></p>
+
+                            <blockquote>
+                                <i class="icofont-quote-left quote-left"></i>
+                                <p>
+                                    Et vero doloremque tempore voluptatem ratione vel aut. Deleniti sunt animi aut. Aut
+                                    eos aliquam doloribus minus autem quos.
+                                </p>
+                                <i class="las la-quote-right quote-right"></i>
+                                <i class="icofont-quote-right quote-right"></i>
+                            </blockquote>
+                        </div>
+
+                        <div class="entry-footer clearfix">
+                            <div class="float-left">
+                                <i class="icofont-folder"></i>
+                                <ul class="cats">
+                                    <li><a href="#">CMRIT</a></li>
+                                </ul>
+
+                                <i class="icofont-tags"></i>
+                                <ul class="tags">
+                                    <li><a href="#" th:text="${post_data.tags}"></a></li>
+                                </ul>
+                            </div>
+
+                            <div class="float-right share">
+                                <a href="" title="Share on Twitter"><i class="icofont-twitter"></i></a>
+                                <a href="" title="Share on Facebook"><i class="icofont-facebook"></i></a>
+                                <a href="" title="Share on Instagram"><i class="icofont-instagram"></i></a>
+                            </div>
+
+                        </div>
+
+                    </article><!-- End blog entry -->
+
+                    <div class="blog-author clearfix">
+                        <img alt="" class="rounded-circle float-left" src="assets/img/blog-author.jpg">
+                        <h4 th:text="${post_data.postUser}"></h4>
+                        <div class="social-links">
+                            <a href="https://twitters.com/#"><i class="icofont-twitter"></i></a>
+                            <a href="https://facebook.com/#"><i class="icofont-facebook"></i></a>
+                            <a href="https://instagram.com/#"><i class="icofont-instagram"></i></a>
+                        </div>
+                        <p>
+                        <div class="row text-center" th:if="${#authentication.name == post_data.postUser}">
+                            <div class="col-md-5">
+                                <a class="btn btn-outline-danger btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                                   th:href="@{/deletePost/{id}(id = ${post_data.id})}">Delete Post</a>
+                            </div>
+
+                            <div class="col-md-2"></div>
+
+                            <div class="col-md-5">
+                                <a class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                                   th:href="@{/editPost/{id}(id = ${post_data.id})}">Update
+                                    Post</a>
+                            </div>
+                        </div>
+                        </p>
+                    </div><!-- End blog author bio -->
+
+                </div><!-- End blog entries list -->
+
+                <div class="col-lg-4">
+                    <div class="sidebar blog-comments">
+                        <h4 class="sidebar-title">Comment</h4>
+
+                        <div class="sidebar-item reply-form mb-4">
+                            <form action="">
+                                <div class="row">
+                                    <div class="col form-group">
+                                        <textarea class="form-control" name="comment"
+                                                  placeholder="Your Comment*"></textarea>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" type="submit">Post Comment</button>
+
+                            </form>
+
+                        </div>
+
+                        <h4 class="comments-count">8 Comments</h4>
+
+                        <div class="comment clearfix" id="comment-1">
+                            <img alt="" class="comment-img  float-left" src="assets/img/comments-1.jpg">
+                            <h5><a href="">Georgia Reader</a> <a class="reply" href="#"><i class="icofont-reply"></i>
+                                Reply</a></h5>
+                            <time datetime="2020-01-01">01 Jan, 2020</time>
+                            <p>
+                                Et rerum totam nisi. Molestiae vel quam dolorum vel voluptatem et et. Est ad aut
+                                sapiente quis molestiae est qui cum soluta.
+                                Vero aut rerum vel. Rerum quos laboriosam placeat ex qui. Sint qui facilis et.
+                            </p>
+
+                        </div><!-- End comment #1 -->
+
+                        <div class="comment clearfix" id="comment-2">
+                            <img alt="" class="comment-img  float-left" src="assets/img/comments-2.jpg">
+                            <h5><a href="">Aron Alvarado</a> <a class="reply" href="#"><i class="icofont-reply"></i>
+                                Reply</a></h5>
+                            <time datetime="2020-01-01">01 Jan, 2020</time>
+                            <p>
+                                Ipsam tempora sequi voluptatem quis sapiente non. Autem itaque eveniet saepe. Officiis
+                                illo ut beatae.
+                            </p>
+
+                            <div class="comment comment-reply clearfix" id="comment-reply-1">
+                                <img alt="" class="comment-img  float-left" src="assets/img/comments-3.jpg">
+                                <h5><a href="">Lynda Small</a> <a class="reply" href="#"><i class="icofont-reply"></i>
+                                    Reply</a></h5>
+                                <time datetime="2020-01-01">01 Jan, 2020</time>
+                                <p>
+                                    Enim ipsa eum fugiat fuga repellat. Commodi quo quo dicta. Est ullam aspernatur ut
+                                    vitae quia mollitia id non. Qui ad quas nostrum rerum sed necessitatibus aut est.
+                                    Eum officiis sed repellat maxime vero nisi natus. Amet nesciunt nesciunt qui illum
+                                    omnis est et dolor recusandae.
+
+                                    Recusandae sit ad aut impedit et. Ipsa labore dolor impedit et natus in porro aut.
+                                    Magnam qui cum. Illo similique occaecati nihil modi eligendi. Pariatur distinctio
+                                    labore omnis incidunt et illum. Expedita et dignissimos distinctio laborum minima
+                                    fugiat.
+
+                                    Libero corporis qui. Nam illo odio beatae enim ducimus. Harum reiciendis error
+                                    dolorum non autem quisquam vero rerum neque.
+                                </p>
+
+                                <div class="comment comment-reply clearfix" id="comment-reply-2">
+                                    <img alt="" class="comment-img  float-left" src="assets/img/comments-4.jpg">
+                                    <h5><a href="">Sianna Ramsay</a> <a class="reply" href="#"><i
+                                            class="icofont-reply"></i> Reply</a></h5>
+                                    <time datetime="2020-01-01">01 Jan, 2020</time>
+                                    <p>
+                                        Et dignissimos impedit nulla et quo distinctio ex nemo. Omnis quia dolores
+                                        cupiditate et. Ut unde qui eligendi sapiente omnis ullam. Placeat porro est
+                                        commodi est officiis voluptas repellat quisquam possimus. Perferendis id
+                                        consectetur necessitatibus.
+                                    </p>
+
+                                </div><!-- End comment reply #2-->
+
+                            </div><!-- End comment reply #1-->
+
+                        </div><!-- End comment #2-->
+
+                        <div class="comment clearfix" id="comment-3">
+                            <img alt="" class="comment-img  float-left" src="assets/img/comments-5.jpg">
+                            <h5><a href="">Nolan Davidson</a> <a class="reply" href="#"><i class="icofont-reply"></i>
+                                Reply</a></h5>
+                            <time datetime="2020-01-01">01 Jan, 2020</time>
+                            <p>
+                                Distinctio nesciunt rerum reprehenderit sed. Iste omnis eius repellendus quia nihil ut
+                                accusantium tempore. Nesciunt expedita id dolor exercitationem aspernatur aut quam ut.
+                                Voluptatem est accusamus iste at.
+                                Non aut et et esse qui sit modi neque. Exercitationem et eos aspernatur. Ea est
+                                consequuntur officia beatae ea aut eos soluta. Non qui dolorum voluptatibus et optio
+                                veniam. Quam officia sit nostrum dolorem.
+                            </p>
+
+                        </div><!-- End comment #3 -->
+
+                        <div class="comment clearfix" id="comment-4">
+                            <img alt="" class="comment-img  float-left" src="assets/img/comments-6.jpg">
+                            <h5><a href="">Kay Duggan</a> <a class="reply" href="#"><i class="icofont-reply"></i> Reply</a>
+                            </h5>
+                            <time datetime="2020-01-01">01 Jan, 2020</time>
+                            <p>
+                                Dolorem atque aut. Omnis doloremque blanditiis quia eum porro quis ut velit tempore.
+                                Cumque sed quia ut maxime. Est ad aut cum. Ut exercitationem non in fugiat.
+                            </p>
+
+                        </div><!-- End comment #4 -->
+
+                    </div><!-- End blog comments -->
+                </div>
             </div>
 
-            <div class="row portfolio-container">
-                <div class="col-lg-8 col-md-8 portfolio-item filter-app">
-                    <img class="img-fluid" th:alt="${post_data.postDescription}"
-                         th:if="${post_data.postType == 'image' || post_data.postType == 'gif'}"
-                         th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"/>
-                    <video autoplay loop th:if="${post_data.postType == 'video'}">
-                        <source th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"
-                                type="vi/mp4">
-                    </video>
-                    <div class="portfolio-info">
-                        <p th:text="'Posted By: '+ ${post_data.postUser}"></p>
-                        <p th:text="'Posted On: '+ ${post_data.postDate}"></p>
-                        <small th:text="'Tags: ' + ${post_data.tags}"></small>
-                        <a class="venobox preview-link" data-gall="portfolioGallery" href="#"
-                           th:title="${post_data.postLikesUserIds}"><i class="bx bxs-heart"></i></a>
-                        <a class="details-link" href="#" th:title="${post_data.postCommentsUserIds}"><i
-                                class="bx bxs-comment"></i></a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-3 portfolio-item filter-app">
-                    <h4><span>Comments</span></h4>
-                    <p>comment 1</p>
-                    <p>comment 2</p>
-                    <p>comment 3</p>
-                </div>
-            </div>
-            <div class="row text-center" th:if="${#authentication.name == post_data.postUser}">
-                <div class="col-md-5">
-                    <a class="btn btn-outline-danger btn-rounded btn-block z-depth-0 my-4 waves-effect"
-                       th:href="@{/deletePost/{id}(id = ${post_data.id})}">Delete Post</a>
-                </div>
-
-                <div class="col-md-2"></div>
-
-                <div class="col-md-5">
-                    <a class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
-                       th:href="@{/editPost/{id}(id = ${post_data.id})}">Update
-                        Post</a>
-                </div>
-            </div>
         </div>
-    </section>
+    </section><!-- End Blog Section -->
 
 </main><!-- End #main -->
 

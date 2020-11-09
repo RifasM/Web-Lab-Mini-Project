@@ -33,7 +33,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Disable Cross Site Scripting
-        // TODO: Enable CSRF
         http.csrf().disable();
 
         // The pages does not require login

@@ -159,6 +159,7 @@ public class UserWebController {
      */
     @PostMapping("/resetPassword/{token}")
     public String resetPasswordPost(@PathVariable(value = "token") String token,
+                                    @RequestParam String password1,
                                     Model model) throws ResourceNotFoundException {
         ResponseEntity<ResetPassword> reset = passwordController.validateToken(token);
         if (reset.getStatusCode().is2xxSuccessful()) {
@@ -167,7 +168,7 @@ public class UserWebController {
                     .orElseThrow(() -> new ResourceNotFoundException("User not found for token "
                             + token + "with User ID: " + reset.getBody().getUser()));
 
-            String encryptedPassword = userController.passwordEncoder().encode(user.getPassword());
+            String encryptedPassword = userController.passwordEncoder().encode(password1);
             user.setPassword(encryptedPassword);
 
             userRepository.save(user);
