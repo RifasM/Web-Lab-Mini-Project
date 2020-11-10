@@ -33,7 +33,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Disable Cross Site Scripting
-        http.csrf().disable();
+        // http.csrf().disable();
 
         // The pages does not require login
         http.authorizeRequests().antMatchers("/", "/login", "/logout", "/signup").permitAll();
