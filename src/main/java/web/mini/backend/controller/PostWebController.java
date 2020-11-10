@@ -80,6 +80,8 @@ public class PostWebController {
                 model.addAttribute("success", post.getId());
             } else
                 model.addAttribute("error", result.getBody());
+
+            model.addAttribute("boards", boardController.findByUser(postUser));
             return "postTemplates/createPost";
 
         } else
@@ -93,8 +95,8 @@ public class PostWebController {
      * @return rendered createPost.html
      */
     @GetMapping("/createPost")
-    public String createPostPage(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    public String createPostPage(Model model,
+                                 Authentication auth) {
         List<Board> board = boardController.findByUser(auth.getName());
         model.addAttribute("boards", board);
         return "postTemplates/createPost";
@@ -109,13 +111,14 @@ public class PostWebController {
     @GetMapping("/viewPost/{post_id}")
     public String postPage(@PathVariable(value = "post_id") String post_id,
                            Model model) {
-        try {
-            ResponseEntity<Post> request = postController.getPostsById(post_id);
-            if (request.getStatusCode().is2xxSuccessful())
-                model.addAttribute("post_data", request.getBody());
-        } catch (ResourceNotFoundException e) {
+
+        ResponseEntity<Post> request = postController.getPostsById(post_id);
+
+        if (request.getStatusCode().is2xxSuccessful())
+            model.addAttribute("post_data", request.getBody());
+        else
             return "errorPages/404";
-        }
+
 
         return "postTemplates/viewPost";
     }
@@ -147,8 +150,7 @@ public class PostWebController {
      * @return rendered editPost.html
      */
     @GetMapping("/editPost/{post_id}")
-    public String editPost(@PathVariable(value = "post_id") String post_id, Model model)
-            throws ResourceNotFoundException {
+    public String editPost(@PathVariable(value = "post_id") String post_id, Model model) {
         ResponseEntity<Post> post = postController.getPostsById(post_id);
         if (post.getStatusCode().is2xxSuccessful())
             model.addAttribute("post_data", post.getBody());
@@ -169,7 +171,7 @@ public class PostWebController {
                            @RequestParam String postTitle,
                            @RequestParam String postDescription,
                            @RequestParam String tags,
-                           Model model) throws ResourceNotFoundException {
+                           Model model) {
         ResponseEntity<Post> request = postController.getPostsById(post_id);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (request.getStatusCode().is2xxSuccessful() && request.getBody() != null) {

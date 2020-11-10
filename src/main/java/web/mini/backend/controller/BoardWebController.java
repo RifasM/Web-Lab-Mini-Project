@@ -103,25 +103,29 @@ public class BoardWebController {
                 return "error";
             }
 
+            Board board_body = board.getBody();
+
             // Use the no board url as default
-            if (board.getBody().getBoardCoverUrl() == null)
-                board.getBody().setBoardCoverUrl("no-board-cover.png");
+            if (board_body.getBoardCoverUrl() == null)
+                board_body.setBoardCoverUrl("no-board-cover.png");
 
             List<Post> post_list = new ArrayList<>();
+            List<String> board_post_list = new ArrayList<>();
 
             if (board.getBody().getPostID() != null) {
-                for (String post_id : board.getBody().getPostID()) {
+                for (String post_id : board_body.getPostID()) {
                     ResponseEntity<Post> result = postController.getPostsById(post_id);
-                    if (result.getStatusCode().is2xxSuccessful())
+                    if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
                         post_list.add(result.getBody());
-                    else
-                        board.getBody().getPostID().remove(post_id);
+                        board_post_list.add(result.getBody().getId());
+                    }
                 }
-                boardRepository.save(board.getBody());
+                board_body.setPostID(board_post_list);
+                boardRepository.save(board_body);
             }
 
             model.addAttribute("posts", post_list);
-            model.addAttribute("board_data", board.getBody());
+            model.addAttribute("board_data", board_body);
 
 
             return "boardTemplates/viewBoard";
