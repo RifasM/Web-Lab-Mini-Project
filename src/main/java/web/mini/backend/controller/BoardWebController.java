@@ -93,8 +93,7 @@ public class BoardWebController {
     @GetMapping("/viewBoard/{board_id}")
     public String viewBoard(@PathVariable(value = "board_id") String board_id,
                             Model model,
-                            Authentication auth)
-            throws ResourceNotFoundException {
+                            Authentication auth) {
         ResponseEntity<Board> board = boardController.getBoardById(board_id);
 
         if (board.getStatusCode().is2xxSuccessful()) {
@@ -130,7 +129,7 @@ public class BoardWebController {
 
             return "boardTemplates/viewBoard";
         }
-        return "error";
+        return "errorPages/404";
     }
 
     /**
@@ -177,16 +176,15 @@ public class BoardWebController {
     @GetMapping("/editBoard/{board_id}")
     public String editBoardPage(@PathVariable(value = "board_id") String board_id,
                                 Model model,
-                                Authentication auth)
-            throws ResourceNotFoundException {
+                                Authentication auth) {
         ResponseEntity<Board> request = boardController.getBoardById(board_id);
         if (request.getStatusCode().is2xxSuccessful()) {
-            if (Objects.requireNonNull(request.getBody()).getUserId().equals(auth.getName()))
+            if (Objects.requireNonNull(request.getBody()).getUserId().equals(auth.getName())) {
                 model.addAttribute("board_data", request.getBody());
-            else
-                return "errorPages/404";
+                return "boardTemplates/editBoard";
+            }
         }
-        return "boardTemplates/editBoard";
+        return "errorPages/404";
     }
 
     /**

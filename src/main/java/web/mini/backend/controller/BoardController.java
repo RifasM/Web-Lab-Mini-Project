@@ -40,12 +40,16 @@ public class BoardController {
      * @throws ResourceNotFoundException the resource not found exception
      */
     @GetMapping("/board/{id}")
-    public ResponseEntity<Board> getBoardById(@PathVariable(value = "id") String boardID)
-            throws ResourceNotFoundException {
-        Board board =
-                boardRepository
-                        .findById(boardID)
-                        .orElseThrow(() -> new ResourceNotFoundException("Post not found on :: " + boardID));
+    public ResponseEntity<Board> getBoardById(@PathVariable(value = "id") String boardID) {
+        Board board;
+        try {
+            board =
+                    boardRepository
+                            .findById(boardID)
+                            .orElseThrow(() -> new ResourceNotFoundException("Post not found on :: " + boardID));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(500).body(null);
+        }
         return ResponseEntity.ok().body(board);
     }
 
