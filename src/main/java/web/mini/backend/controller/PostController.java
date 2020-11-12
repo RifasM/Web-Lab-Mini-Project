@@ -47,13 +47,13 @@ public class PostController {
      */
     @GetMapping("/post/{id}")
     public ResponseEntity<Post> getPostsById(@PathVariable(value = "id") String postID) {
-        Post post = null;
+        Post post;
         try {
             post = postRepository.findById(postID)
                     .orElseThrow(() ->
                             new ResourceNotFoundException("Post not found on :: " + postID));
         } catch (ResourceNotFoundException e) {
-            ResponseEntity.status(500).body(null);
+            return ResponseEntity.status(500).body(null);
         }
         return ResponseEntity.ok().body(post);
     }
