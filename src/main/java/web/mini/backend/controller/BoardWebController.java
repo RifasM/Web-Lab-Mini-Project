@@ -96,11 +96,10 @@ public class BoardWebController {
                             Authentication auth) {
         ResponseEntity<Board> board = boardController.getBoardById(board_id);
 
-        if (board.getStatusCode().is2xxSuccessful()) {
-            // Check if board is private and requesting User is not the board owner, then raise error
-            if (Objects.requireNonNull(board.getBody()).getPrivateBoard() && !auth.getName().equals(board.getBody().getUserId())) {
-                return "error";
-            }
+        if (board.getStatusCode().is2xxSuccessful() && board.getBody() != null) {
+            // Check if board is private and requesting User is not the board owner, then raise 404
+            if (board.getBody().getPrivateBoard() && (auth == null || !auth.getName().equals(board.getBody().getUserId())))
+                return "errorPages/404";
 
             Board board_body = board.getBody();
 

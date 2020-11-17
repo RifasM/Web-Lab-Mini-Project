@@ -37,7 +37,6 @@ public class BoardController {
      *
      * @param boardID the post id
      * @return the boards by id
-     * @throws ResourceNotFoundException the resource not found exception
      */
     @GetMapping("/board/{id}")
     public ResponseEntity<Board> getBoardById(@PathVariable(value = "id") String boardID) {
