@@ -138,6 +138,14 @@ public class BoardController {
         return getStringBooleanMap(status);
     }
 
+    /**
+     * Update a board based on the new board content and a cover file if present
+     *
+     * @param newBoard
+     * @param boardCoverFile
+     * @return
+     * @throws ResourceNotFoundException
+     */
     @PutMapping("/board")
     public ResponseEntity<Board> updateBoard(Board newBoard,
                                              MultipartFile boardCoverFile)
