@@ -141,9 +141,9 @@ public class BoardController {
     /**
      * Update a board based on the new board content and a cover file if present
      *
-     * @param newBoard
-     * @param boardCoverFile
-     * @return
+     * @param newBoard       the board entity to update
+     * @param boardCoverFile the cove file to upload to the s3 bucket
+     * @return a response entity with the updated board as the body
      * @throws ResourceNotFoundException
      */
     @PutMapping("/board")
