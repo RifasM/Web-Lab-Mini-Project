@@ -1,13 +1,18 @@
 package web.mini.backend.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import web.mini.backend.BackendApplication;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Post;
 import web.mini.backend.repository.PostRepository;
 import web.mini.backend.repository.UserRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +21,8 @@ import static web.mini.backend.controller.BoardController.getStringBooleanMap;
 @RestController
 @RequestMapping("/api/v1/")
 public class PostController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BackendApplication.class);
+
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -36,7 +43,13 @@ public class PostController {
      */
     @GetMapping("/posts")
     public Iterable<Post> getAllPosts() {
-        return postRepository.findAllByOrderByPostDateDesc();
+        Iterable<Post> post = null;
+        try {
+            post = postRepository.findAllByOrderByPostDateDesc();
+        } catch (UncategorizedElasticsearchException e) {
+            LOGGER.error(e.toString());
+        }
+        return post;
     }
 
     /**
@@ -120,8 +133,40 @@ public class PostController {
      * @param title the post
      * @return the post
      */
-    @GetMapping("/post/{title}")
+    @GetMapping("/post/search/{title}")
     public List<Post> findByTitle(@PathVariable(value = "title") String title) {
         return postRepository.findByPostTitle(title);
+    }
+
+    /**
+     * Method to like a post, store the user who liked the post
+     *
+     * @param postID   the post which the respective user has liked
+     * @param userID   the user id of the user liking the post
+     * @param likeType the type of like, heart, thumbs, curious
+     * @return true if successful, false if failed
+     */
+    @RequestMapping("/post/like")
+    public Boolean likePost(@RequestParam String postID,
+                            @RequestParam String userID,
+                            @RequestParam int likeType) {
+        ResponseEntity<Post> result = getPostsById(postID);
+        if (result.getStatusCode().is2xxSuccessful()) {
+            Post post = result.getBody();
+
+            assert post != null;
+            if (post.getPostLikesUserIds() != null)
+                post.getPostLikesUserIds().put(userID, likeType);
+            else {
+                Map<String, Integer> like = new HashMap<>();
+                like.put(userID, likeType);
+                post.setPostLikesUserIds(like);
+            }
+            postRepository.save(post);
+
+            return true;
+        }
+
+        return false;
     }
 }
