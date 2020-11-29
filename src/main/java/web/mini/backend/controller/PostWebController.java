@@ -114,9 +114,28 @@ public class PostWebController {
 
         ResponseEntity<Post> request = postController.getPostsById(post_id);
 
-        if (request.getStatusCode().is2xxSuccessful())
-            model.addAttribute("post_data", request.getBody());
-        else
+        if (request.getStatusCode().is2xxSuccessful()) {
+            Post post = request.getBody();
+            int heart = 0, thumb = 0, wow = 0;
+            assert post != null;
+            for (String user : post.getPostLikesUserIds().keySet()) {
+                switch (post.getPostLikesUserIds().get(user)) {
+                    case 1:
+                        heart++;
+                        break;
+                    case 2:
+                        thumb++;
+                        break;
+                    case 3:
+                        wow++;
+                        break;
+                }
+            }
+            model.addAttribute("post_data", post);
+            model.addAttribute("like_heart", heart);
+            model.addAttribute("like_thumb", thumb);
+            model.addAttribute("like_wow", wow);
+        } else
             return "errorPages/404";
 
 

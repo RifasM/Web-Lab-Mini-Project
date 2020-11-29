@@ -46,16 +46,85 @@
                         <div class="entry-meta">
                             <ul>
                                 <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="#"
-                                                                          th:text="${post_data.postUser}"></a>
+                                                                                                      th:text="${post_data.postUser}"></a>
                                 </li>
                                 <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i><span
                                         th:text="${post_data.postDate}"></span></li>
                                 <li class="d-flex align-items-center"><i class="icofont-comment"></i>
-                                    <p th:text="${post_data.postLikesUserIds}"></p></li>
-                                <li class="d-flex align-items-center"><i class="icofont-heart"></i>
                                     <p th:text="${post_data.postCommentsUserIds}"></p></li>
                             </ul>
+                            <ul>
+                                <li class="d-flex align-items-center">
+                                    <p class="icofont-heart like-line" id="heart-disp" onclick="doHeart()"
+                                       th:text="${like_heart}"></p>
+                                    <input id="heart-val" th:value="${like_heart}" type="hidden">
+                                </li>
+                                <li class="d-flex align-items-center">
+                                    <p class="icofont-thumbs-up like-line" id="thumb-disp" onclick="doThumb()"
+                                       th:text="${like_thumb}"></p>
+                                    <input id="thumb-val" th:value="${like_thumb}" type="hidden">
+                                </li>
+                                <li class="d-flex align-items-center">
+                                    <p class="icofont-light-bulb like-line" id="wow-disp" onclick="doWow()"
+                                       th:text="${like_wow}"></p>
+                                    <input id="wow-val" th:value="${like_wow}" type="hidden">
+                                </li>
+                            </ul>
                         </div>
+
+                        <script>
+                            const r = new XMLHttpRequest();
+                            const postID = window.location.pathname.split("/").pop();
+                            const userID = document.getElementById("navbar-user-name").value;
+
+                            function doHeart() {
+                                r.open("GET", "/api/v1/post/like?" +
+                                    "postID=" + postID +
+                                    "&userID=" + userID +
+                                    "&likeType=1");
+
+                                r.send();
+
+                                r.onload = () => {
+                                    if (r.response === "true") {
+                                        document.getElementById("heart-disp").innerHTML =
+                                            parseInt(document.getElementById("heart-val").value) + 1;
+                                    }
+                                }
+                            }
+
+                            function doThumb() {
+                                r.open("GET", "/api/v1/post/like?" +
+                                    "postID=" + postID +
+                                    "&userID=" + userID +
+                                    "&likeType=2");
+
+                                r.send();
+
+                                r.onload = () => {
+                                    if (r.response === "true") {
+                                        document.getElementById("thumb-disp").innerHTML =
+                                            parseInt(document.getElementById("thumb-val").value) + 1;
+                                    }
+                                }
+                            }
+
+                            function doWow() {
+                                r.open("GET", "/api/v1/post/like?" +
+                                    "postID=" + postID +
+                                    "&userID=" + userID +
+                                    "&likeType=3");
+
+                                r.send();
+
+                                r.onload = () => {
+                                    if (r.response === "true") {
+                                        document.getElementById("wow-disp").innerHTML =
+                                            parseInt(document.getElementById("wow-val").value) + 1;
+                                    }
+                                }
+                            }
+                        </script>
 
                         <div class="entry-content">
                             <blockquote>
