@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import web.mini.backend.BackendApplication;
@@ -148,23 +149,25 @@ public class PostController {
      */
     @RequestMapping("/post/like")
     public Boolean likePost(@RequestParam String postID,
-                            @RequestParam String userID,
-                            @RequestParam int likeType) {
-        ResponseEntity<Post> result = getPostsById(postID);
-        if (result.getStatusCode().is2xxSuccessful()) {
-            Post post = result.getBody();
+                            @RequestParam int likeType,
+                            Authentication auth) {
+        if (!auth.getName().equals("anonymousUser")) {
+            ResponseEntity<Post> result = getPostsById(postID);
+            if (result.getStatusCode().is2xxSuccessful()) {
+                Post post = result.getBody();
 
-            assert post != null;
-            if (post.getPostLikesUserIds() != null)
-                post.getPostLikesUserIds().put(userID, likeType);
-            else {
-                Map<String, Integer> like = new HashMap<>();
-                like.put(userID, likeType);
-                post.setPostLikesUserIds(like);
+                assert post != null;
+                if (post.getPostLikesUserIds() != null)
+                    post.getPostLikesUserIds().put(auth.getName(), likeType);
+                else {
+                    Map<String, Integer> like = new HashMap<>();
+                    like.put(auth.getName(), likeType);
+                    post.setPostLikesUserIds(like);
+                }
+                postRepository.save(post);
+
+                return true;
             }
-            postRepository.save(post);
-
-            return true;
         }
 
         return false;

@@ -75,20 +75,20 @@
                         <script>
                             const r = new XMLHttpRequest();
                             const postID = window.location.pathname.split("/").pop();
-                            const userID = document.getElementById("navbar-user-name").value;
 
                             function doHeart() {
                                 r.open("GET", "/api/v1/post/like?" +
                                     "postID=" + postID +
-                                    "&userID=" + userID +
                                     "&likeType=1");
 
                                 r.send();
 
                                 r.onload = () => {
                                     if (r.response === "true") {
-                                        document.getElementById("heart-disp").innerHTML =
+                                        const heart = document.getElementById("heart-disp");
+                                        heart.innerHTML =
                                             parseInt(document.getElementById("heart-val").value) + 1;
+                                        heart.style.color = "red";
                                     }
                                 }
                             }
@@ -96,15 +96,16 @@
                             function doThumb() {
                                 r.open("GET", "/api/v1/post/like?" +
                                     "postID=" + postID +
-                                    "&userID=" + userID +
                                     "&likeType=2");
 
                                 r.send();
 
                                 r.onload = () => {
                                     if (r.response === "true") {
-                                        document.getElementById("thumb-disp").innerHTML =
+                                        const thumb = document.getElementById("thumb-disp");
+                                        thumb.innerHTML =
                                             parseInt(document.getElementById("thumb-val").value) + 1;
+                                        thumb.style.color = "#25db65";
                                     }
                                 }
                             }
@@ -112,15 +113,16 @@
                             function doWow() {
                                 r.open("GET", "/api/v1/post/like?" +
                                     "postID=" + postID +
-                                    "&userID=" + userID +
                                     "&likeType=3");
 
                                 r.send();
 
                                 r.onload = () => {
                                     if (r.response === "true") {
-                                        document.getElementById("wow-disp").innerHTML =
+                                        const wow = document.getElementById("wow-disp");
+                                        wow.innerHTML =
                                             parseInt(document.getElementById("wow-val").value) + 1;
+                                        wow.style.color = "#ff9f5e";
                                     }
                                 }
                             }
