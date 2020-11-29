@@ -57,30 +57,33 @@ public class BoardWebController {
     @PostMapping("/createBoard")
     public String createBoardProcess(@RequestParam String boardName,
                                      @RequestParam String boardDescription,
-                                     @RequestParam String userId,
                                      @RequestParam(required = false, defaultValue = "true") String privateBoard,
                                      @RequestParam(required = false) MultipartFile boardCoverUrl,
-                                     Model model) {
+                                     Model model,
+                                     Authentication auth) {
 
-        Board board = new Board(
-                null,
-                userId,
-                boardName,
-                null,
-                boardDescription,
-                null,
-                Boolean.parseBoolean(privateBoard),
-                new Date());
+        if (!auth.getName().equals("anonymousUser")) {
+            Board board = new Board(
+                    null,
+                    auth.getName(),
+                    boardName,
+                    null,
+                    boardDescription,
+                    null,
+                    Boolean.parseBoolean(privateBoard),
+                    new Date());
 
-        ResponseEntity<String> result = boardController.createBoard(board,
-                boardCoverUrl);
+            ResponseEntity<String> result = boardController.createBoard(board,
+                    boardCoverUrl);
 
-        if (result.getStatusCode().is2xxSuccessful())
-            model.addAttribute("success", board.getId());
-        else
-            model.addAttribute("error", result.getBody());
+            if (result.getStatusCode().is2xxSuccessful())
+                model.addAttribute("success", board.getId());
+            else
+                model.addAttribute("error", result.getBody());
 
-        return "boardTemplates/createBoard";
+            return "boardTemplates/createBoard";
+        }
+        return "error";
     }
 
     /**

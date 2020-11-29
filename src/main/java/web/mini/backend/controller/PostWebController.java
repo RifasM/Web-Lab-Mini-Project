@@ -50,42 +50,44 @@ public class PostWebController {
                                     @RequestParam String postType,
                                     @RequestParam String boardId,
                                     @RequestParam String tags,
-                                    @RequestParam String postUser,
                                     @RequestParam MultipartFile postFile,
-                                    Model model) throws ResourceNotFoundException {
-        Post post = new Post(
-                null,
-                postTitle,
-                postDescription,
-                postType,
-                null,
-                tags,
-                1,
-                postUser,
-                null,
-                null,
-                new Date());
-        ResponseEntity<String> result = postController.createPost(post, postFile);
+                                    Model model,
+                                    Authentication auth) {
+        if (!auth.getName().equals("anonymousUser")) {
+            Post post = new Post(
+                    null,
+                    postTitle,
+                    postDescription,
+                    postType,
+                    null,
+                    tags,
+                    1,
+                    auth.getName(),
+                    null,
+                    null,
+                    new Date());
+            ResponseEntity<String> result = postController.createPost(post, postFile);
 
-        if (result.getStatusCode().is2xxSuccessful()) {
-            Board board = boardController.getBoardById(boardId).getBody();
-            if (board != null) {
-                List<String> postIDs = new ArrayList<>();
-                if (board.getPostID() != null)
-                    postIDs = board.getPostID();
+            if (result.getStatusCode().is2xxSuccessful()) {
+                Board board = boardController.getBoardById(boardId).getBody();
+                if (board != null) {
+                    List<String> postIDs = new ArrayList<>();
+                    if (board.getPostID() != null)
+                        postIDs = board.getPostID();
 
-                postIDs.add(post.getId());
-                board.setPostID(postIDs);
-                boardRepository.save(board);
-                model.addAttribute("success", post.getId());
-            } else
-                model.addAttribute("error", result.getBody());
+                    postIDs.add(post.getId());
+                    board.setPostID(postIDs);
+                    boardRepository.save(board);
+                    model.addAttribute("success", post.getId());
+                } else
+                    model.addAttribute("error", result.getBody());
 
-            model.addAttribute("boards", boardController.findByUser(postUser));
-            return "postTemplates/createPost";
+                model.addAttribute("boards", boardController.findByUser(auth.getName()));
+                return "postTemplates/createPost";
 
-        } else
-            return "error";
+            }
+        }
+        return "error";
     }
 
     /**
@@ -116,19 +118,22 @@ public class PostWebController {
 
         if (request.getStatusCode().is2xxSuccessful()) {
             Post post = request.getBody();
+
             int heart = 0, thumb = 0, wow = 0;
             assert post != null;
-            for (String user : post.getPostLikesUserIds().keySet()) {
-                switch (post.getPostLikesUserIds().get(user)) {
-                    case 1:
-                        heart++;
-                        break;
-                    case 2:
-                        thumb++;
-                        break;
-                    case 3:
-                        wow++;
-                        break;
+            if (post.getPostLikesUserIds() != null) {
+                for (String user : post.getPostLikesUserIds().keySet()) {
+                    switch (post.getPostLikesUserIds().get(user)) {
+                        case 1:
+                            heart++;
+                            break;
+                        case 2:
+                            thumb++;
+                            break;
+                        case 3:
+                            wow++;
+                            break;
+                    }
                 }
             }
             model.addAttribute("post_data", post);
