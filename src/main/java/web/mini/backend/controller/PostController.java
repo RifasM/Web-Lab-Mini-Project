@@ -143,8 +143,8 @@ public class PostController {
      * Method to like a post, store the user who liked the post
      *
      * @param postID   the post which the respective user has liked
-     * @param userID   the user id of the user liking the post
      * @param likeType the type of like, heart, thumbs, curious
+     * @param auth     the authentication details of the user
      * @return true if successful, false if failed
      */
     @RequestMapping("/post/like")
@@ -171,5 +171,33 @@ public class PostController {
         }
 
         return false;
+    }
+
+    /**
+     * Method to comment on a post and map the user id of
+     * the person commenting the post
+     *
+     * @param post    the post which the respective user has commented
+     * @param comment the comment which the user has posted
+     * @param auth    the authentication details of the request
+     * @return true if successful, false if failed
+     */
+    public ResponseEntity<Post> comment(@RequestParam Post post,
+                                        @RequestParam String comment,
+                                        Authentication auth) {
+        try {
+            if (post.getPostCommentsUserIds() != null)
+                post.getPostCommentsUserIds().put(auth.getName(), comment);
+            else {
+                Map<String, String> comments = new HashMap<>();
+                comments.put(auth.getName(), comment);
+                post.setPostCommentsUserIds(comments);
+            }
+            postRepository.save(post);
+
+            return ResponseEntity.ok().body(post);
+        } catch (NullPointerException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package web.mini.backend.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import web.mini.backend.BackendApplication;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
@@ -21,6 +24,7 @@ import java.util.List;
 
 @Controller
 public class PostWebController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BackendApplication.class);
 
     @Autowired
     private PostRepository postRepository;
@@ -140,6 +144,7 @@ public class PostWebController {
             model.addAttribute("like_heart", heart);
             model.addAttribute("like_thumb", thumb);
             model.addAttribute("like_wow", wow);
+            model.addAttribute("comment_count", post.getPostCommentsUserIds().size());
         } else
             return "errorPages/404";
 
@@ -154,10 +159,10 @@ public class PostWebController {
      * @return redirect to home
      */
     @RequestMapping("/deletePost/{post_id}")
-    public String deletePost(@PathVariable(value = "post_id") String post_id)
+    public String deletePost(@PathVariable(value = "post_id") String post_id,
+                             Authentication auth)
             throws ResourceNotFoundException {
         Post post = postController.getPostsById(post_id).getBody();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (post != null && post.getPostUser().equals(auth.getName())) {
             postController.deletePost(post_id);
@@ -231,5 +236,20 @@ public class PostWebController {
         model.addAttribute("posts", posts);
 
         return "postTemplates/viewPosts";
+    }
+
+    @PostMapping("/comment")
+    public String commentPost(@RequestParam String postID,
+                              @RequestParam String comment,
+                              Authentication auth) {
+        ResponseEntity<Post> result = postController.getPostsById(postID);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            result = postController.comment(result.getBody(), comment, auth);
+            if (result.getStatusCode().is4xxClientError())
+                LOGGER.error("Error creating comment on Post ID: " + postID + ". " +
+                        "Provided comment: " + comment);
+        }
+
+        return "redirect:/viewPost/" + postID;
     }
 }
