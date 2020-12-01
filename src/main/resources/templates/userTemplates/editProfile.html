@@ -38,38 +38,6 @@
     <section id="portfolio-details" class="portfolio-details">
       <div class="container">
 
-        <div class="portfolio-details-container">
-
-          <div class="owl-carousel portfolio-details-carousel">
-            <img src="img/portfolio/portfolio-details-1.jpg" class="img-fluid" alt="">
-            <img src="img/portfolio/portfolio-details-2.jpg" class="img-fluid" alt="">
-            <img src="img/portfolio/portfolio-details-3.jpg" class="img-fluid" alt="">
-          </div>
-
-          <div class="portfolio-info">
-            <h3>Personal information</h3>
-            <ul>
-              <li><strong>Username</strong>:
-                <th:block th:text="${basic_details.userName}"/>
-              </li>
-              <li><strong>First Name</strong>:
-                <th:block th:text="${basic_details.firstName}"/>
-              </li>
-              <li><strong>Last Name</strong>:
-                <th:block th:text="${basic_details.lastName}"/>
-              </li>
-              <li><strong>Email</strong>:
-                <th:block th:text="${basic_details.email}"/>
-              </li>
-              <li><strong>Phone</strong>:
-                <th:block th:text="${basic_details.phone}"/>
-              </li>
-              <li><a class="btn btn-outline-danger" th:href="@{/logout}">Logout</a></li>
-            </ul>
-          </div>
-
-        </div>
-
         <div class="portfolio-description">
           <h2>Your details</h2>
           <p>

@@ -144,7 +144,8 @@ public class PostWebController {
             model.addAttribute("like_heart", heart);
             model.addAttribute("like_thumb", thumb);
             model.addAttribute("like_wow", wow);
-            model.addAttribute("comment_count", post.getPostCommentsUserIds().size());
+            model.addAttribute("comment_count",
+                    (post.getPostCommentsUserIds() != null ? post.getPostCommentsUserIds().size() : 0));
         } else
             return "errorPages/404";
 
