@@ -51,7 +51,7 @@
                                 <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i><span
                                         th:text="${post_data.postDate}"></span></li>
                                 <li class="d-flex align-items-center"><i class="icofont-comment"></i>
-                                    <p th:text="${post_data.postCommentsUserIds}"></p></li>
+                                    <span th:text="${comment_count}"></span></li>
                             </ul>
                             <ul>
                                 <li class="d-flex align-items-center">
@@ -193,101 +193,30 @@
                         <h4 class="sidebar-title">Comment</h4>
 
                         <div class="sidebar-item reply-form mb-4">
-                            <form action="">
+                            <form method="post" th:action="@{/comment}">
                                 <div class="row">
                                     <div class="col form-group">
+                                        <input name="postID" th:value="${post_data.id}" type="hidden">
                                         <textarea class="form-control" name="comment"
-                                                  placeholder="Your Comment*"></textarea>
+                                                  placeholder="Your Comment"></textarea>
                                     </div>
                                 </div>
-                                <button class="btn btn-primary" type="submit">Post Comment</button>
+                                <button class="btn btn-outline-primary" type="submit">Post Comment</button>
 
                             </form>
 
                         </div>
 
-                        <h4 class="comments-count">8 Comments</h4>
+                        <h4 class="comments-count" th:text="${comment_count}+' Comment(s)'"></h4>
 
-                        <div class="comment clearfix" id="comment-1">
+                        <div class="comment clearfix" th:each="comment : ${post_data.postCommentsUserIds}">
                             <img alt="" class="comment-img  float-left" src="assets/img/comments-1.jpg">
-                            <h5><a href="">Georgia Reader</a> <a class="reply" href="#"><i class="icofont-reply"></i>
-                                Reply</a></h5>
-                            <time datetime="2020-01-01">01 Jan, 2020</time>
-                            <p>
-                                Et rerum totam nisi. Molestiae vel quam dolorum vel voluptatem et et. Est ad aut
-                                sapiente quis molestiae est qui cum soluta.
-                                Vero aut rerum vel. Rerum quos laboriosam placeat ex qui. Sint qui facilis et.
-                            </p>
+                            <h5><a href="" th:text="${comment.key}"></a> <!--a class="reply" href="#"><i class="icofont-reply"></i>
+                                Reply</a--></h5>
+                            <!--time datetime="2020-01-01">01 Jan, 2020</time-->
+                            <p th:text="${comment.value}"></p>
 
-                        </div><!-- End comment #1 -->
-
-                        <div class="comment clearfix" id="comment-2">
-                            <img alt="" class="comment-img  float-left" src="assets/img/comments-2.jpg">
-                            <h5><a href="">Aron Alvarado</a> <a class="reply" href="#"><i class="icofont-reply"></i>
-                                Reply</a></h5>
-                            <time datetime="2020-01-01">01 Jan, 2020</time>
-                            <p>
-                                Ipsam tempora sequi voluptatem quis sapiente non. Autem itaque eveniet saepe. Officiis
-                                illo ut beatae.
-                            </p>
-
-                            <div class="comment comment-reply clearfix" id="comment-reply-1">
-                                <img alt="" class="comment-img  float-left" src="assets/img/comments-3.jpg">
-                                <h5><a href="">Lynda Small</a> <a class="reply" href="#"><i class="icofont-reply"></i>
-                                    Reply</a></h5>
-                                <time datetime="2020-01-01">01 Jan, 2020</time>
-                                <p>
-                                    Enim ipsa eum fugiat fuga repellat. Commodi quo quo dicta. Est ullam aspernatur ut
-                                    vitae quia mollitia id non. Qui ad quas nostrum rerum sed necessitatibus aut est.
-                                    Eum officiis sed repellat maxime vero nisi natus. Amet nesciunt nesciunt qui illum
-                                    omnis est et dolor recusandae.
-                                </p>
-
-                                <div class="comment comment-reply clearfix" id="comment-reply-2">
-                                    <img alt="" class="comment-img  float-left" src="assets/img/comments-4.jpg">
-                                    <h5><a href="">Sianna Ramsay</a> <a class="reply" href="#"><i
-                                            class="icofont-reply"></i> Reply</a></h5>
-                                    <time datetime="2020-01-01">01 Jan, 2020</time>
-                                    <p>
-                                        Et dignissimos impedit nulla et quo distinctio ex nemo. Omnis quia dolores
-                                        cupiditate et. Ut unde qui eligendi sapiente omnis ullam. Placeat porro est
-                                        commodi est officiis voluptas repellat quisquam possimus. Perferendis id
-                                        consectetur necessitatibus.
-                                    </p>
-
-                                </div><!-- End comment reply #2-->
-
-                            </div><!-- End comment reply #1-->
-
-                        </div><!-- End comment #2-->
-
-                        <div class="comment clearfix" id="comment-3">
-                            <img alt="" class="comment-img  float-left" src="assets/img/comments-5.jpg">
-                            <h5><a href="">Nolan Davidson</a> <a class="reply" href="#"><i class="icofont-reply"></i>
-                                Reply</a></h5>
-                            <time datetime="2020-01-01">01 Jan, 2020</time>
-                            <p>
-                                Distinctio nesciunt rerum reprehenderit sed. Iste omnis eius repellendus quia nihil ut
-                                accusantium tempore. Nesciunt expedita id dolor exercitationem aspernatur aut quam ut.
-                                Voluptatem est accusamus iste at.
-                                Non aut et et esse qui sit modi neque. Exercitationem et eos aspernatur. Ea est
-                                consequuntur officia beatae ea aut eos soluta. Non qui dolorum voluptatibus et optio
-                                veniam. Quam officia sit nostrum dolorem.
-                            </p>
-
-                        </div><!-- End comment #3 -->
-
-                        <div class="comment clearfix" id="comment-4">
-                            <img alt="" class="comment-img  float-left" src="assets/img/comments-6.jpg">
-                            <h5><a href="">Kay Duggan</a> <a class="reply" href="#"><i class="icofont-reply"></i> Reply</a>
-                            </h5>
-                            <time datetime="2020-01-01">01 Jan, 2020</time>
-                            <p>
-                                Dolorem atque aut. Omnis doloremque blanditiis quia eum porro quis ut velit tempore.
-                                Cumque sed quia ut maxime. Est ad aut cum. Ut exercitationem non in fugiat.
-                            </p>
-
-                        </div><!-- End comment #4 -->
+                        </div><!-- End comment-->
 
                     </div><!-- End blog comments -->
                 </div>
