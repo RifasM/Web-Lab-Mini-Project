@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -252,5 +253,21 @@ public class PostWebController {
         }
 
         return "redirect:/viewPost/" + postID;
+    }
+
+    @PostMapping("/disable")
+    public String disablePost(@RequestParam String postID,
+                              Authentication auth) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            ResponseEntity<Post> result = postController.getPostsById(postID);
+            if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+                result.getBody().setEnabled(0); // disable the post
+                postRepository.save(result.getBody());
+            }
+
+            return "redirect:/viewPost/" + postID;
+        }
+
+        return "errorPages/404";
     }
 }
