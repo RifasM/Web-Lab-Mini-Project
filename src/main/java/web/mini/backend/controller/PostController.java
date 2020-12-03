@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.elasticsearch.UncategorizedElasticsearchException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import web.mini.backend.BackendApplication;
@@ -201,4 +202,49 @@ public class PostController {
         }
     }
 
+    /**
+     * Disable a given post
+     *
+     * @param postID post of the post to be disabled
+     * @param auth   authentication parameter to check user is ADMIN
+     * @return Boolean true if successful and false if failed
+     */
+    @PostMapping("/disable")
+    public ResponseEntity<Boolean> disablePost(@RequestParam String postID,
+                                               Authentication auth) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            ResponseEntity<Post> result = getPostsById(postID);
+            if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+                result.getBody().setEnabled(0); // disable the post
+                postRepository.save(result.getBody());
+
+                return ResponseEntity.ok().body(true);
+            }
+        }
+
+        return ResponseEntity.badRequest().body(false);
+    }
+
+    /**
+     * Enable a given post
+     *
+     * @param postID post of the post to be enabled
+     * @param auth   authentication parameter to check user is ADMIN
+     * @return Boolean true if successful and false if failed
+     */
+    @PostMapping("/enable")
+    public ResponseEntity<Boolean> enablePost(@RequestParam String postID,
+                                              Authentication auth) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            ResponseEntity<Post> result = getPostsById(postID);
+            if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+                result.getBody().setEnabled(1); // enable the post
+                postRepository.save(result.getBody());
+
+                return ResponseEntity.ok().body(true);
+            }
+        }
+
+        return ResponseEntity.badRequest().body(false);
+    }
 }

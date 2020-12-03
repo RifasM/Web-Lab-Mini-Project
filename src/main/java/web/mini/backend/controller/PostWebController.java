@@ -240,6 +240,14 @@ public class PostWebController {
         return "postTemplates/viewPosts";
     }
 
+    /**
+     * Comment on a post based on logged in user
+     *
+     * @param postID  post ID of the post being commented on
+     * @param comment the comment to be saved
+     * @param auth    authentication details of current user
+     * @return the post page with the updated comment
+     */
     @PostMapping("/comment")
     public String commentPost(@RequestParam String postID,
                               @RequestParam String comment,
@@ -255,17 +263,39 @@ public class PostWebController {
         return "redirect:/viewPost/" + postID;
     }
 
+    /**
+     * Disable a post only if role is ADMIN
+     *
+     * @param postID post id to disable
+     * @param auth   authentication details of logged in user
+     * @return post page if successful, else 404 page
+     */
     @PostMapping("/disable")
     public String disablePost(@RequestParam String postID,
                               Authentication auth) {
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            ResponseEntity<Post> result = postController.getPostsById(postID);
-            if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
-                result.getBody().setEnabled(0); // disable the post
-                postRepository.save(result.getBody());
-            }
+            ResponseEntity<Boolean> result = postController.disablePost(postID, auth);
+            if (result.getStatusCode().is2xxSuccessful())
+                return "redirect:/viewPost/" + postID;
+        }
 
-            return "redirect:/viewPost/" + postID;
+        return "errorPages/404";
+    }
+
+    /**
+     * Enable a post only if role is ADMIN
+     *
+     * @param postID post id to enable
+     * @param auth   authentication details of logged in user
+     * @return post page if successful, else 404 page
+     */
+    @PostMapping("/enable")
+    public String enablePost(@RequestParam String postID,
+                             Authentication auth) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            ResponseEntity<Boolean> result = postController.enablePost(postID, auth);
+            if (result.getStatusCode().is2xxSuccessful())
+                return "redirect:/viewPost/" + postID;
         }
 
         return "errorPages/404";
