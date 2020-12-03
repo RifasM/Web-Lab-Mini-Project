@@ -185,18 +185,19 @@
                         </div>
 
                         <div class="row text-center" sec:authorize="hasRole('ROLE_ADMIN')">
-                            <form method="post" th:action="@{/disable}" th:if="${post_data.enabled == 1}">
+                            <p th:text="${post_data.enabled}"></p>
+                            <form method="post" th:action="@{/disable}" th:if="${post_data.enabled=='1'}">
                                 <input name="postID" th:value="${post_data.id}" type="hidden">
                                 <input class="btn btn-outline-warning btn-rounded btn-block z-depth-0 my-4 waves-effect"
                                        type="submit"
                                        value="Disable Post">
                             </form>
 
-                            <form method="post" th:action="@{/disable}" th:unless="${post_data.enabled == 0}">
+                            <form method="post" th:action="@{/disable}" th:unless="${post_data.enabled == '0'}">
                                 <input name="postID" th:value="${post_data.id}" type="hidden">
                                 <input class="btn btn-outline-warning btn-rounded btn-block z-depth-0 my-4 waves-effect"
                                        type="submit"
-                                       value="Disable Post">
+                                       value="Enable Post">
                             </form>
                         </div>
                         </p>
