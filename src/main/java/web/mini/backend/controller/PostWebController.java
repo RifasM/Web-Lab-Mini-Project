@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -117,7 +116,8 @@ public class PostWebController {
      */
     @GetMapping("/viewPost/{post_id}")
     public String postPage(@PathVariable(value = "post_id") String post_id,
-                           Model model) {
+                           Model model,
+                           Authentication auth) {
 
         ResponseEntity<Post> request = postController.getPostsById(post_id);
 
@@ -147,6 +147,10 @@ public class PostWebController {
             model.addAttribute("like_wow", wow);
             model.addAttribute("comment_count",
                     (post.getPostCommentsUserIds() != null ? post.getPostCommentsUserIds().size() : 0));
+
+            if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                return "errorPages/404";
+
         } else
             return "errorPages/404";
 
@@ -202,9 +206,9 @@ public class PostWebController {
                            @RequestParam String postTitle,
                            @RequestParam String postDescription,
                            @RequestParam String tags,
-                           Model model) {
+                           Model model,
+                           Authentication auth) {
         ResponseEntity<Post> request = postController.getPostsById(post_id);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (request.getStatusCode().is2xxSuccessful() && request.getBody() != null) {
             Post post = request.getBody();
             if (post.getPostUser().equals(auth.getName())) {

@@ -13,7 +13,7 @@ public interface PostRepository extends ElasticsearchRepository<Post, String> {
 
     List<Post> findByPostTitle(String title);
 
-    List<Post> findAllByOrderByPostDateDesc();
+    List<Post> findAllByEnabledOrderByPostDateDesc(int enabled);
 
     /*
     @Query("{\"bool\": {\"must\": [{\"match\": {\"authors.name\": \"?0\"}}]}}")

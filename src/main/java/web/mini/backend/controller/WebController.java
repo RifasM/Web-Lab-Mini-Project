@@ -114,7 +114,7 @@ public class WebController {
      */
     @RequestMapping("/home")
     public String authLogin(Model model) {
-        Iterable<Post> posts = postController.getAllPosts();
+        Iterable<Post> posts = postController.getAllEnabledPosts();
         model.addAttribute("posts", posts);
         return "home";
     }
