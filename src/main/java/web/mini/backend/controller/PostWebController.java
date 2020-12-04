@@ -43,6 +43,23 @@ public class PostWebController {
 
 
     /**
+     * Return Disabled post page if the user is admin
+     *
+     * @return rendered disabledPosts.html page
+     */
+    @RequestMapping("/home/disabled")
+    public String viewDisabledPosts(Model model,
+                                    Authentication auth) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            Iterable<Post> posts = postController.getAllDisabledPosts();
+            model.addAttribute("posts", posts);
+            return "home";
+        }
+        return "errorPages/404";
+    }
+
+
+    /**
      * Handle Post Creation Page request
      * Post Mapping
      *
