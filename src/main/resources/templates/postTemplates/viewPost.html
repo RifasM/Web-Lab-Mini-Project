@@ -183,7 +183,7 @@
                     </article><!-- End blog entry -->
 
                     <div class="blog-author clearfix">
-                        <img alt="" class="rounded-circle float-left" src="assets/img/blog-author.jpg">
+                        <img alt="User Picture" class="rounded-circle float-left" th:src="@{/img/neutral.jpg}">
                         <h4 th:text="${post_data.postUser}"></h4>
                         <div class="social-links">
                             <a href="https://twitters.com/#"><i class="icofont-twitter"></i></a>
@@ -249,7 +249,7 @@
                         <h4 class="comments-count" th:text="${comment_count}+' Comment(s)'"></h4>
 
                         <div class="comment clearfix" th:each="comment : ${post_data.postCommentsUserIds}">
-                            <!--img alt="" class="comment-img  float-left" src="assets/img/comments-1.jpg"-->
+                            <img alt="User Picture" class="comment-img  float-left" th:src="@{/img/neutral.jpg}">
                             <h5><a href="" th:text="${comment.key}"></a> <!--a class="reply" href="#"><i class="icofont-reply"></i>
                                 Reply</a--></h5>
                             <!--time datetime="2020-01-01">01 Jan, 2020</time-->

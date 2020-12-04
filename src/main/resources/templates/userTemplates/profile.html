@@ -39,8 +39,17 @@
                 <div class="px-4 pt-0 pb-4 bg-dark">
                     <div class="media align-items-end profile-header">
                         <div class="profile mr-3">
-                            <img alt="..." class="rounded mb-2 img-thumbnail"
-                                 src="https://d19m59y37dris4.cloudfront.net/university/1-1-1/img/teacher-4.jpg"
+                            <img class="rounded mb-2 img-thumbnail"
+                                 th:alt="${user.firstName + ' ' + user.lastName}" th:if="${user.gender == 'male'}"
+                                 th:src="@{/img/boy.png}"
+                                 width="130">
+                            <img class="rounded mb-2 img-thumbnail"
+                                 th:alt="${user.firstName + ' ' + user.lastName}" th:if="${user.gender == 'female'}"
+                                 th:src="@{/img/girl.png}"
+                                 width="130">
+                            <img class="rounded mb-2 img-thumbnail"
+                                 th:alt="${user.firstName + ' ' + user.lastName}" th:src="@{/img/neutral.jpg}"
+                                 th:unless="${user.gender == 'male'}"
                                  width="130">
                             <a class="btn btn-dark btn-sm btn-block" th:href="@{/editProfile}"
                                th:if="${#authentication.name == user.userName}">Edit profile</a>
