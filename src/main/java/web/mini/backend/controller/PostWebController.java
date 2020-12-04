@@ -48,14 +48,10 @@ public class PostWebController {
      * @return rendered disabledPosts.html page
      */
     @RequestMapping("/home/disabled")
-    public String viewDisabledPosts(Model model,
-                                    Authentication auth) {
-        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            Iterable<Post> posts = postController.getAllDisabledPosts();
-            model.addAttribute("posts", posts);
-            return "home";
-        }
-        return "errorPages/404";
+    public String viewDisabledPosts(Model model) {
+        Iterable<Post> posts = postController.getAllDisabledPosts();
+        model.addAttribute("posts", posts);
+        return "home";
     }
 
 
@@ -165,7 +161,7 @@ public class PostWebController {
             model.addAttribute("comment_count",
                     (post.getPostCommentsUserIds() != null ? post.getPostCommentsUserIds().size() : 0));
 
-            if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
+            if (post.getEnabled() == 0 && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
                 return "errorPages/404";
 
         } else
@@ -320,5 +316,22 @@ public class PostWebController {
         }
 
         return "errorPages/404";
+    }
+
+    /**
+     * Search for posts based on a query string.
+     * Search the title and description for the provided string.
+     *
+     * @param query the query string to search
+     * @param model model to add parameters to the template
+     * @return rendered home page with search results
+     */
+    @PostMapping("/search")
+    public String searchPosts(@RequestParam String query,
+                              Model model) {
+        List<Post> result = postController.findPost(query);
+        model.addAttribute("search", query);
+        model.addAttribute("posts", result);
+        return "home";
     }
 }

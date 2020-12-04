@@ -11,7 +11,7 @@ public interface PostRepository extends ElasticsearchRepository<Post, String> {
 
     List<Post> findByPostUser(String userID);
 
-    List<Post> findByPostTitle(String title);
+    List<Post> findByPostTitleContainingOrPostDescriptionContaining(String title, String desc);
 
     List<Post> findAllByEnabledOrderByPostDateDesc(int enabled);
 

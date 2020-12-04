@@ -27,14 +27,12 @@ public class PostController {
 
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
     private final AwsController awsController;
 
     public PostController(PostRepository postRepository,
                           UserRepository userRepository,
                           AwsController awsController) {
         this.postRepository = postRepository;
-        this.userRepository = userRepository;
         this.awsController = awsController;
     }
 
@@ -152,12 +150,12 @@ public class PostController {
     /**
      * Find post.
      *
-     * @param title the post
+     * @param query the post
      * @return the post
      */
     @GetMapping("/post/search")
-    public List<Post> findByTitle(@RequestParam String title) {
-        return postRepository.findByPostTitle(title);
+    public List<Post> findPost(@RequestParam String query) {
+        return postRepository.findByPostTitleContainingOrPostDescriptionContaining(query, query);
     }
 
     /**
