@@ -137,7 +137,7 @@ public class PostWebController {
         if (request.getStatusCode().is2xxSuccessful()) {
             Post post = request.getBody();
 
-            int heart = 0, thumb = 0, wow = 0;
+            int heart = 0, thumb = 0, wow = 0, haha = 0;
             assert post != null;
             if (post.getPostLikesUserIds() != null) {
                 for (String user : post.getPostLikesUserIds().keySet()) {
@@ -151,6 +151,9 @@ public class PostWebController {
                         case 3:
                             wow++;
                             break;
+                        case 4:
+                            haha++;
+                            break;
                     }
                 }
             }
@@ -158,6 +161,7 @@ public class PostWebController {
             model.addAttribute("like_heart", heart);
             model.addAttribute("like_thumb", thumb);
             model.addAttribute("like_wow", wow);
+            model.addAttribute("like_haha", haha);
             model.addAttribute("comment_count",
                     (post.getPostCommentsUserIds() != null ? post.getPostCommentsUserIds().size() : 0));
 

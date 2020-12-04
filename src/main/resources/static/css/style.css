@@ -2135,4 +2135,5 @@ section {
 
 .like-line:hover {
     font-size: 2.5em !important;
+    cursor: pointer;
 }
