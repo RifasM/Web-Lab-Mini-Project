@@ -1,5 +1,7 @@
 package web.mini.backend.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import web.mini.backend.BackendApplication;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.ResetPassword;
 import web.mini.backend.model.User;
@@ -20,12 +23,16 @@ import java.util.Objects;
 
 @Controller
 public class UserWebController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BackendApplication.class);
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordController passwordController;
+
+    @Autowired
+    private PostController postController;
 
     @Autowired
     private UserController userController;
@@ -35,15 +42,32 @@ public class UserWebController {
 
 
     /**
-     * Return the profile page for that user
+     * Return the Dashboard for that user
      *
      * @param model Model to add the attributes to render onto the page
      * @param auth  Get the authentication details of the current user
      * @return The rendered profile page
      */
-    @RequestMapping("/profile")
-    public String profile(Model model, Authentication auth) {
+    @RequestMapping("/dashboard")
+    public String profile(Model model,
+                          Authentication auth) {
         model.addAttribute("firstName", userRepository.findByUsername(auth.getName()).getFirstName());
+        return "userTemplates/dashboard";
+    }
+
+    /**
+     * Return the profile for that user
+     *
+     * @param username the username of the user whose profile has been requested
+     * @param model    Model to add the attributes to render onto the page
+     * @return The rendered profile page
+     */
+    @RequestMapping("/profile/{username}")
+    public String profile(@PathVariable(value = "username") String username,
+                          Model model) {
+        User user = userRepository.findByUsername(username);
+        model.addAttribute("user", user);
+        model.addAttribute("posts", postController.findByUser(username));
         return "userTemplates/profile";
     }
 

@@ -11,6 +11,8 @@
     <meta content="" name="keywords">
 
     <th:block th:insert="includes/home-fragments::home-header"></th:block>
+
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css'>
 </head>
 
 <body>
@@ -21,91 +23,73 @@
 
 <main id="main">
 
-    <section class="services" id="services">
-        <div class="container">
 
-            <div class="section-title">
-                <h2>Profile</h2>
-                <h3>Welcome <span th:text="${firstName}"></span></h3>
-                <p>View and manage your profile, board and posts</p>
-            </div>
+    <style>
+        .profile-header {
+            transform: translateY(5rem);
+        }
 
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box">
-                        <a th:href="@{/viewBoards}">
-                            <div class="icon"><i class="bx bx-cabinet"></i></div>
-                            <h4 class="title">Your Boards</h4>
-                            <p class="description">View all your boards</p>
-                        </a>
+    </style>
+
+    <div class="row py-5 px-4">
+        <div class="col-xl-10 col-md-10 col-sm-10 mx-auto">
+
+            <!-- Profile widget -->
+            <div class="bg-white shadow rounded overflow-hidden">
+                <div class="px-4 pt-0 pb-4 bg-dark">
+                    <div class="media align-items-end profile-header">
+                        <div class="profile mr-3">
+                            <img alt="..." class="rounded mb-2 img-thumbnail"
+                                 src="https://d19m59y37dris4.cloudfront.net/university/1-1-1/img/teacher-4.jpg"
+                                 width="130">
+                            <a class="btn btn-dark btn-sm btn-block" th:href="@{/editProfile}"
+                               th:if="${#authentication.name == user.userName}">Edit profile</a>
+                        </div>
+                        <div class="media-body mb-5 text-white">
+                            <h4 class="mt-0 mb-0" th:text="${user.firstName + ' ' + user.lastName}">Full Name here</h4>
+                            <p class="small mb-4"><i class="fa fa-map-marker mr-2"></i>Bangalore</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-                    <div class="icon-box">
-                        <a th:href="@{/viewPosts}">
-                            <div class="icon"><i class="bx bxs-file-image"></i></div>
-                            <h4 class="title">Your Posts</h4>
-                            <p class="description">View all your posts</p>
-                        </a>
-                    </div>
+                <div class="bg-light p-4 d-flex justify-content-end text-center">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <h5 class="font-weight-bold mb-0 d-block">241</h5><small class="text-muted"> <i
+                                class="fa fa-picture-o mr-1"></i>Posts</small>
+                        </li>
+                        <li class="list-inline-item">
+                            <h5 class="font-weight-bold mb-0 d-block">84K</h5><small class="text-muted"> <i
+                                class="fa fa-user-circle-o mr-1"></i>Boards</small>
+                        </li>
+                    </ul>
                 </div>
 
-            </div>
+                <div class="py-4 px-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="mb-0">Recent photos</h5>
+                        <a class="btn btn-link text-muted" href="#">Show all</a>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 mb-2 pr-lg-1" th:each="post: ${posts}">
+                            <a th:href="@{/viewPost/} + ${post.id}">
+                                <img class="img-fluid rounded shadow-sm" th:alt="${post.postDescription}"
+                                     th:alt-title="${post.postDescription}"
+                                     th:if="${post.postType == 'image' || post.postType == 'gif'}"
+                                     th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post.postUrl}"/>
+                                <video autoplay loop th:if="${post.postType == 'video'}">
+                                    <source th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'
+                                    +${post.postUrl}"
+                                            type="vi/mp4">
+                                </video>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End profile widget -->
 
         </div>
-    </section>
-
-    <section class="features" id="features">
-        <div class="container">
-
-            <div class="row">
-                <div class="col-lg-3 col-md-4 col-6 mt-4">
-                    <div class="icon-box">
-                        <i class="ri-settings-4-line" style="color: #ffbb2c;"></i>
-                        <h3><a href="">Settings</a></h3>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-6 mt-4">
-                    <div class="icon-box">
-                        <i class="ri-lock-password-line" style="color: #5578ff;"></i>
-                        <h3><a href="">Update Password</a></h3>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-6 mt-4">
-                    <div class="icon-box">
-                        <i class="ri-user-2-fill" style="color: #03e86a;"></i>
-                        <h3><a th:href="@{/editProfile}">Edit Profile</a></h3>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-6 mt-4">
-                    <div class="icon-box">
-                        <i class="ri-logout-circle-r-line" style="color: #1fa8d4;"></i>
-                        <h3><a th:href="@{/logout}">Logout</a></h3>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-6 mt-4">
-                    <div class="icon-box">
-                        <i class="ri-error-warning-fill" style="color: #ff6179;"></i>
-                        <h3><a href="">Raise a Issue</a></h3>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-6 mt-4">
-                    <div class="icon-box">
-                        <i class="ri-delete-bin-2-line" style="color: #ff4747;"></i>
-                        <h3><a href="">Delete Your account</a></h3>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section><!-- End Features Section -->
+    </div>
 
 </main><!-- End #main -->
 
