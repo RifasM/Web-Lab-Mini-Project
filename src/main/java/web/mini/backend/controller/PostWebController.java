@@ -162,8 +162,6 @@ public class PostWebController {
             model.addAttribute("like_thumb", thumb);
             model.addAttribute("like_wow", wow);
             model.addAttribute("like_haha", haha);
-            model.addAttribute("comment_count",
-                    (post.getPostCommentsUserIds() != null ? post.getPostCommentsUserIds().size() : 0));
 
             if (post.getEnabled() == 0 && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
                 return "errorPages/404";

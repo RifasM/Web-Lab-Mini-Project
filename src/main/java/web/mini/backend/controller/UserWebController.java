@@ -35,6 +35,9 @@ public class UserWebController {
     private PostController postController;
 
     @Autowired
+    private BoardController boardController;
+
+    @Autowired
     private UserController userController;
 
     @Autowired
@@ -56,7 +59,7 @@ public class UserWebController {
     }
 
     /**
-     * Return the profile for that user
+     * Return the profile of the user
      *
      * @param username the username of the user whose profile has been requested
      * @param model    Model to add the attributes to render onto the page
@@ -68,6 +71,8 @@ public class UserWebController {
         User user = userRepository.findByUsername(username);
         model.addAttribute("user", user);
         model.addAttribute("posts", postController.findByUser(username));
+        model.addAttribute("boards", boardController.findByUser(username));
+
         return "userTemplates/profile";
     }
 

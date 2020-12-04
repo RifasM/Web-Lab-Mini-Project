@@ -51,7 +51,7 @@
                                 <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i><span
                                         th:text="${post_data.postDate}"></span></li>
                                 <li class="d-flex align-items-center"><i class="icofont-comment"></i>
-                                    <span th:text="${comment_count}"></span></li>
+                                    <span th:text="${#lists.size(post_data.postCommentsUserIds)}"></span></li>
                             </ul>
                             <ul>
                                 <li class="d-flex align-items-center">
@@ -246,7 +246,8 @@
 
                         </div>
 
-                        <h4 class="comments-count" th:text="${comment_count}+' Comment(s)'"></h4>
+                        <h4 class="comments-count"
+                            th:text="${#lists.size(post_data.postCommentsUserIds)} + ' Comment(s)'"></h4>
 
                         <div class="comment clearfix" th:each="comment : ${post_data.postCommentsUserIds}">
                             <img alt="User Picture" class="comment-img  float-left" th:src="@{/img/neutral.jpg}">
