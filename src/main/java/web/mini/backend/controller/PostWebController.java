@@ -320,7 +320,6 @@ public class PostWebController {
         return "errorPages/404";
     }
 
-
     /**
      * Search for posts based on a query string.
      * Search the title and description for the provided string.
