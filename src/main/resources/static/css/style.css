@@ -2127,3 +2127,12 @@ section {
 .create-post:hover {
     bottom: 19px;
 }
+
+.like-line {
+    font-size: 2em !important;
+    transition: all ease-in-out .3s;
+}
+
+.like-line:hover {
+    font-size: 2.5em !important;
+}

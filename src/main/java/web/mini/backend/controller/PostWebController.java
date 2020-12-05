@@ -1,13 +1,17 @@
 package web.mini.backend.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import web.mini.backend.BackendApplication;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
@@ -21,6 +25,7 @@ import java.util.List;
 
 @Controller
 public class PostWebController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BackendApplication.class);
 
     @Autowired
     private PostRepository postRepository;
@@ -50,40 +55,44 @@ public class PostWebController {
                                     @RequestParam String postType,
                                     @RequestParam String boardId,
                                     @RequestParam String tags,
-                                    @RequestParam String postUser,
                                     @RequestParam MultipartFile postFile,
-                                    Model model) throws ResourceNotFoundException {
-        Post post = new Post(
-                null,
-                postTitle,
-                postDescription,
-                postType,
-                null,
-                tags,
-                1,
-                postUser,
-                null,
-                null,
-                new Date());
-        ResponseEntity<String> result = postController.createPost(post, postFile);
+                                    Model model,
+                                    Authentication auth) {
+        if (!auth.getName().equals("anonymousUser")) {
+            Post post = new Post(
+                    null,
+                    postTitle,
+                    postDescription,
+                    postType,
+                    null,
+                    tags,
+                    1,
+                    auth.getName(),
+                    null,
+                    null,
+                    new Date());
+            ResponseEntity<String> result = postController.createPost(post, postFile);
 
-        if (result.getStatusCode().is2xxSuccessful()) {
-            Board board = boardController.getBoardById(boardId).getBody();
-            if (board != null) {
-                List<String> postIDs = new ArrayList<>();
-                if (board.getPostID() != null)
-                    postIDs = board.getPostID();
+            if (result.getStatusCode().is2xxSuccessful()) {
+                Board board = boardController.getBoardById(boardId).getBody();
+                if (board != null) {
+                    List<String> postIDs = new ArrayList<>();
+                    if (board.getPostID() != null)
+                        postIDs = board.getPostID();
 
-                postIDs.add(post.getId());
-                board.setPostID(postIDs);
-                boardRepository.save(board);
-                model.addAttribute("success", post.getId());
-            } else
-                model.addAttribute("error", result.getBody());
-            return "postTemplates/createPost";
+                    postIDs.add(post.getId());
+                    board.setPostID(postIDs);
+                    boardRepository.save(board);
+                    model.addAttribute("success", post.getId());
+                } else
+                    model.addAttribute("error", result.getBody());
 
-        } else
-            return "error";
+                model.addAttribute("boards", boardController.findByUser(auth.getName()));
+                return "postTemplates/createPost";
+
+            }
+        }
+        return "error";
     }
 
     /**
@@ -93,8 +102,8 @@ public class PostWebController {
      * @return rendered createPost.html
      */
     @GetMapping("/createPost")
-    public String createPostPage(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    public String createPostPage(Model model,
+                                 Authentication auth) {
         List<Board> board = boardController.findByUser(auth.getName());
         model.addAttribute("boards", board);
         return "postTemplates/createPost";
@@ -109,13 +118,38 @@ public class PostWebController {
     @GetMapping("/viewPost/{post_id}")
     public String postPage(@PathVariable(value = "post_id") String post_id,
                            Model model) {
-        try {
-            ResponseEntity<Post> request = postController.getPostsById(post_id);
-            if (request.getStatusCode().is2xxSuccessful())
-                model.addAttribute("post_data", request.getBody());
-        } catch (ResourceNotFoundException e) {
+
+        ResponseEntity<Post> request = postController.getPostsById(post_id);
+
+        if (request.getStatusCode().is2xxSuccessful()) {
+            Post post = request.getBody();
+
+            int heart = 0, thumb = 0, wow = 0;
+            assert post != null;
+            if (post.getPostLikesUserIds() != null) {
+                for (String user : post.getPostLikesUserIds().keySet()) {
+                    switch (post.getPostLikesUserIds().get(user)) {
+                        case 1:
+                            heart++;
+                            break;
+                        case 2:
+                            thumb++;
+                            break;
+                        case 3:
+                            wow++;
+                            break;
+                    }
+                }
+            }
+            model.addAttribute("post_data", post);
+            model.addAttribute("like_heart", heart);
+            model.addAttribute("like_thumb", thumb);
+            model.addAttribute("like_wow", wow);
+            model.addAttribute("comment_count",
+                    (post.getPostCommentsUserIds() != null ? post.getPostCommentsUserIds().size() : 0));
+        } else
             return "errorPages/404";
-        }
+
 
         return "postTemplates/viewPost";
     }
@@ -127,10 +161,10 @@ public class PostWebController {
      * @return redirect to home
      */
     @RequestMapping("/deletePost/{post_id}")
-    public String deletePost(@PathVariable(value = "post_id") String post_id)
+    public String deletePost(@PathVariable(value = "post_id") String post_id,
+                             Authentication auth)
             throws ResourceNotFoundException {
         Post post = postController.getPostsById(post_id).getBody();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (post != null && post.getPostUser().equals(auth.getName())) {
             postController.deletePost(post_id);
@@ -147,8 +181,7 @@ public class PostWebController {
      * @return rendered editPost.html
      */
     @GetMapping("/editPost/{post_id}")
-    public String editPost(@PathVariable(value = "post_id") String post_id, Model model)
-            throws ResourceNotFoundException {
+    public String editPost(@PathVariable(value = "post_id") String post_id, Model model) {
         ResponseEntity<Post> post = postController.getPostsById(post_id);
         if (post.getStatusCode().is2xxSuccessful())
             model.addAttribute("post_data", post.getBody());
@@ -169,7 +202,7 @@ public class PostWebController {
                            @RequestParam String postTitle,
                            @RequestParam String postDescription,
                            @RequestParam String tags,
-                           Model model) throws ResourceNotFoundException {
+                           Model model) {
         ResponseEntity<Post> request = postController.getPostsById(post_id);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (request.getStatusCode().is2xxSuccessful() && request.getBody() != null) {
@@ -205,5 +238,66 @@ public class PostWebController {
         model.addAttribute("posts", posts);
 
         return "postTemplates/viewPosts";
+    }
+
+    /**
+     * Comment on a post based on logged in user
+     *
+     * @param postID  post ID of the post being commented on
+     * @param comment the comment to be saved
+     * @param auth    authentication details of current user
+     * @return the post page with the updated comment
+     */
+    @PostMapping("/comment")
+    public String commentPost(@RequestParam String postID,
+                              @RequestParam String comment,
+                              Authentication auth) {
+        ResponseEntity<Post> result = postController.getPostsById(postID);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            result = postController.comment(result.getBody(), comment, auth);
+            if (result.getStatusCode().is4xxClientError())
+                LOGGER.error("Error creating comment on Post ID: " + postID + ". " +
+                        "Provided comment: " + comment);
+        }
+
+        return "redirect:/viewPost/" + postID;
+    }
+
+    /**
+     * Disable a post only if role is ADMIN
+     *
+     * @param postID post id to disable
+     * @param auth   authentication details of logged in user
+     * @return post page if successful, else 404 page
+     */
+    @PostMapping("/disable")
+    public String disablePost(@RequestParam String postID,
+                              Authentication auth) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            ResponseEntity<Boolean> result = postController.disablePost(postID, auth);
+            if (result.getStatusCode().is2xxSuccessful())
+                return "redirect:/viewPost/" + postID;
+        }
+
+        return "errorPages/404";
+    }
+
+    /**
+     * Enable a post only if role is ADMIN
+     *
+     * @param postID post id to enable
+     * @param auth   authentication details of logged in user
+     * @return post page if successful, else 404 page
+     */
+    @PostMapping("/enable")
+    public String enablePost(@RequestParam String postID,
+                             Authentication auth) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            ResponseEntity<Boolean> result = postController.enablePost(postID, auth);
+            if (result.getStatusCode().is2xxSuccessful())
+                return "redirect:/viewPost/" + postID;
+        }
+
+        return "errorPages/404";
     }
 }

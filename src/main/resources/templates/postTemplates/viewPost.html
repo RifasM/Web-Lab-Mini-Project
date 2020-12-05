@@ -20,58 +20,227 @@
 <th:block style="color: #fff;" th:insert="includes/home-fragments::navbar-inner-page"></th:block>
 
 <main id="main">
-
-    <section class="portfolio" id="portfolio">
+    <!-- ======= Blog Section ======= -->
+    <section class="blog" id="blog">
         <div class="container">
 
-            <div class="section-title">
-                <h3 th:text="${post_data.postTitle}"></h3>
-                <p th:text="${post_data.postDescription}"></p>
+            <div class="row">
+
+                <div class="col-lg-8 entries">
+
+                    <article class="entry entry-single">
+
+                        <div class="entry-img">
+                            <img class="img-fluid" th:alt="${post_data.postDescription}"
+                                 th:if="${post_data.postType == 'image' || post_data.postType == 'gif'}"
+                                 th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"/>
+                            <video autoplay loop th:if="${post_data.postType == 'video'}">
+                                <source th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'
+                                +${post_data.postUrl}"
+                                        type="vi/mp4">
+                            </video>
+                        </div>
+
+                        <h2 class="entry-title" th:text="${post_data.postTitle}"></h2>
+
+                        <div class="entry-meta">
+                            <ul>
+                                <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="#"
+                                                                                                      th:text="${post_data.postUser}"></a>
+                                </li>
+                                <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i><span
+                                        th:text="${post_data.postDate}"></span></li>
+                                <li class="d-flex align-items-center"><i class="icofont-comment"></i>
+                                    <span th:text="${comment_count}"></span></li>
+                            </ul>
+                            <ul>
+                                <li class="d-flex align-items-center">
+                                    <p class="icofont-heart like-line" id="heart-disp" onclick="doHeart()"
+                                       th:text="${like_heart}"></p>
+                                    <input id="heart-val" th:value="${like_heart}" type="hidden">
+                                </li>
+                                <li class="d-flex align-items-center">
+                                    <p class="icofont-thumbs-up like-line" id="thumb-disp" onclick="doThumb()"
+                                       th:text="${like_thumb}"></p>
+                                    <input id="thumb-val" th:value="${like_thumb}" type="hidden">
+                                </li>
+                                <li class="d-flex align-items-center">
+                                    <p class="icofont-light-bulb like-line" id="wow-disp" onclick="doWow()"
+                                       th:text="${like_wow}"></p>
+                                    <input id="wow-val" th:value="${like_wow}" type="hidden">
+                                </li>
+                            </ul>
+                        </div>
+
+                        <script>
+                            const r = new XMLHttpRequest();
+                            const postID = window.location.pathname.split("/").pop();
+
+                            function doHeart() {
+                                r.open("GET", "/api/v1/post/like?" +
+                                    "postID=" + postID +
+                                    "&likeType=1");
+
+                                r.send();
+
+                                r.onload = () => {
+                                    if (r.response === "true") {
+                                        const heart = document.getElementById("heart-disp");
+                                        heart.innerHTML =
+                                            parseInt(document.getElementById("heart-val").value) + 1;
+                                        heart.style.color = "red";
+                                    }
+                                }
+                            }
+
+                            function doThumb() {
+                                r.open("GET", "/api/v1/post/like?" +
+                                    "postID=" + postID +
+                                    "&likeType=2");
+
+                                r.send();
+
+                                r.onload = () => {
+                                    if (r.response === "true") {
+                                        const thumb = document.getElementById("thumb-disp");
+                                        thumb.innerHTML =
+                                            parseInt(document.getElementById("thumb-val").value) + 1;
+                                        thumb.style.color = "#25db65";
+                                    }
+                                }
+                            }
+
+                            function doWow() {
+                                r.open("GET", "/api/v1/post/like?" +
+                                    "postID=" + postID +
+                                    "&likeType=3");
+
+                                r.send();
+
+                                r.onload = () => {
+                                    if (r.response === "true") {
+                                        const wow = document.getElementById("wow-disp");
+                                        wow.innerHTML =
+                                            parseInt(document.getElementById("wow-val").value) + 1;
+                                        wow.style.color = "#ff9f5e";
+                                    }
+                                }
+                            }
+                        </script>
+
+                        <div class="entry-content">
+                            <blockquote>
+                                <i class="icofont-quote-left quote-left"></i>
+                                <p th:text="${post_data.postDescription}"></p>
+                                <i class="las la-quote-right quote-right"></i>
+                                <i class="icofont-quote-right quote-right"></i>
+                            </blockquote>
+                        </div>
+
+                        <div class="entry-footer clearfix">
+                            <div class="float-left">
+                                <i class="icofont-folder"></i>
+                                <ul class="cats">
+                                    <li><a href="#">CMRIT</a></li>
+                                </ul>
+
+                                <i class="icofont-tags"></i>
+                                <ul class="tags">
+                                    <li><a href="#" th:text="${post_data.tags}"></a></li>
+                                </ul>
+                            </div>
+
+                            <div class="float-right share">
+                                <a href="" title="Share on Twitter"><i class="icofont-twitter"></i></a>
+                                <a href="" title="Share on Facebook"><i class="icofont-facebook"></i></a>
+                                <a href="" title="Share on Instagram"><i class="icofont-instagram"></i></a>
+                            </div>
+
+                        </div>
+
+                    </article><!-- End blog entry -->
+
+                    <div class="blog-author clearfix">
+                        <img alt="" class="rounded-circle float-left" src="assets/img/blog-author.jpg">
+                        <h4 th:text="${post_data.postUser}"></h4>
+                        <div class="social-links">
+                            <a href="https://twitters.com/#"><i class="icofont-twitter"></i></a>
+                            <a href="https://facebook.com/#"><i class="icofont-facebook"></i></a>
+                            <a href="https://instagram.com/#"><i class="icofont-instagram"></i></a>
+                        </div>
+                        <p>
+                        <div class="row text-center" th:if="${#authentication.name == post_data.postUser}">
+                            <div class="col-md-5">
+                                <a class="btn btn-outline-danger btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                                   th:href="@{/deletePost/{id}(id = ${post_data.id})}">Delete Post</a>
+                            </div>
+
+                            <div class="col-md-2"></div>
+
+                            <div class="col-md-5">
+                                <a class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                                   th:href="@{/editPost/{id}(id = ${post_data.id})}">Update
+                                    Post</a>
+                            </div>
+                        </div>
+
+                        <div class="row text-center m-4" sec:authorize="hasRole('ROLE_ADMIN')">
+
+                            <form method="post" th:action="@{/disable}" th:if="${post_data.enabled==1}">
+                                <input name="postID" th:value="${post_data.id}" type="hidden">
+                                <input class="btn btn-outline-danger"
+                                       type="submit"
+                                       value="Disable Post">
+                            </form>
+
+                            <form method="post" th:action="@{/enable}" th:if="${post_data.enabled == 0}">
+                                <input name="postID" th:value="${post_data.id}" type="hidden">
+                                <input class="btn btn-outline-success"
+                                       type="submit"
+                                       value="Enable Post">
+                            </form>
+                        </div>
+                        </p>
+                    </div><!-- End blog author bio -->
+
+                </div><!-- End blog entries list -->
+
+                <div class="col-lg-4">
+                    <div class="sidebar blog-comments">
+                        <h4 class="sidebar-title">Comment</h4>
+
+                        <div class="sidebar-item reply-form mb-4">
+                            <form method="post" th:action="@{/comment}">
+                                <div class="row">
+                                    <div class="col form-group">
+                                        <input name="postID" th:value="${post_data.id}" type="hidden">
+                                        <textarea class="form-control" name="comment"
+                                                  placeholder="Your Comment"></textarea>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-primary" type="submit">Post Comment</button>
+
+                            </form>
+
+                        </div>
+
+                        <h4 class="comments-count" th:text="${comment_count}+' Comment(s)'"></h4>
+
+                        <div class="comment clearfix" th:each="comment : ${post_data.postCommentsUserIds}">
+                            <!--img alt="" class="comment-img  float-left" src="assets/img/comments-1.jpg"-->
+                            <h5><a href="" th:text="${comment.key}"></a> <!--a class="reply" href="#"><i class="icofont-reply"></i>
+                                Reply</a--></h5>
+                            <!--time datetime="2020-01-01">01 Jan, 2020</time-->
+                            <p th:text="${comment.value}"></p>
+
+                        </div><!-- End comment-->
+
+                    </div><!-- End blog comments -->
+                </div>
             </div>
 
-            <div class="row portfolio-container">
-                <div class="col-lg-8 col-md-8 portfolio-item filter-app">
-                    <img class="img-fluid" th:alt="${post_data.postDescription}"
-                         th:if="${post_data.postType == 'image' || post_data.postType == 'gif'}"
-                         th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"/>
-                    <video autoplay loop th:if="${post_data.postType == 'video'}">
-                        <source th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post_data.postUrl}"
-                                type="vi/mp4">
-                    </video>
-                    <div class="portfolio-info">
-                        <p th:text="'Posted By: '+ ${post_data.postUser}"></p>
-                        <p th:text="'Posted On: '+ ${post_data.postDate}"></p>
-                        <small th:text="'Tags: ' + ${post_data.tags}"></small>
-                        <a class="venobox preview-link" data-gall="portfolioGallery" href="#"
-                           th:title="${post_data.postLikesUserIds}"><i class="bx bxs-heart"></i></a>
-                        <a class="details-link" href="#" th:title="${post_data.postCommentsUserIds}"><i
-                                class="bx bxs-comment"></i></a>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-3 portfolio-item filter-app">
-                    <h4><span>Comments</span></h4>
-                    <p>comment 1</p>
-                    <p>comment 2</p>
-                    <p>comment 3</p>
-                </div>
-            </div>
-            <div class="row text-center" th:if="${#authentication.name == post_data.postUser}">
-                <div class="col-md-5">
-                    <a class="btn btn-outline-danger btn-rounded btn-block z-depth-0 my-4 waves-effect"
-                       th:href="@{/deletePost/{id}(id = ${post_data.id})}">Delete Post</a>
-                </div>
-
-                <div class="col-md-2"></div>
-
-                <div class="col-md-5">
-                    <a class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
-                       th:href="@{/editPost/{id}(id = ${post_data.id})}">Update
-                        Post</a>
-                </div>
-            </div>
         </div>
-    </section>
+    </section><!-- End Blog Section -->
 
 </main><!-- End #main -->
 

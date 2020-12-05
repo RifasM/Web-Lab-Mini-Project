@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.ResetPassword;
 import web.mini.backend.model.User;
+import web.mini.backend.repository.ResetPasswordRepository;
 import web.mini.backend.repository.UserRepository;
 
 import java.text.ParseException;
@@ -28,6 +29,9 @@ public class UserWebController {
 
     @Autowired
     private UserController userController;
+
+    @Autowired
+    private ResetPasswordRepository resetPasswordRepository;
 
 
     /**
@@ -143,7 +147,7 @@ public class UserWebController {
         ResponseEntity<ResetPassword> reset = passwordController.validateToken(token);
 
         if (reset.getStatusCode().is2xxSuccessful())
-            model.addAttribute("valid", true);
+            model.addAttribute("valid", token);
         else
             model.addAttribute("error", true);
 
@@ -159,18 +163,21 @@ public class UserWebController {
      */
     @PostMapping("/resetPassword/{token}")
     public String resetPasswordPost(@PathVariable(value = "token") String token,
+                                    @RequestParam String password1,
                                     Model model) throws ResourceNotFoundException {
         ResponseEntity<ResetPassword> reset = passwordController.validateToken(token);
+        System.out.println(reset.getBody());
         if (reset.getStatusCode().is2xxSuccessful()) {
             User user = userRepository.findById(
                     Objects.requireNonNull(reset.getBody()).getUser())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found for token "
                             + token + "with User ID: " + reset.getBody().getUser()));
 
-            String encryptedPassword = userController.passwordEncoder().encode(user.getPassword());
+            String encryptedPassword = userController.passwordEncoder().encode(password1);
             user.setPassword(encryptedPassword);
 
             userRepository.save(user);
+            resetPasswordRepository.delete(Objects.requireNonNull(reset.getBody()));
             model.addAttribute("success", true);
         } else
             model.addAttribute("error", true);

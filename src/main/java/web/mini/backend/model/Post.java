@@ -7,7 +7,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,9 +33,9 @@ public class Post {
 
     private String postUser;
 
-    private List<Map<Long, Integer>> postLikesUserIds; // Integer here is to specify type of like, thumbs, heart, etc
+    private Map<String, Integer> postLikesUserIds; // Integer here is to specify type of like, thumbs, heart, etc
 
-    private List<Map<Long, String>> postCommentsUserIds;
+    private Map<String, String> postCommentsUserIds;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,8 +49,8 @@ public class Post {
                 String tags,
                 int enabled,
                 String postUser,
-                List<Map<Long, Integer>> postLikesUserIds,
-                List<Map<Long, String>> postCommentsUserIds,
+                Map<String, Integer> postLikesUserIds,
+                Map<String, String> postCommentsUserIds,
                 Date postDate) {
         this.id = id;
         this.postTitle = postTitle;
@@ -138,19 +137,19 @@ public class Post {
         this.id = id;
     }
 
-    public List<Map<Long, Integer>> getPostLikesUserIds() {
+    public Map<String, Integer> getPostLikesUserIds() {
         return postLikesUserIds;
     }
 
-    public void setPostLikesUserIds(List<Map<Long, Integer>> postLikesUserIds) {
+    public void setPostLikesUserIds(Map<String, Integer> postLikesUserIds) {
         this.postLikesUserIds = postLikesUserIds;
     }
 
-    public List<Map<Long, String>> getPostCommentsUserIds() {
+    public Map<String, String> getPostCommentsUserIds() {
         return postCommentsUserIds;
     }
 
-    public void setPostCommentsUserIds(List<Map<Long, String>> postCommentsUserIds) {
+    public void setPostCommentsUserIds(Map<String, String> postCommentsUserIds) {
         this.postCommentsUserIds = postCommentsUserIds;
     }
 

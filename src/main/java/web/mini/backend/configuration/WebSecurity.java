@@ -33,15 +33,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Disable Cross Site Scripting
-        // TODO: Enable CSRF
-        http.csrf().disable();
+        // http.csrf().disable();
 
         // The pages does not require login
         http.authorizeRequests().antMatchers("/", "/login", "/logout", "/signup").permitAll();
 
         // /home page requires login as USER or ADMIN.
         // If no login, it will redirect to /login page.
-        http.authorizeRequests().antMatchers("/home/**", "/profile/**", "/create*", "/edit*").
+        http.authorizeRequests().antMatchers("/home/**", "/profile/**", "/create*", "/edit*", "/view*/**").
                 access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
         // For ADMIN only.
@@ -80,8 +79,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         // raw = Password@123
         // hash = $2y$12$JC2kCe9r5GqKtQG/2JldZ.yXnE0vV7dAdTFtS61HR/vEje/hG3Hca
         auth.inMemoryAuthentication()
-                .withUser("user@pixies.org").password("$2y$12$JC2kCe9r5GqKtQG/2JldZ.yXnE0vV7dAdTFtS61HR/vEje/hG3Hca").roles("USER")
+                .withUser("user").password("$2y$12$JC2kCe9r5GqKtQG/2JldZ.yXnE0vV7dAdTFtS61HR/vEje/hG3Hca").roles("USER")
                 .and()
-                .withUser("admin@pixies.org").password("$2y$12$JC2kCe9r5GqKtQG/2JldZ.yXnE0vV7dAdTFtS61HR/vEje/hG3Hca").roles("ADMIN");
+                .withUser("admin").password("$2y$12$JC2kCe9r5GqKtQG/2JldZ.yXnE0vV7dAdTFtS61HR/vEje/hG3Hca").roles("ADMIN");
     }
 }
