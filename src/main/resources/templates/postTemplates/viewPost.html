@@ -45,13 +45,17 @@
 
                         <div class="entry-meta">
                             <ul>
-                                <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="#"
-                                                                                                      th:text="${post_data.postUser}"></a>
+                                <li class="d-flex align-items-center">
+                                    <i class="icofont-user"></i>
+                                    <a th:href="@{/profile/} + ${post_data.postUser}"
+                                       th:text="${post_data.postUser}"></a>
                                 </li>
                                 <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i><span
                                         th:text="${post_data.postDate}"></span></li>
                                 <li class="d-flex align-items-center"><i class="icofont-comment"></i>
-                                    <span th:text="${#lists.size(post_data.postCommentsUserIds)}"></span></li>
+                                    <span th:if="${post_data.postCommentsUserIds != null}" th:text="${#lists.size(post_data.postCommentsUserIds)}">0</span>
+                                    <span th:unless="${post_data.postCommentsUserIds != null}">0</span>
+                                </li>
                             </ul>
                             <ul>
                                 <li class="d-flex align-items-center">
@@ -184,7 +188,7 @@
 
                     <div class="blog-author clearfix">
                         <img alt="User Picture" class="rounded-circle float-left" th:src="@{/img/neutral.jpg}">
-                        <h4 th:text="${post_data.postUser}"></h4>
+                        <h4><a th:href="@{/profile/} + ${post_data.postUser}" th:text="${post_data.postUser}"></a></h4>
                         <div class="social-links">
                             <a href="https://twitters.com/#"><i class="icofont-twitter"></i></a>
                             <a href="https://facebook.com/#"><i class="icofont-facebook"></i></a>
@@ -246,8 +250,9 @@
 
                         </div>
 
-                        <h4 class="comments-count"
-                            th:text="${#lists.size(post_data.postCommentsUserIds)} + ' Comment(s)'"></h4>
+                        <h4 class="comments-count" th:if="${post_data.postCommentsUserIds != null}"
+                            th:text="${#lists.size(post_data.postCommentsUserIds)} + ' Comment(s)'">0 Comments</h4>
+                        <h4 class="comments-count" th:unless="${post_data.postCommentsUserIds != null}">0 Comments</h4>
 
                         <div class="comment clearfix" th:each="comment : ${post_data.postCommentsUserIds}">
                             <img alt="User Picture" class="comment-img  float-left" th:src="@{/img/neutral.jpg}">
