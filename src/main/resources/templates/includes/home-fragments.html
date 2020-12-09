@@ -101,10 +101,13 @@
                     <li class="drop-down" th:if="${#authentication.name != 'anonymousUser'}"><a
                             th:text="${#authentication.name}"></a>
                         <ul>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')">
+                                <a th:href="@{/home/disabled}">Disabled Posts</a>
+                            </li>
                             <li class="drop-down"><a href="#">My Details</a>
                                 <ul>
-                                    <li><a th:href="@{/profile}">Profile</a></li>
-                                    <li><a href="#">Settings</a></li>
+                                    <li><a th:href="@{/profile/} + ${#authentication.name}">Profile</a></li>
+                                    <li><a th:href="@{/dashboard}">Dashboard</a></li>
                                 </ul>
                             </li>
                             <li><a href="#footer">Contact</a></li>

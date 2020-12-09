@@ -27,27 +27,43 @@ public class PostController {
 
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
     private final AwsController awsController;
 
     public PostController(PostRepository postRepository,
                           UserRepository userRepository,
                           AwsController awsController) {
         this.postRepository = postRepository;
-        this.userRepository = userRepository;
         this.awsController = awsController;
     }
 
     /**
-     * Get all post list.
+     * Get all the enabled or active post list.
      *
      * @return the list
      */
     @GetMapping("/posts")
-    public Iterable<Post> getAllPosts() {
+    public Iterable<Post> getAllEnabledPosts() {
         Iterable<Post> post = null;
         try {
-            post = postRepository.findAllByOrderByPostDateDesc();
+            // get all the enabled posts
+            post = postRepository.findAllByEnabledOrderByPostDateDesc(1);
+        } catch (UncategorizedElasticsearchException e) {
+            LOGGER.error(e.toString());
+        }
+        return post;
+    }
+
+    /**
+     * Get all the disabled or inactive post list.
+     *
+     * @return the list
+     */
+    @GetMapping("/posts/disabled")
+    public Iterable<Post> getAllDisabledPosts() {
+        Iterable<Post> post = null;
+        try {
+            // get all the disabled posts
+            post = postRepository.findAllByEnabledOrderByPostDateDesc(0);
         } catch (UncategorizedElasticsearchException e) {
             LOGGER.error(e.toString());
         }
@@ -67,6 +83,8 @@ public class PostController {
             post = postRepository.findById(postID)
                     .orElseThrow(() ->
                             new ResourceNotFoundException("Post not found on :: " + postID));
+            if (post.getEnabled() == 0)
+                return ResponseEntity.status(203).body(post);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(500).body(null);
         }
@@ -132,12 +150,12 @@ public class PostController {
     /**
      * Find post.
      *
-     * @param title the post
+     * @param query the post
      * @return the post
      */
-    @GetMapping("/post/search/{title}")
-    public List<Post> findByTitle(@PathVariable(value = "title") String title) {
-        return postRepository.findByPostTitle(title);
+    @GetMapping("/post/search")
+    public List<Post> findPost(@RequestParam String query) {
+        return postRepository.findByPostTitleContainingOrPostDescriptionContaining(query, query);
     }
 
     /**

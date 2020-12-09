@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import web.mini.backend.model.Post;
 import web.mini.backend.model.User;
-import web.mini.backend.repository.PostRepository;
 import web.mini.backend.repository.UserRepository;
 
 import java.text.ParseException;
@@ -23,9 +22,6 @@ public class WebController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private PostRepository postRepository;
 
     @Autowired
     private PostController postController;
@@ -114,7 +110,7 @@ public class WebController {
      */
     @RequestMapping("/home")
     public String authLogin(Model model) {
-        Iterable<Post> posts = postController.getAllPosts();
+        Iterable<Post> posts = postController.getAllEnabledPosts();
         model.addAttribute("posts", posts);
         return "home";
     }

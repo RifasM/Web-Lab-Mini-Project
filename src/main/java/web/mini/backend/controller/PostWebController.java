@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +40,19 @@ public class PostWebController {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    /**
+     * Return Disabled post page if the user is admin
+     *
+     * @return rendered disabledPosts.html page
+     */
+    @RequestMapping("/home/disabled")
+    public String viewDisabledPosts(Model model) {
+        Iterable<Post> posts = postController.getAllDisabledPosts();
+        model.addAttribute("posts", posts);
+        return "home";
+    }
 
 
     /**
@@ -117,14 +129,15 @@ public class PostWebController {
      */
     @GetMapping("/viewPost/{post_id}")
     public String postPage(@PathVariable(value = "post_id") String post_id,
-                           Model model) {
+                           Model model,
+                           Authentication auth) {
 
         ResponseEntity<Post> request = postController.getPostsById(post_id);
 
         if (request.getStatusCode().is2xxSuccessful()) {
             Post post = request.getBody();
 
-            int heart = 0, thumb = 0, wow = 0;
+            int heart = 0, thumb = 0, wow = 0, haha = 0;
             assert post != null;
             if (post.getPostLikesUserIds() != null) {
                 for (String user : post.getPostLikesUserIds().keySet()) {
@@ -138,6 +151,9 @@ public class PostWebController {
                         case 3:
                             wow++;
                             break;
+                        case 4:
+                            haha++;
+                            break;
                     }
                 }
             }
@@ -145,8 +161,11 @@ public class PostWebController {
             model.addAttribute("like_heart", heart);
             model.addAttribute("like_thumb", thumb);
             model.addAttribute("like_wow", wow);
-            model.addAttribute("comment_count",
-                    (post.getPostCommentsUserIds() != null ? post.getPostCommentsUserIds().size() : 0));
+            model.addAttribute("like_haha", haha);
+
+            if (post.getEnabled() == 0 && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                return "errorPages/404";
+
         } else
             return "errorPages/404";
 
@@ -202,9 +221,9 @@ public class PostWebController {
                            @RequestParam String postTitle,
                            @RequestParam String postDescription,
                            @RequestParam String tags,
-                           Model model) {
+                           Model model,
+                           Authentication auth) {
         ResponseEntity<Post> request = postController.getPostsById(post_id);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (request.getStatusCode().is2xxSuccessful() && request.getBody() != null) {
             Post post = request.getBody();
             if (post.getPostUser().equals(auth.getName())) {
@@ -299,5 +318,22 @@ public class PostWebController {
         }
 
         return "errorPages/404";
+    }
+
+    /**
+     * Search for posts based on a query string.
+     * Search the title and description for the provided string.
+     *
+     * @param query the query string to search
+     * @param model model to add parameters to the template
+     * @return rendered home page with search results
+     */
+    @PostMapping("/search")
+    public String searchPosts(@RequestParam String query,
+                              Model model) {
+        List<Post> result = postController.findPost(query);
+        model.addAttribute("search", query);
+        model.addAttribute("posts", result);
+        return "home";
     }
 }

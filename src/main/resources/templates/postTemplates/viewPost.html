@@ -45,29 +45,38 @@
 
                         <div class="entry-meta">
                             <ul>
-                                <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="#"
-                                                                                                      th:text="${post_data.postUser}"></a>
+                                <li class="d-flex align-items-center">
+                                    <i class="icofont-user"></i>
+                                    <a th:href="@{/profile/} + ${post_data.postUser}"
+                                       th:text="${post_data.postUser}"></a>
                                 </li>
                                 <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i><span
                                         th:text="${post_data.postDate}"></span></li>
                                 <li class="d-flex align-items-center"><i class="icofont-comment"></i>
-                                    <span th:text="${comment_count}"></span></li>
+                                    <span th:if="${post_data.postCommentsUserIds != null}" th:text="${#lists.size(post_data.postCommentsUserIds)}">0</span>
+                                    <span th:unless="${post_data.postCommentsUserIds != null}">0</span>
+                                </li>
                             </ul>
                             <ul>
                                 <li class="d-flex align-items-center">
-                                    <p class="icofont-heart like-line" id="heart-disp" onclick="doHeart()"
-                                       th:text="${like_heart}"></p>
+                                    <p class="like-line" id="heart-disp" onclick="doHeart()"
+                                       th:text="'&#10084;&#65039;'+${like_heart}"></p>
                                     <input id="heart-val" th:value="${like_heart}" type="hidden">
                                 </li>
                                 <li class="d-flex align-items-center">
-                                    <p class="icofont-thumbs-up like-line" id="thumb-disp" onclick="doThumb()"
-                                       th:text="${like_thumb}"></p>
+                                    <p class="like-line" id="thumb-disp" onclick="doThumb()"
+                                       th:text="'👍'+${like_thumb}"></p>
                                     <input id="thumb-val" th:value="${like_thumb}" type="hidden">
                                 </li>
                                 <li class="d-flex align-items-center">
-                                    <p class="icofont-light-bulb like-line" id="wow-disp" onclick="doWow()"
-                                       th:text="${like_wow}"></p>
+                                    <p class="like-line" id="wow-disp" onclick="doWow()"
+                                       th:text="'🔥'+${like_wow}"></p>
                                     <input id="wow-val" th:value="${like_wow}" type="hidden">
+                                </li>
+                                <li class="d-flex align-items-center">
+                                    <p class="like-line" id="haha-disp" onclick="doHaha()"
+                                       th:text="'😂'+${like_haha}"></p>
+                                    <input id="haha-val" th:value="${like_haha}" type="hidden">
                                 </li>
                             </ul>
                         </div>
@@ -86,9 +95,9 @@
                                 r.onload = () => {
                                     if (r.response === "true") {
                                         const heart = document.getElementById("heart-disp");
-                                        heart.innerHTML =
-                                            parseInt(document.getElementById("heart-val").value) + 1;
-                                        heart.style.color = "red";
+                                        const a = parseInt(document.getElementById("heart-val").value) + 1;
+                                        heart.innerHTML = '&#10084;&#65039;' + a;
+                                        heart.style.fontSize = '2.5em';
                                     }
                                 }
                             }
@@ -103,9 +112,9 @@
                                 r.onload = () => {
                                     if (r.response === "true") {
                                         const thumb = document.getElementById("thumb-disp");
-                                        thumb.innerHTML =
-                                            parseInt(document.getElementById("thumb-val").value) + 1;
-                                        thumb.style.color = "#25db65";
+                                        const a = parseInt(document.getElementById("thumb-val").value) + 1;
+                                        thumb.innerHTML = "👍" + a;
+                                        thumb.style.fontSize = '2.5em';
                                     }
                                 }
                             }
@@ -120,9 +129,26 @@
                                 r.onload = () => {
                                     if (r.response === "true") {
                                         const wow = document.getElementById("wow-disp");
-                                        wow.innerHTML =
-                                            parseInt(document.getElementById("wow-val").value) + 1;
-                                        wow.style.color = "#ff9f5e";
+                                        const a = parseInt(document.getElementById("wow-val").value) + 1;
+                                        wow.innerHTML = "🔥" + a;
+                                        wow.style.fontSize = '2.5em';
+                                    }
+                                }
+                            }
+
+                            function doHaha() {
+                                r.open("GET", "/api/v1/post/like?" +
+                                    "postID=" + postID +
+                                    "&likeType=4");
+
+                                r.send();
+
+                                r.onload = () => {
+                                    if (r.response === "true") {
+                                        const haha = document.getElementById("haha-disp");
+                                        const a = parseInt(document.getElementById("haha-val").value) + 1;
+                                        haha.innerHTML = "😂" + a;
+                                        haha.style.fontSize = '2.5em';
                                     }
                                 }
                             }
@@ -161,8 +187,8 @@
                     </article><!-- End blog entry -->
 
                     <div class="blog-author clearfix">
-                        <img alt="" class="rounded-circle float-left" src="assets/img/blog-author.jpg">
-                        <h4 th:text="${post_data.postUser}"></h4>
+                        <img alt="User Picture" class="rounded-circle float-left" th:src="@{/img/neutral.jpg}">
+                        <h4><a th:href="@{/profile/} + ${post_data.postUser}" th:text="${post_data.postUser}"></a></h4>
                         <div class="social-links">
                             <a href="https://twitters.com/#"><i class="icofont-twitter"></i></a>
                             <a href="https://facebook.com/#"><i class="icofont-facebook"></i></a>
@@ -224,10 +250,12 @@
 
                         </div>
 
-                        <h4 class="comments-count" th:text="${comment_count}+' Comment(s)'"></h4>
+                        <h4 class="comments-count" th:if="${post_data.postCommentsUserIds != null}"
+                            th:text="${#lists.size(post_data.postCommentsUserIds)} + ' Comment(s)'">0 Comments</h4>
+                        <h4 class="comments-count" th:unless="${post_data.postCommentsUserIds != null}">0 Comments</h4>
 
                         <div class="comment clearfix" th:each="comment : ${post_data.postCommentsUserIds}">
-                            <!--img alt="" class="comment-img  float-left" src="assets/img/comments-1.jpg"-->
+                            <img alt="User Picture" class="comment-img  float-left" th:src="@{/img/neutral.jpg}">
                             <h5><a href="" th:text="${comment.key}"></a> <!--a class="reply" href="#"><i class="icofont-reply"></i>
                                 Reply</a--></h5>
                             <!--time datetime="2020-01-01">01 Jan, 2020</time-->

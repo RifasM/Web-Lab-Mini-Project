@@ -97,9 +97,9 @@
 
                                         <div class="entry-meta">
                                             <ul>
-                                                <li class="d-flex align-items-center"><i class="icofont-user"></i> <a
-                                                        href="#"
-                                                        th:text="${post.postUser}"></a>
+                                                <li class="d-flex align-items-center"><i class="icofont-user"></i>
+                                                    <a th:href="@{/profile/} + ${board_data.userId}"
+                                                        th:text="${board_data.userId}"></a>
                                                 </li>
                                                 <li class="d-flex align-items-center"><i class="icofont-tags"></i><a
                                                         href="#"

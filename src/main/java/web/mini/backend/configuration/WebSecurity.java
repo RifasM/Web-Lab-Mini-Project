@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import web.mini.backend.exception.CustomAccessDeniedHandler;
 
 import javax.sql.DataSource;
@@ -40,11 +41,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
         // /home page requires login as USER or ADMIN.
         // If no login, it will redirect to /login page.
-        http.authorizeRequests().antMatchers("/home/**", "/profile/**", "/create*", "/edit*", "/view*/**").
+        http.authorizeRequests().antMatchers("/home",
+                "/profile/**", "/create*", "/edit*", "/view*/**", "/like", "/comment").
                 access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
         // For ADMIN only.
-        http.authorizeRequests().antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/admin/**", "/home/disabled").access("hasRole('ROLE_ADMIN')");
 
         // When the user has logged in as XX.
         // But access a page that requires role YY,
@@ -56,18 +58,19 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .and()
                     .formLogin()//
                     // Submit URL of login page.
-                    //.loginProcessingUrl("/auth-login") // Submit URL
-                    .loginPage("/login")//
-                    .defaultSuccessUrl("/home")//
-                    .failureUrl("/login?error=true")//
-                    //.usernameParameter("username")//
-                    //.passwordParameter("password")//
-                    .permitAll()
+                //.loginProcessingUrl("/auth-login") // Submit URL
+                .loginPage("/login")//
+                .defaultSuccessUrl("/home")//
+                .failureUrl("/login?error=true")//
+                //.usernameParameter("username")//
+                //.passwordParameter("password")//
+                .permitAll()
                 // Config for Logout Page
                 .and()
-                    .logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/")
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                //.logoutUrl("/logout")
+                .logoutSuccessUrl("/")
                     .deleteCookies("JSESSIONID")
                 .and().
                     exceptionHandling()

@@ -11,9 +11,9 @@ public interface PostRepository extends ElasticsearchRepository<Post, String> {
 
     List<Post> findByPostUser(String userID);
 
-    List<Post> findByPostTitle(String title);
+    List<Post> findByPostTitleContainingOrPostDescriptionContaining(String title, String desc);
 
-    List<Post> findAllByOrderByPostDateDesc();
+    List<Post> findAllByEnabledOrderByPostDateDesc(int enabled);
 
     /*
     @Query("{\"bool\": {\"must\": [{\"match\": {\"authors.name\": \"?0\"}}]}}")
