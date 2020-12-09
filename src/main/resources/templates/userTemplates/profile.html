@@ -54,6 +54,17 @@
                             <a class="btn btn-dark btn-sm btn-block" style="display: block !important;"
                                th:href="@{/editProfile}"
                                th:if="${#authentication.name == user.userName}">Edit profile</a>
+
+                            <!-- Disable or Enable User Profile -->
+                            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                                <a class="btn btn-danger btn-sm btn-block" style="display: block !important;"
+                                   th:href="@{/deactivate/{user_id}(user_id = ${user.userName})}"
+                                   th:if="${user.enabled == 1}">Deactivate User</a>
+                                <a class="btn btn-success btn-sm btn-block" style="display: block !important;"
+                                   th:href="@{/activate/{user_id}(user_id = ${user.userName})}"
+                                   th:if="${user.enabled == 0}">Activate User</a>
+                            </div>
+
                         </div>
                         <div class="media-body mb-5 text-white">
                             <h4 class="mt-0 mb-0" th:text="${user.firstName + ' ' + user.lastName}">Full Name here</h4>
