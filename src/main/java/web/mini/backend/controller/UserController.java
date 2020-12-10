@@ -47,6 +47,16 @@ public class UserController {
     }
 
     /**
+     * Get all the disabled users list.
+     *
+     * @return the user list
+     */
+    @GetMapping("/users/disabled")
+    public List<User> getAllDisabledUsers() {
+        return userRepository.findByEnabled(0);
+    }
+
+    /**
      * Gets users by id.
      *
      * @param userId the user id

@@ -266,7 +266,7 @@ public class UserWebController {
     }
 
     /**
-     * Avtivate the user profile of a given user
+     * Activate the user profile of a given user
      *
      * @param username the username to activate
      * @param auth     authentication details to check if current user is an admin
@@ -281,6 +281,18 @@ public class UserWebController {
                 return "redirect:/profile/" + username;
             else
                 LOGGER.error("Could not activate user: " + username + ", with admin user authentication: " + auth.getName());
+        }
+
+        return "errorPages/404";
+    }
+
+    @RequestMapping("/disabledUsers")
+    public String disabledUsers(Authentication auth,
+                                Model model) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            model.addAttribute("users", userController.getAllDisabledUsers());
+
+            return "userTemplates/disabledUsers";
         }
 
         return "errorPages/404";
