@@ -64,6 +64,22 @@ public class UserController {
     }
 
     /**
+     * Gets users by username.
+     *
+     * @param username the username
+     * @return the user
+     */
+    @GetMapping("/users/{username}")
+    public ResponseEntity<User> getUsersByUsername(@PathVariable(value = "username") String username) {
+        User user = userRepository.findByUsername(username);
+
+        if (user == null)
+            return ResponseEntity.badRequest().body(null);
+
+        return ResponseEntity.ok().body(user);
+    }
+
+    /**
      * Create user user.
      *
      * @param user the user
@@ -121,5 +137,49 @@ public class UserController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    /**
+     * Deactivate a user based on the user name
+     *
+     * @param username  the username of the user to be deactivated
+     * @param adminName the name of the administrator disabling the user
+     * @return true if successful, false if failed
+     */
+    @RequestMapping("/user/deactivate")
+    public Boolean deactivateUser(@RequestParam String username,
+                                  @RequestParam String adminName) {
+        ResponseEntity<User> result = getUsersByUsername(username);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            result.getBody().setEnabled(0); // disable the user
+            result.getBody().setUpdatedAt(new Date());
+            result.getBody().setUpdatedBy(adminName);
+            userRepository.save(result.getBody());
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Activate a user based on the user name
+     *
+     * @param username  the username of the user to be activated
+     * @param adminName the name of the administrator enabling the user
+     * @return true if successful, false if failed
+     */
+    @RequestMapping("/user/activate")
+    public Boolean activateUser(@RequestParam String username,
+                                @RequestParam String adminName) {
+        ResponseEntity<User> result = getUsersByUsername(username);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            result.getBody().setEnabled(1); // activate the user
+            result.getBody().setUpdatedAt(new Date());
+            result.getBody().setUpdatedBy(adminName);
+            userRepository.save(result.getBody());
+            return true;
+        }
+
+        return false;
     }
 }
