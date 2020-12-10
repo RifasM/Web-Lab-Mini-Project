@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Pixies - Dashboard</title>
+    <title>Pixies - Disabled Users</title>
     <meta content="" name="descriptison">
     <meta content="" name="keywords">
 
@@ -21,15 +21,33 @@
 
 <main id="main">
 
+    <section class="services" id="services">
+        <div class="container">
+
+            <div class="section-title">
+                <p>View and manage Disabled Users</p>
+            </div>
+
+        </div>
+    </section>
+
     <section class="features" id="features">
         <div class="container">
 
             <div class="row">
-                <div class="col-lg-3 col-md-4 col-6 mt-4">
+
+                <div class="col-lg-3 col-md-4 col-6 mt-4" th:each="user : ${users}">
                     <div class="icon-box">
-                        <i class="ri-settings-4-line" style="color: #ffbb2c;"></i>
-                        <h3><a href="">Settings</a></h3>
+                        <a th:href="@{/profile/disabled/{user_name}(user_name = ${user.userName})}">
+                            <h3 th:text="'Username: '+${user.userName}">Username:</h3>
+                            <br>
+                            <h3 th:text="'Full Name: '+${user.firstName}+ ' ' + ${user.lastName}">Full Name:</h3>
+                        </a>
                     </div>
+                </div>
+
+                <div class="section-title" th:if="${#lists.size(users) == 0}">
+                    <h6>No Disabled Users</h6>
                 </div>
 
             </div>
