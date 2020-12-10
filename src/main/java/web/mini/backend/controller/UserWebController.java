@@ -60,7 +60,7 @@ public class UserWebController {
     }
 
     /**
-     * Return the profile of the user
+     * Return the profile of the user if active
      *
      * @param username the username of the user whose profile has been requested
      * @param model    Model to add the attributes to render onto the page
@@ -69,12 +69,41 @@ public class UserWebController {
     @RequestMapping("/profile/{username}")
     public String profile(@PathVariable(value = "username") String username,
                           Model model) {
-        User user = userRepository.findByUsername(username);
-        model.addAttribute("user", user);
-        model.addAttribute("posts", postController.findByUser(username));
-        model.addAttribute("boards", boardController.findByUser(username));
+        ResponseEntity<User> result = userController.getEnabledUsersByUsername(username);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            model.addAttribute("user", result.getBody());
+            model.addAttribute("posts", postController.findByUser(username));
+            model.addAttribute("boards", boardController.findByUser(username));
 
-        return "userTemplates/profile";
+            return "userTemplates/profile";
+        }
+
+        return "errorPages/404";
+    }
+
+    /**
+     * Return the profile of the disabled user
+     *
+     * @param username the username of the user whose profile has been requested
+     * @param model    Model to add the attributes to render onto the page
+     * @return The rendered profile page
+     */
+    @RequestMapping("/profile/disabled/{username}")
+    public String disabledProfile(@PathVariable(value = "username") String username,
+                                  Model model,
+                                  Authentication auth) {
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            ResponseEntity<User> result = userController.getDisabledUsersByUsername(username);
+            if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+                model.addAttribute("user", result.getBody());
+                model.addAttribute("posts", postController.findByUser(username));
+                model.addAttribute("boards", boardController.findByUser(username));
+
+                return "userTemplates/profile";
+            }
+        }
+
+        return "errorPages/404";
     }
 
     /**
@@ -228,7 +257,7 @@ public class UserWebController {
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             Boolean result = userController.deactivateUser(username, auth.getName());
             if (result)
-                return "redirect:/profile/" + username;
+                return "redirect:/profile/disabled/" + username;
             else
                 LOGGER.error("Could not deactivate user: " + username + ", with admin user authentication: " + auth.getName());
         }

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Pixies - Dashboard</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <th:block th:insert="includes/home-fragments::home-header"></th:block>
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<th:block th:insert="includes/home-fragments::navbar-inner-page"/>
+<!-- End Header -->
+
+<main id="main">
+
+    <section class="features" id="features">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-6 mt-4">
+                    <div class="icon-box">
+                        <i class="ri-settings-4-line" style="color: #ffbb2c;"></i>
+                        <h3><a href="">Settings</a></h3>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section><!-- End Features Section -->
+
+</main><!-- End #main -->
+
+<th:block th:insert="includes/home-fragments::footer"></th:block>
+
+<a class="back-to-top" href="#"><i class="ri-arrow-up-line"></i></a>
+
+<th:block th:insert="includes/home-fragments::home-scripts"></th:block>
+
+</body>
+
+</html>

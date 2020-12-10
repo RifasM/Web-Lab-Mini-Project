@@ -64,16 +64,32 @@ public class UserController {
     }
 
     /**
-     * Gets users by username.
+     * Gets the enabled users by username.
      *
      * @param username the username
      * @return the user
      */
     @GetMapping("/users/{username}")
-    public ResponseEntity<User> getUsersByUsername(@PathVariable(value = "username") String username) {
+    public ResponseEntity<User> getEnabledUsersByUsername(@PathVariable(value = "username") String username) {
         User user = userRepository.findByUsername(username);
+        assert user != null;
+        if (user.getEnabled() == 0)
+            return ResponseEntity.badRequest().body(null);
 
-        if (user == null)
+        return ResponseEntity.ok().body(user);
+    }
+
+    /**
+     * Gets the diabled users by username.
+     *
+     * @param username the username
+     * @return the user
+     */
+    @GetMapping("/users/disabled/{username}")
+    public ResponseEntity<User> getDisabledUsersByUsername(@PathVariable(value = "username") String username) {
+        User user = userRepository.findByUsername(username);
+        assert user != null;
+        if (user.getEnabled() == 1)
             return ResponseEntity.badRequest().body(null);
 
         return ResponseEntity.ok().body(user);
@@ -149,7 +165,7 @@ public class UserController {
     @RequestMapping("/user/deactivate")
     public Boolean deactivateUser(@RequestParam String username,
                                   @RequestParam String adminName) {
-        ResponseEntity<User> result = getUsersByUsername(username);
+        ResponseEntity<User> result = getEnabledUsersByUsername(username);
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
             result.getBody().setEnabled(0); // disable the user
             result.getBody().setUpdatedAt(new Date());
@@ -171,7 +187,7 @@ public class UserController {
     @RequestMapping("/user/activate")
     public Boolean activateUser(@RequestParam String username,
                                 @RequestParam String adminName) {
-        ResponseEntity<User> result = getUsersByUsername(username);
+        ResponseEntity<User> result = getDisabledUsersByUsername(username);
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
             result.getBody().setEnabled(1); // activate the user
             result.getBody().setUpdatedAt(new Date());
