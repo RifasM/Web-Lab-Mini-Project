@@ -39,6 +39,7 @@
                 <div class="px-4 pt-0 pb-4 bg-dark">
                     <div class="media align-items-end profile-header">
                         <div class="profile mr-3">
+
                             <img class="rounded mb-2 img-thumbnail"
                                  th:alt="${user.firstName + ' ' + user.lastName}" th:if="${user.gender == 'male'}"
                                  th:src="@{/img/boy.png}"
@@ -49,8 +50,9 @@
                                  width="130">
                             <img class="rounded mb-2 img-thumbnail"
                                  th:alt="${user.firstName + ' ' + user.lastName}" th:src="@{/img/neutral.jpg}"
-                                 th:unless="${user.gender == 'male'}"
+                                 th:if="${user.gender == 'nts'}"
                                  width="130">
+
                             <a class="btn btn-dark btn-sm btn-block" style="display: block !important;"
                                th:href="@{/editProfile}"
                                th:if="${#authentication.name == user.userName}">Edit profile</a>
