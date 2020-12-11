@@ -35,7 +35,6 @@
         <div class="container">
 
             <div class="row">
-
                 <div class="col-lg-3 col-md-4 col-6 mt-4" th:each="user : ${users}">
                     <div class="icon-box">
                         <a th:href="@{/profile/disabled/{user_name}(user_name = ${user.userName})}">
