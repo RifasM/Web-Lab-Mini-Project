@@ -36,15 +36,15 @@
 
             <div class="row">
 
-                <div class="col-lg-3 col-md-4 col-6 mt-4" th:each="user : ${users}">
-                    <div class="icon-box">
-                        <a th:href="@{/profile/disabled/{user_name}(user_name = ${user.userName})}">
-                            <h3 th:text="'Username: '+${user.userName}">Username:</h3>
-                            <br>
-                            <h3 th:text="'Full Name: '+${user.firstName}+ ' ' + ${user.lastName}">Full Name:</h3>
-                        </a>
-                    </div>
+            <div class="col-lg-3 col-md-4 col-6 mt-4" th:each="user : ${users}">
+                <div class="icon-box">
+                    <a th:href="@{/profile/disabled/{user_name}(user_name = ${user.userName})}">
+                        <h3 th:text="'Username: '+${user.userName}">Username:</h3>
+                        <br>
+                        <h3 th:text="'Full Name: '+${user.firstName}+ ' ' + ${user.lastName}">Full Name:</h3>
+                    </a>
                 </div>
+            </div>
 
                 <div class="section-title" th:if="${#lists.size(users) == 0}">
                     <h6>No Disabled Users</h6>
