@@ -84,7 +84,8 @@ public class BoardController {
      * @return the boards by user id
      */
     @GetMapping("/board/{boardId}/{userID}")
-    public Board findByUserAndBoard(@PathVariable(value = "userID") String userID, @PathVariable(value = "boardId") String boardId) {
+    public Board findByUserAndBoard(@PathVariable(value = "userID") String userID,
+                                    @PathVariable(value = "boardId") String boardId) {
         return boardRepository.findBoardByIdAndUserId(boardId, userID);
     }
 
