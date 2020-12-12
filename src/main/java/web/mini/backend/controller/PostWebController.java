@@ -169,6 +169,24 @@ public class PostWebController {
     }
 
     /**
+     * Add a given post id to the respective board id
+     *
+     * @param boardID the board id to add the post to
+     * @param postID  the post id to be added
+     * @param model   to return the success or failure state
+     * @return the post page with success of error messages
+     */
+    @PostMapping("/addPost/{postID}")
+    public String addPostToBoard(@RequestParam String boardID,
+                                 @PathVariable(value = "postID") String postID) {
+        ResponseEntity<Board> result = boardController.addPost(boardID, postID);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null)
+            return "redirect:/viewBoard/" + boardID;
+
+        return "redirect:/viewPost/" + postID;
+    }
+
+    /**
      * Return Home Page after deleting the post
      *
      * @param post_id postID to delete

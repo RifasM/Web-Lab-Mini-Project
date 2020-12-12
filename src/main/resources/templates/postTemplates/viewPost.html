@@ -175,7 +175,8 @@
                                         </div>
                                         <div class="modal-body row">
                                             <div class="col" th:each="board: ${user_boards}">
-                                                <form action="" class="form-inline" method="post">
+                                                <form class="form-inline" method="post"
+                                                      th:action="@{/addPost/{id}(id = ${post_data.id})}">
                                                     <input name="boardID" th:value="${board.id}" type="hidden">
                                                     <button class="form-group mb-2 btn btn-learn-more"
                                                             th:text="'Add to '+${board.boardName}"

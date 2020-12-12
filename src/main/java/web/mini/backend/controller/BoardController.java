@@ -177,6 +177,13 @@ public class BoardController {
         return ResponseEntity.ok().body(board);
     }
 
+    /**
+     * Add a given post id to the requested board
+     *
+     * @param boardID the board id to add the post
+     * @param postID  the post id of the post to be added
+     * @return the board after addition of the post
+     */
     @RequestMapping("/board/addPost/{post_id}")
     public ResponseEntity<Board> addPost(@RequestParam String boardID,
                                          @PathVariable(value = "post_id") String postID) {
@@ -188,10 +195,12 @@ public class BoardController {
             if (board.getPostID() != null)
                 postIDs = board.getPostID();
 
-            postIDs.add(postID);
-            board.setPostID(postIDs);
-            boardRepository.save(board);
-
+            // if board already contains the post, skip it
+            if (!postIDs.contains(postID)) {
+                postIDs.add(postID);
+                board.setPostID(postIDs);
+                boardRepository.save(board);
+            }
             return ResponseEntity.ok().body(board);
         }
 
