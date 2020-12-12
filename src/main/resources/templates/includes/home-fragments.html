@@ -97,6 +97,12 @@
 
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
+                    <li class="md-form my-0">
+                        <form class="form-inline" method="post" th:action="@{/search}">
+                            <input class="form-control mr-sm-2" name="query" placeholder="Search"
+                                   th:value="${search}" type="text">
+                        </form>
+                    </li>
                     <li class="active"><a th:href="@{/}">Home</a></li>
                     <li class="drop-down" th:if="${#authentication.name != 'anonymousUser'}"><a
                             th:text="${#authentication.name}"></a>

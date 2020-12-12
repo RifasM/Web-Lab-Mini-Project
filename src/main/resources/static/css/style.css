@@ -2140,13 +2140,13 @@ section {
 
 .sidebar-fix {
     position: fixed !important;
-    right: 10em;
+    right: 7em;
     max-height: 90vh;
-    max-width: 350px !important;
+    max-width: 250px !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1500px) {
     .sidebar-fix {
-        position: relative;
+        display: none !important;
     }
 }
