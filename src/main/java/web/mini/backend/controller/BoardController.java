@@ -8,6 +8,7 @@ import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
 import web.mini.backend.repository.BoardRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,5 +175,26 @@ public class BoardController {
         boardRepository.save(board);
 
         return ResponseEntity.ok().body(board);
+    }
+
+    @RequestMapping("/board/addPost/{post_id}")
+    public ResponseEntity<Board> addPost(@RequestParam String boardID,
+                                         @PathVariable(value = "post_id") String postID) {
+        ResponseEntity<Board> result = getBoardById(boardID);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            Board board = result.getBody();
+
+            List<String> postIDs = new ArrayList<>();
+            if (board.getPostID() != null)
+                postIDs = board.getPostID();
+
+            postIDs.add(postID);
+            board.setPostID(postIDs);
+            boardRepository.save(board);
+
+            return ResponseEntity.ok().body(board);
+        }
+
+        return ResponseEntity.status(500).body(null);
     }
 }

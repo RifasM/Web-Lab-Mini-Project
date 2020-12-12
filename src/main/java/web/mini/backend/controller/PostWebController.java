@@ -18,7 +18,6 @@ import web.mini.backend.repository.BoardRepository;
 import web.mini.backend.repository.PostRepository;
 import web.mini.backend.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -86,17 +85,10 @@ public class PostWebController {
             ResponseEntity<String> result = postController.createPost(post, postFile);
 
             if (result.getStatusCode().is2xxSuccessful()) {
-                Board board = boardController.getBoardById(boardId).getBody();
-                if (board != null) {
-                    List<String> postIDs = new ArrayList<>();
-                    if (board.getPostID() != null)
-                        postIDs = board.getPostID();
-
-                    postIDs.add(post.getId());
-                    board.setPostID(postIDs);
-                    boardRepository.save(board);
+                ResponseEntity<Board> res = boardController.addPost(boardId, post.getId());
+                if (res.getStatusCode().is2xxSuccessful())
                     model.addAttribute("success", post.getId());
-                } else
+                else
                     model.addAttribute("error", result.getBody());
 
                 model.addAttribute("boards", boardController.findByUser(auth.getName()));
@@ -158,10 +150,13 @@ public class PostWebController {
                 }
             }
             model.addAttribute("post_data", post);
+
             model.addAttribute("like_heart", heart);
             model.addAttribute("like_thumb", thumb);
             model.addAttribute("like_wow", wow);
             model.addAttribute("like_haha", haha);
+
+            model.addAttribute("user_boards", boardController.findByUser(auth.getName()));
 
             if (post.getEnabled() == 0 && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
                 return "errorPages/404";

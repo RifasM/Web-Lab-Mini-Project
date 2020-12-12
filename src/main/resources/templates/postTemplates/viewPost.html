@@ -155,6 +155,46 @@
                         </script>
 
                         <div class="entry-content">
+                            <!-- Button trigger modal -->
+                            <button class="btn btn-primary" data-target="#exampleModalCenter" data-toggle="modal"
+                                    type="button">
+                                Add this to your board
+                            </button>
+
+                            <!-- Modal -->
+                            <div aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade"
+                                 id="exampleModalCenter" role="dialog" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Choose the board to add
+                                                post to</h5>
+                                            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body row">
+                                            <div class="col" th:each="board: ${user_boards}">
+                                                <form action="" class="form-inline" method="post">
+                                                    <input name="boardID" th:value="${board.id}" type="hidden">
+                                                    <button class="form-group mb-2 btn btn-learn-more"
+                                                            th:text="'Add to '+${board.boardName}"
+                                                            type="submit">Add
+                                                    </button>
+                                                    <hr>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="entry-content">
                             <blockquote>
                                 <i class="icofont-quote-left quote-left"></i>
                                 <p th:text="${post_data.postDescription}"></p>

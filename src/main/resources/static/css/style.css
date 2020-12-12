@@ -2137,3 +2137,16 @@ section {
     font-size: 2.5em !important;
     cursor: pointer;
 }
+
+.sidebar-fix {
+    position: fixed !important;
+    right: 10em;
+    max-height: 90vh;
+    max-width: 350px !important;
+}
+
+@media (max-width: 768px) {
+    .sidebar-fix {
+        position: relative;
+    }
+}
