@@ -273,6 +273,6 @@ public class PostController {
      */
     @RequestMapping("/recent")
     public List<Post> recentPosts() {
-        return postRepository.findTop5ByEnabledOrderByPostDateDesc(1);
+        return postRepository.findTop5ByEnabledAndPostTypeOrderByPostDateDesc(1, "image");
     }
 }
