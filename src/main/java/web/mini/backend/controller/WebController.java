@@ -109,6 +109,8 @@ public class WebController {
     public String authLogin(Model model) {
         Iterable<Post> posts = postController.getAllEnabledPosts();
         model.addAttribute("posts", posts);
+        model.addAttribute("recent_posts", postController.recentPosts());
+
         return "home";
     }
 }

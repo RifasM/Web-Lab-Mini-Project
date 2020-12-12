@@ -265,4 +265,14 @@ public class PostController {
 
         return ResponseEntity.badRequest().body(false);
     }
+
+    /**
+     * Get top 5 recent posts by creation date
+     *
+     * @return the list of top 5 posts
+     */
+    @RequestMapping("/recent")
+    public List<Post> recentPosts() {
+        return postRepository.findTop5ByEnabledOrderByPostDateDesc(1);
+    }
 }

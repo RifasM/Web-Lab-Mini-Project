@@ -14,7 +14,6 @@ import web.mini.backend.BackendApplication;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
-import web.mini.backend.repository.BoardRepository;
 import web.mini.backend.repository.PostRepository;
 import web.mini.backend.repository.UserRepository;
 
@@ -27,9 +26,6 @@ public class PostWebController {
 
     @Autowired
     private PostRepository postRepository;
-
-    @Autowired
-    private BoardRepository boardRepository;
 
     @Autowired
     private PostController postController;
@@ -50,6 +46,7 @@ public class PostWebController {
     public String viewDisabledPosts(Model model) {
         Iterable<Post> posts = postController.getAllDisabledPosts();
         model.addAttribute("posts", posts);
+        model.addAttribute("recent_posts", postController.recentPosts());
         return "home";
     }
 

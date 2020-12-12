@@ -15,6 +15,8 @@ public interface PostRepository extends ElasticsearchRepository<Post, String> {
 
     List<Post> findAllByEnabledOrderByPostDateDesc(int enabled);
 
+    List<Post> findTop5ByEnabledOrderByPostDateDesc(int enabled);
+
     /*
     @Query("{\"bool\": {\"must\": [{\"match\": {\"authors.name\": \"?0\"}}]}}")
     Page<Article> findByAuthorsNameUsingCustomQuery(String name, Pageable pageable);
