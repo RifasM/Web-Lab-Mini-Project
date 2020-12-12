@@ -173,7 +173,6 @@ public class PostWebController {
      *
      * @param boardID the board id to add the post to
      * @param postID  the post id to be added
-     * @param model   to return the success or failure state
      * @return the post page with success of error messages
      */
     @PostMapping("/addPost/{postID}")

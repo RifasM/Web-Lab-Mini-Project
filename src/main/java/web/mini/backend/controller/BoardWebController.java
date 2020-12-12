@@ -225,4 +225,21 @@ public class BoardWebController {
 
         return "boardTemplates/viewBoards";
     }
+
+    /**
+     * Remove a given post id from the respective board id
+     *
+     * @param boardID the board id to remove the post to
+     * @param postID  the post id to be removed
+     * @return the post page with success of error messages
+     */
+    @PostMapping("/removePost/{postID}")
+    public String removePostFromBoard(@RequestParam String boardID,
+                                      @PathVariable(value = "postID") String postID) {
+        ResponseEntity<Board> result = boardController.removePost(boardID, postID);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null)
+            return "redirect:/viewBoard/" + boardID;
+
+        return "redirect:/viewPost/" + postID;
+    }
 }

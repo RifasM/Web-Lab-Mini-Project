@@ -2138,15 +2138,6 @@ section {
     cursor: pointer;
 }
 
-.sidebar-fix {
-    position: fixed !important;
-    right: 7em;
-    max-height: 90vh;
-    max-width: 250px !important;
-}
-
-@media (max-width: 1500px) {
-    .sidebar-fix {
-        display: none !important;
-    }
+.switch label input[type="checkbox"]:checked + .lever:after {
+    background-color: #5bc0de !important;
 }

@@ -206,4 +206,33 @@ public class BoardController {
 
         return ResponseEntity.status(500).body(null);
     }
+
+    /**
+     * Remove a given post id from the requested board
+     *
+     * @param boardID the board id to add the post
+     * @param postID  the post id of the post to be removed
+     * @return the board after addition of the post
+     */
+    @RequestMapping("/board/removePost/{post_id}")
+    public ResponseEntity<Board> removePost(@RequestParam String boardID,
+                                            @PathVariable(value = "post_id") String postID) {
+        ResponseEntity<Board> result = getBoardById(boardID);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            Board board = result.getBody();
+
+            List<String> postIDs = new ArrayList<>();
+            if (board.getPostID() != null)
+                postIDs = board.getPostID();
+
+            if (postIDs.contains(postID)) {
+                postIDs.remove(postID);
+                board.setPostID(postIDs);
+                boardRepository.save(board);
+            }
+            return ResponseEntity.ok().body(board);
+        }
+
+        return ResponseEntity.status(500).body(null);
+    }
 }
