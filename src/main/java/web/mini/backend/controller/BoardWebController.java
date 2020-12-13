@@ -144,7 +144,7 @@ public class BoardWebController {
     public String editBoardPage(@PathVariable(value = "board_id") String board_id,
                                 @RequestParam String boardName,
                                 @RequestParam String boardDescription,
-                                @RequestParam(required = false, defaultValue = "true") String privateBoard,
+                                @RequestParam(required = false, defaultValue = "off") String privateBoard,
                                 @RequestParam(required = false) MultipartFile boardCoverUrl,
                                 Model model,
                                 Authentication auth) throws ResourceNotFoundException {
@@ -154,7 +154,8 @@ public class BoardWebController {
                 Board board = request.getBody();
                 board.setBoardName(boardName);
                 board.setBoardDescription(boardDescription);
-                board.setPrivateBoard(Boolean.parseBoolean(privateBoard));
+                board.setPrivateBoard(privateBoard.equals("on"));
+
                 ResponseEntity<Board> status = boardController.updateBoard(board, boardCoverUrl);
                 if (status.getStatusCode().is2xxSuccessful())
                     model.addAttribute("success", board_id);

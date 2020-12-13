@@ -60,13 +60,14 @@
                     <p for="privateBoard">Board Type</p>
                     <div class="custom-control switch">
                         <label>
-                            Private
-                            <input checked data-off="Private" data-offstyle="success"
-                                   data-on="Public" data-onstyle="primary"
-                                   id="privateBoard" name="privateBoard"
-                                   th:value="${board_data.privateBoard}" type="checkbox">
-                            <span class="lever"></span>
                             Public
+                            <input data-off="Public"
+                                   data-offstyle="success" data-on="Private"
+                                   data-onstyle="primary" th:checked="${board_data.privateBoard}"
+                                   id="privateBoard" name="privateBoard"
+                                   type="checkbox">
+                            <span class="lever"></span>
+                            Private
                         </label>
                     </div>
                 </div>
