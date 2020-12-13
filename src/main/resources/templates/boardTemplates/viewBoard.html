@@ -98,8 +98,8 @@
                                         <div class="entry-meta">
                                             <ul>
                                                 <li class="d-flex align-items-center"><i class="icofont-user"></i>
-                                                    <a th:href="@{/profile/} + ${board_data.userId}"
-                                                        th:text="${board_data.userId}"></a>
+                                                    <a th:href="@{/profile/} + ${post.postUser}"
+                                                       th:text="${post.postUser}"></a>
                                                 </li>
                                                 <li class="d-flex align-items-center"><i class="icofont-tags"></i><a
                                                         href="#"
