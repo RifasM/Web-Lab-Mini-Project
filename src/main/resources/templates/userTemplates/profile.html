@@ -70,7 +70,8 @@
                         </div>
                         <div class="media-body mb-5 text-white">
                             <h4 class="mt-0 mb-0" th:text="${user.firstName + ' ' + user.lastName}">Full Name here</h4>
-                            <p class="small mb-4"><i class="fa fa-map-marker mr-2"></i>Bangalore</p>
+                            <p class="small mb-4"><i class="fa fa-user mr-2"></i><span
+                                    th:text="${user.userName}"></span></p>
                         </div>
                     </div>
                 </div>
