@@ -60,7 +60,6 @@ public class PostWebController {
     @PostMapping("/createPost")
     public String createPostProcess(@RequestParam String postTitle,
                                     @RequestParam String postDescription,
-                                    @RequestParam String postType,
                                     @RequestParam String boardId,
                                     @RequestParam String tags,
                                     @RequestParam MultipartFile postFile,
@@ -71,7 +70,7 @@ public class PostWebController {
                     null,
                     postTitle,
                     postDescription,
-                    postType,
+                    null,
                     null,
                     tags,
                     1,
@@ -86,14 +85,15 @@ public class PostWebController {
                 if (res.getStatusCode().is2xxSuccessful())
                     model.addAttribute("success", post.getId());
                 else
-                    model.addAttribute("error", result.getBody());
+                    model.addAttribute("error", res.getBody());
+            } else
+                model.addAttribute("error", result.getBody());
 
-                model.addAttribute("boards", boardController.findByUser(auth.getName()));
-                return "postTemplates/createPost";
+            model.addAttribute("boards", boardController.findByUser(auth.getName()));
 
-            }
+            return "postTemplates/createPost";
         }
-        return "error";
+        return "redirect:/login";
     }
 
     /**

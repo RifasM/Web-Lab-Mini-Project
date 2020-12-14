@@ -17,6 +17,7 @@ import web.mini.backend.repository.UserRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static web.mini.backend.controller.BoardController.getStringBooleanMap;
 
@@ -111,12 +112,37 @@ public class PostController {
     @PostMapping("/post")
     public ResponseEntity<String> createPost(@RequestParam Post post,
                                              @RequestParam MultipartFile postFile) {
-
         ResponseEntity<String> status = awsController.uploadFileToS3Bucket(postFile,
                 "posts");
 
         if (status.getStatusCode().is2xxSuccessful()) {
             try {
+                String contentType = postFile.getContentType();
+
+                switch (Objects.requireNonNull(contentType)) {
+                    case "image/png":
+                    case "image/jpeg":
+                    case "image/bmp":
+                    case "image/svg+xml":
+                    case "image/tiff":
+                    case "image/webp":
+                        post.setPostType("image");
+                        break;
+                    case "image/gif":
+                    case "image/apng":
+                        post.setPostType("gif");
+                        break;
+                    case "video/webm":
+                    case "video/ogg":
+                    case "video/mp4":
+                        post.setPostType("video");
+                        break;
+                    default:
+                        awsController.deleteFileFromS3Bucket(postFile.getName(),
+                                "posts");
+                        return ResponseEntity.status(406).body("Mischievous File");
+                }
+
                 post.setPostUrl(status.getBody());
                 postRepository.save(post);
                 return ResponseEntity.ok().body("created successfully");

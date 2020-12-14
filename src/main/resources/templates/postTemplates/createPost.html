@@ -55,15 +55,6 @@
                 </div>
 
                 <div class="md-form">
-                    <p class="form-control-plaintext">Post Type</p>
-                    <select class="form-control" id="postType" name="postType" required>
-                        <option value="image">Image</option>
-                        <option value="video">Video</option>
-                        <option value="gif">Gif</option>
-                    </select>
-                </div>
-
-                <div class="md-form">
                     <p class="form-control-plaintext">Save to Board</p>
                     <select class="form-control" id="boardId" name="boardId" required>
                         <option th:each="board : ${boards}" th:text="${board.boardName}"
