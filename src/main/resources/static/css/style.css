@@ -245,10 +245,6 @@ h1, h2, h3, h4, h5, h6 {
     text-align: right;
 }
 
-.mobile-nav-toggle i {
-    color: #007bff;
-}
-
 .mobile-nav {
     position: fixed;
     top: 55px;
@@ -285,9 +281,13 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none;
 }
 
+.mobile-nav form {
+    padding-left: 5em;
+}
+
 .mobile-nav .drop-down > a:after {
     content: "\ea99";
-    font-family: IcoFont sans-serif;
+    font-family: IcoFont;
     padding-left: 10px;
     position: absolute;
     right: 15px;
@@ -660,51 +660,6 @@ section {
 
 .features .icon-box:hover a {
     color: #007bff;
-}
-
-/*--------------------------------------------------------------
-# Cta
---------------------------------------------------------------*/
-.cta {
-    background: linear-gradient(rgba(2, 2, 2, 0.5), rgba(0, 0, 0, 0.8)), url("../img/cta-bg.jpg") center center;
-    background-size: cover;
-    padding: 60px 0;
-}
-
-.cta h3 {
-    color: #fff;
-    font-size: 28px;
-    font-weight: 700;
-}
-
-.cta p {
-    color: #fff;
-}
-
-.cta .cta-btn {
-    font-family: "Nunito", sans-serif;
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: 16px;
-    letter-spacing: 1px;
-    display: inline-block;
-    padding: 8px 28px;
-    border-radius: 25px;
-    transition: 0.5s;
-    margin-top: 10px;
-    border: 2px solid #fff;
-    color: #fff;
-}
-
-.cta .cta-btn:hover {
-    background: #007bff;
-    border: 2px solid #007bff;
-}
-
-@media (min-width: 1024px) {
-    .cta {
-        background-attachment: fixed;
-    }
 }
 
 /*--------------------------------------------------------------
@@ -1773,7 +1728,7 @@ section {
 }
 
 .blog .sidebar .search-form form button:hover {
-    background: #d01d3f;
+    background: #4999ec;
 }
 
 .blog .sidebar .categories ul {
@@ -1923,7 +1878,7 @@ section {
 
 #footer .footer-top .footer-links ul i {
     padding-right: 2px;
-    color: #ea6981;
+    color: #007bff;
     font-size: 18px;
     line-height: 1;
 }
