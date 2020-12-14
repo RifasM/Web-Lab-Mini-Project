@@ -41,7 +41,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
         // /home page requires login as USER or ADMIN.
         // If no login, it will redirect to /login page.
-        http.authorizeRequests().antMatchers("/home",
+        http.authorizeRequests().antMatchers("/home", "/api/**",
                 "/profile/**", "/create*", "/edit*", "/view*/**", "/like", "/comment").
                 access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 

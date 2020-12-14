@@ -118,6 +118,10 @@
                                         </video>
                                     </a>
                                 </div>
+
+                                <div th:if="${#lists.size(posts) == 0}">
+                                    <h3>Hmm, No posts Created</h3>
+                                </div>
                             </div>
                         </div>
 
@@ -128,6 +132,9 @@
                                         <img class="img-fluid rounded shadow-sm" th:alt="${board.boardDescription}"
                                              th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/boards/'+${board.boardCoverUrl}"/>
                                     </a>
+                                </div>
+                                <div th:if="${#lists.size(boards) == 0}">
+                                    <h3>Hmm, No boards Created</h3>
                                 </div>
                             </div>
                         </div>
