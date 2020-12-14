@@ -39,6 +39,7 @@
                 <div class="px-4 pt-0 pb-4 bg-dark">
                     <div class="media align-items-end profile-header">
                         <div class="profile mr-3">
+
                             <img class="rounded mb-2 img-thumbnail"
                                  th:alt="${user.firstName + ' ' + user.lastName}" th:if="${user.gender == 'male'}"
                                  th:src="@{/img/boy.png}"
@@ -49,8 +50,9 @@
                                  width="130">
                             <img class="rounded mb-2 img-thumbnail"
                                  th:alt="${user.firstName + ' ' + user.lastName}" th:src="@{/img/neutral.jpg}"
-                                 th:unless="${user.gender == 'male'}"
+                                 th:if="${user.gender == 'nts'}"
                                  width="130">
+
                             <a class="btn btn-dark btn-sm btn-block" style="display: block !important;"
                                th:href="@{/editProfile}"
                                th:if="${#authentication.name == user.userName}">Edit profile</a>
@@ -68,7 +70,8 @@
                         </div>
                         <div class="media-body mb-5 text-white">
                             <h4 class="mt-0 mb-0" th:text="${user.firstName + ' ' + user.lastName}">Full Name here</h4>
-                            <p class="small mb-4"><i class="fa fa-map-marker mr-2"></i>Bangalore</p>
+                            <p class="small mb-4"><i class="fa fa-user mr-2"></i><span
+                                    th:text="${user.userName}"></span></p>
                         </div>
                     </div>
                 </div>
@@ -115,6 +118,10 @@
                                         </video>
                                     </a>
                                 </div>
+
+                                <div th:if="${#lists.size(posts) == 0}">
+                                    <h3>Hmm, No posts Created</h3>
+                                </div>
                             </div>
                         </div>
 
@@ -125,6 +132,9 @@
                                         <img class="img-fluid rounded shadow-sm" th:alt="${board.boardDescription}"
                                              th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/boards/'+${board.boardCoverUrl}"/>
                                     </a>
+                                </div>
+                                <div th:if="${#lists.size(boards) == 0}">
+                                    <h3>Hmm, No boards Created</h3>
                                 </div>
                             </div>
                         </div>

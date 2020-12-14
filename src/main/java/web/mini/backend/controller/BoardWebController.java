@@ -144,7 +144,7 @@ public class BoardWebController {
     public String editBoardPage(@PathVariable(value = "board_id") String board_id,
                                 @RequestParam String boardName,
                                 @RequestParam String boardDescription,
-                                @RequestParam(required = false, defaultValue = "true") String privateBoard,
+                                @RequestParam(required = false, defaultValue = "off") String privateBoard,
                                 @RequestParam(required = false) MultipartFile boardCoverUrl,
                                 Model model,
                                 Authentication auth) throws ResourceNotFoundException {
@@ -154,7 +154,8 @@ public class BoardWebController {
                 Board board = request.getBody();
                 board.setBoardName(boardName);
                 board.setBoardDescription(boardDescription);
-                board.setPrivateBoard(Boolean.parseBoolean(privateBoard));
+                board.setPrivateBoard(privateBoard.equals("on"));
+
                 ResponseEntity<Board> status = boardController.updateBoard(board, boardCoverUrl);
                 if (status.getStatusCode().is2xxSuccessful())
                     model.addAttribute("success", board_id);
@@ -224,5 +225,22 @@ public class BoardWebController {
         model.addAttribute("firstName", userRepository.findByUsername(auth.getName()).getFirstName());
 
         return "boardTemplates/viewBoards";
+    }
+
+    /**
+     * Remove a given post id from the respective board id
+     *
+     * @param boardID the board id to remove the post to
+     * @param postID  the post id to be removed
+     * @return the post page with success of error messages
+     */
+    @PostMapping("/removePost/{postID}")
+    public String removePostFromBoard(@RequestParam String boardID,
+                                      @PathVariable(value = "postID") String postID) {
+        ResponseEntity<Board> result = boardController.removePost(boardID, postID);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null)
+            return "redirect:/viewBoard/" + boardID;
+
+        return "redirect:/viewPost/" + postID;
     }
 }

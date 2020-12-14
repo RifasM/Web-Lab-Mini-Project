@@ -8,6 +8,7 @@ import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
 import web.mini.backend.repository.BoardRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,8 @@ public class BoardController {
      * @return the boards by user id
      */
     @GetMapping("/board/{boardId}/{userID}")
-    public Board findByUserAndBoard(@PathVariable(value = "userID") String userID, @PathVariable(value = "boardId") String boardId) {
+    public Board findByUserAndBoard(@PathVariable(value = "userID") String userID,
+                                    @PathVariable(value = "boardId") String boardId) {
         return boardRepository.findBoardByIdAndUserId(boardId, userID);
     }
 
@@ -173,5 +175,64 @@ public class BoardController {
         boardRepository.save(board);
 
         return ResponseEntity.ok().body(board);
+    }
+
+    /**
+     * Add a given post id to the requested board
+     *
+     * @param boardID the board id to add the post
+     * @param postID  the post id of the post to be added
+     * @return the board after addition of the post
+     */
+    @RequestMapping("/board/addPost/{post_id}")
+    public ResponseEntity<Board> addPost(@RequestParam String boardID,
+                                         @PathVariable(value = "post_id") String postID) {
+        ResponseEntity<Board> result = getBoardById(boardID);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            Board board = result.getBody();
+
+            List<String> postIDs = new ArrayList<>();
+            if (board.getPostID() != null)
+                postIDs = board.getPostID();
+
+            // if board already contains the post, skip it
+            if (!postIDs.contains(postID)) {
+                postIDs.add(postID);
+                board.setPostID(postIDs);
+                boardRepository.save(board);
+            }
+            return ResponseEntity.ok().body(board);
+        }
+
+        return ResponseEntity.status(500).body(null);
+    }
+
+    /**
+     * Remove a given post id from the requested board
+     *
+     * @param boardID the board id to add the post
+     * @param postID  the post id of the post to be removed
+     * @return the board after addition of the post
+     */
+    @RequestMapping("/board/removePost/{post_id}")
+    public ResponseEntity<Board> removePost(@RequestParam String boardID,
+                                            @PathVariable(value = "post_id") String postID) {
+        ResponseEntity<Board> result = getBoardById(boardID);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            Board board = result.getBody();
+
+            List<String> postIDs = new ArrayList<>();
+            if (board.getPostID() != null)
+                postIDs = board.getPostID();
+
+            if (postIDs.contains(postID)) {
+                postIDs.remove(postID);
+                board.setPostID(postIDs);
+                boardRepository.save(board);
+            }
+            return ResponseEntity.ok().body(board);
+        }
+
+        return ResponseEntity.status(500).body(null);
     }
 }

@@ -2,7 +2,6 @@ package web.mini.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,11 +31,9 @@ public class WebController {
      * @return rendered landing.html
      */
     @RequestMapping("/")
-    public String index() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && !("anonymousUser").equals(auth.getName())) {
+    public String index(Authentication auth) {
+        if (auth != null && !("anonymousUser").equals(auth.getName()))
             return "redirect:/home";
-        }
 
         return "index";
     }
@@ -112,6 +109,8 @@ public class WebController {
     public String authLogin(Model model) {
         Iterable<Post> posts = postController.getAllEnabledPosts();
         model.addAttribute("posts", posts);
+        model.addAttribute("recent_posts", postController.recentPosts());
+
         return "home";
     }
 }

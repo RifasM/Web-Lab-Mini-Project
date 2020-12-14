@@ -14,11 +14,9 @@ import web.mini.backend.BackendApplication;
 import web.mini.backend.exception.ResourceNotFoundException;
 import web.mini.backend.model.Board;
 import web.mini.backend.model.Post;
-import web.mini.backend.repository.BoardRepository;
 import web.mini.backend.repository.PostRepository;
 import web.mini.backend.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,9 +26,6 @@ public class PostWebController {
 
     @Autowired
     private PostRepository postRepository;
-
-    @Autowired
-    private BoardRepository boardRepository;
 
     @Autowired
     private PostController postController;
@@ -51,6 +46,7 @@ public class PostWebController {
     public String viewDisabledPosts(Model model) {
         Iterable<Post> posts = postController.getAllDisabledPosts();
         model.addAttribute("posts", posts);
+        model.addAttribute("recent_posts", postController.recentPosts());
         return "home";
     }
 
@@ -64,7 +60,6 @@ public class PostWebController {
     @PostMapping("/createPost")
     public String createPostProcess(@RequestParam String postTitle,
                                     @RequestParam String postDescription,
-                                    @RequestParam String postType,
                                     @RequestParam String boardId,
                                     @RequestParam String tags,
                                     @RequestParam MultipartFile postFile,
@@ -75,7 +70,7 @@ public class PostWebController {
                     null,
                     postTitle,
                     postDescription,
-                    postType,
+                    null,
                     null,
                     tags,
                     1,
@@ -86,25 +81,19 @@ public class PostWebController {
             ResponseEntity<String> result = postController.createPost(post, postFile);
 
             if (result.getStatusCode().is2xxSuccessful()) {
-                Board board = boardController.getBoardById(boardId).getBody();
-                if (board != null) {
-                    List<String> postIDs = new ArrayList<>();
-                    if (board.getPostID() != null)
-                        postIDs = board.getPostID();
-
-                    postIDs.add(post.getId());
-                    board.setPostID(postIDs);
-                    boardRepository.save(board);
+                ResponseEntity<Board> res = boardController.addPost(boardId, post.getId());
+                if (res.getStatusCode().is2xxSuccessful())
                     model.addAttribute("success", post.getId());
-                } else
-                    model.addAttribute("error", result.getBody());
+                else
+                    model.addAttribute("error", res.getBody());
+            } else
+                model.addAttribute("error", result.getBody());
 
-                model.addAttribute("boards", boardController.findByUser(auth.getName()));
-                return "postTemplates/createPost";
+            model.addAttribute("boards", boardController.findByUser(auth.getName()));
 
-            }
+            return "postTemplates/createPost";
         }
-        return "error";
+        return "redirect:/login";
     }
 
     /**
@@ -158,10 +147,13 @@ public class PostWebController {
                 }
             }
             model.addAttribute("post_data", post);
+
             model.addAttribute("like_heart", heart);
             model.addAttribute("like_thumb", thumb);
             model.addAttribute("like_wow", wow);
             model.addAttribute("like_haha", haha);
+
+            model.addAttribute("user_boards", boardController.findByUser(auth.getName()));
 
             if (post.getEnabled() == 0 && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
                 return "errorPages/404";
@@ -171,6 +163,23 @@ public class PostWebController {
 
 
         return "postTemplates/viewPost";
+    }
+
+    /**
+     * Add a given post id to the respective board id
+     *
+     * @param boardID the board id to add the post to
+     * @param postID  the post id to be added
+     * @return the post page with success of error messages
+     */
+    @PostMapping("/addPost/{postID}")
+    public String addPostToBoard(@RequestParam String boardID,
+                                 @PathVariable(value = "postID") String postID) {
+        ResponseEntity<Board> result = boardController.addPost(boardID, postID);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null)
+            return "redirect:/viewBoard/" + boardID;
+
+        return "redirect:/viewPost/" + postID;
     }
 
     /**

@@ -47,6 +47,16 @@ public class UserController {
     }
 
     /**
+     * Get all the disabled users list.
+     *
+     * @return the user list
+     */
+    @GetMapping("/users/disabled")
+    public List<User> getAllDisabledUsers() {
+        return userRepository.findByEnabled(0);
+    }
+
+    /**
      * Gets users by id.
      *
      * @param userId the user id
@@ -60,6 +70,38 @@ public class UserController {
                 userRepository
                         .findById(userId)
                         .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + userId));
+        return ResponseEntity.ok().body(user);
+    }
+
+    /**
+     * Gets the enabled users by username.
+     *
+     * @param username the username
+     * @return the user
+     */
+    @GetMapping("/users/{username}")
+    public ResponseEntity<User> getEnabledUsersByUsername(@PathVariable(value = "username") String username) {
+        User user = userRepository.findByUsername(username);
+        assert user != null;
+        if (user.getEnabled() == 0)
+            return ResponseEntity.badRequest().body(null);
+
+        return ResponseEntity.ok().body(user);
+    }
+
+    /**
+     * Gets the diabled users by username.
+     *
+     * @param username the username
+     * @return the user
+     */
+    @GetMapping("/users/disabled/{username}")
+    public ResponseEntity<User> getDisabledUsersByUsername(@PathVariable(value = "username") String username) {
+        User user = userRepository.findByUsername(username);
+        assert user != null;
+        if (user.getEnabled() == 1)
+            return ResponseEntity.badRequest().body(null);
+
         return ResponseEntity.ok().body(user);
     }
 
@@ -121,5 +163,49 @@ public class UserController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    /**
+     * Deactivate a user based on the user name
+     *
+     * @param username  the username of the user to be deactivated
+     * @param adminName the name of the administrator disabling the user
+     * @return true if successful, false if failed
+     */
+    @RequestMapping("/user/deactivate")
+    public Boolean deactivateUser(@RequestParam String username,
+                                  @RequestParam String adminName) {
+        ResponseEntity<User> result = getEnabledUsersByUsername(username);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            result.getBody().setEnabled(0); // disable the user
+            result.getBody().setUpdatedAt(new Date());
+            result.getBody().setUpdatedBy(adminName);
+            userRepository.save(result.getBody());
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Activate a user based on the user name
+     *
+     * @param username  the username of the user to be activated
+     * @param adminName the name of the administrator enabling the user
+     * @return true if successful, false if failed
+     */
+    @RequestMapping("/user/activate")
+    public Boolean activateUser(@RequestParam String username,
+                                @RequestParam String adminName) {
+        ResponseEntity<User> result = getDisabledUsersByUsername(username);
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            result.getBody().setEnabled(1); // activate the user
+            result.getBody().setUpdatedAt(new Date());
+            result.getBody().setUpdatedBy(adminName);
+            userRepository.save(result.getBody());
+            return true;
+        }
+
+        return false;
     }
 }

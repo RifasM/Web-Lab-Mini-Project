@@ -58,7 +58,7 @@
 
                                 <div class="entry-img">
                                     <a th:href="'/viewPost/'+ ${post.id}">
-                                        <img class="img-fluid" th:alt="${post.postDescription}"
+                                        <img class="img-fluid" style="width: 30em" th:alt="${post.postDescription}"
                                              th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post.postUrl}">
                                     </a>
                                 </div>
@@ -102,13 +102,14 @@
 
                 </div><!-- End blog entries list -->
 
-                <div class="col-lg-4" style="position: fixed; right: 13%; max-height: 90vh; max-width: 350px">
+
+                <div class="col-lg-4">
                     <div class="sidebar">
 
                         <h3 class="sidebar-title">Search</h3>
                         <div class="sidebar-item search-form">
                             <form method="post" th:action="@{/search}">
-                                <input name="query" th:value="${search}" type="text">
+                                <input class="form-control" name="query" th:value="${search}" type="text">
                                 <button type="submit"><i class="icofont-search"></i></button>
                             </form>
 
@@ -116,18 +117,13 @@
 
                         <h3 class="sidebar-title">Recent Posts</h3>
                         <div class="sidebar-item recent-posts">
-                            <div class="post-item clearfix">
-                                <img src="img/blog-recent-1.jpg" alt="">
-                                <h4><a href="blog-single.html">Nihil blanditiis at in nihil autem</a></h4>
-                                <time datetime="2020-01-01">Jan 1, 2020</time>
-                            </div>
 
-                            <div class="post-item clearfix">
-                                <img src="img/blog-recent-2.jpg" alt="">
-                                <h4><a href="blog-single.html">Quidem autem et impedit</a></h4>
-                                <time datetime="2020-01-01">Jan 1, 2020</time>
+                            <div class="post-item clearfix" th:each="recent: ${recent_posts}">
+                                <img class="img-fluid" th:alt="${recent.postDescription}"
+                                     th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${recent.postUrl}">
+                                <h4><a th:href="'/viewPost/'+ ${recent.id}" th:text="${recent.postTitle}">Title</a></h4>
+                                <time th:datetime="${recent.postDate}" th:text="${recent.postDate}"></time>
                             </div>
-
 
                         </div><!-- End sidebar recent posts-->
 
