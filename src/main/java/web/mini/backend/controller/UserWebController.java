@@ -92,6 +92,13 @@ public class UserWebController {
         return "errorPages/403";
     }
 
+    /**
+     * Get the page to be returned based on the given parameters
+     * @param username name of the user logged in
+     * @param model to send back data to the templates
+     * @param result the ResponseEntity Variable to fetch data from
+     * @return the relevent template name to be returned
+     */
     private String getString(@PathVariable("username") String username, Model model, ResponseEntity<User> result) {
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
             model.addAttribute("user", result.getBody());
