@@ -269,7 +269,7 @@ public class UserWebController {
             }
         }
 
-        return "errorPages/404";
+        return "errorPages/403";
     }
 
     /**
