@@ -99,7 +99,7 @@ public class UserWebController {
      * @param result the ResponseEntity Variable to fetch data from
      * @return the relevent template name to be returned
      */
-    private String getString(@PathVariable("username") String username, Model model, ResponseEntity<User> result) {
+    private String getString(String username, Model model, ResponseEntity<User> result) {
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
             model.addAttribute("user", result.getBody());
             model.addAttribute("posts", postController.findByUser(username));
