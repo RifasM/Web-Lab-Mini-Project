@@ -263,8 +263,10 @@ public class UserWebController {
             Boolean result = userController.deactivateUser(username, auth.getName());
             if (result)
                 return "redirect:/profile/disabled/" + username;
-            else
+            else {
                 LOGGER.error("Could not deactivate user: " + username + ", with admin user authentication: " + auth.getName());
+                return "errorPages/500";
+            }
         }
 
         return "errorPages/404";
