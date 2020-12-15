@@ -290,7 +290,7 @@ public class UserWebController {
                 LOGGER.error("Could not activate user: " + username + ", with admin user authentication: " + auth.getName());
         }
 
-        return "errorPages/404";
+        return "errorPages/403";
     }
 
     @RequestMapping("/disabledUsers")
