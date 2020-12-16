@@ -332,6 +332,8 @@ public class PostWebController {
             ResponseEntity<Boolean> result = postController.enablePost(postID, auth);
             if (result.getStatusCode().is2xxSuccessful())
                 return "redirect:/viewPost/" + postID;
+            else
+                return "errorPages/500";
         }
 
         return "errorPages/403";
