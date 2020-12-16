@@ -70,15 +70,7 @@ public class UserWebController {
     public String profile(@PathVariable(value = "username") String username,
                           Model model) {
         ResponseEntity<User> result = userController.getEnabledUsersByUsername(username);
-        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
-            model.addAttribute("user", result.getBody());
-            model.addAttribute("posts", postController.findByUser(username));
-            model.addAttribute("boards", boardController.findByUser(username));
-
-            return "userTemplates/profile";
-        }
-
-        return "errorPages/404";
+        return getString(username, model, result);
     }
 
     /**
@@ -94,18 +86,22 @@ public class UserWebController {
                                   Authentication auth) {
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             ResponseEntity<User> result = userController.getDisabledUsersByUsername(username);
-            if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
-                model.addAttribute("user", result.getBody());
-                model.addAttribute("posts", postController.findByUser(username));
-                model.addAttribute("boards", boardController.findByUser(username));
-
-                return "userTemplates/profile";
-            }
-
-            return "errorPages/404";
+            return getString(username, model, result);
         }
 
         return "errorPages/403";
+    }
+
+    private String getString(@PathVariable("username") String username, Model model, ResponseEntity<User> result) {
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            model.addAttribute("user", result.getBody());
+            model.addAttribute("posts", postController.findByUser(username));
+            model.addAttribute("boards", boardController.findByUser(username));
+
+            return "userTemplates/profile";
+        }
+
+        return "errorPages/404";
     }
 
     /**
