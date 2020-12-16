@@ -334,7 +334,7 @@ public class PostWebController {
                 return "redirect:/viewPost/" + postID;
         }
 
-        return "errorPages/404";
+        return "errorPages/403";
     }
 
     /**
