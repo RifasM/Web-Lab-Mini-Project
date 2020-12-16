@@ -101,9 +101,11 @@ public class UserWebController {
 
                 return "userTemplates/profile";
             }
+
+            return "errorPages/404";
         }
 
-        return "errorPages/404";
+        return "errorPages/403";
     }
 
     /**
