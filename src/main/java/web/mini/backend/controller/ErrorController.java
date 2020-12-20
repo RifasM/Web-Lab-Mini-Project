@@ -24,6 +24,6 @@ public class ErrorController {
                 return "errorPages/403";
         }
         //return "error";
-        errorPages/500
+        return "errorPages/500";
     }
 }
