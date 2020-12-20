@@ -23,6 +23,7 @@ public class ErrorController {
             else if(statusCode == HttpStatus.FORBIDDEN.value())
                 return "errorPages/403";
         }
-        return "error";
+        //return "error";
+        errorPages/500
     }
 }
