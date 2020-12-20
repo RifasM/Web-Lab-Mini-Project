@@ -83,7 +83,7 @@ public class BoardWebController {
 
             return "boardTemplates/createBoard";
         }
-        return "error";
+        return "errorPages/403";
     }
 
     /**
