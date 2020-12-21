@@ -185,6 +185,8 @@ public class BoardWebController {
                 model.addAttribute("board_data", request.getBody());
                 return "boardTemplates/editBoard";
             }
+            else
+                return "errorPages/403";
         }
         return "errorPages/404";
     }
