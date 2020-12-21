@@ -163,9 +163,8 @@ public class BoardWebController {
                     model.addAttribute("error", status.getBody());
 
                 model.addAttribute("board_data", status.getBody());
-            } else {
-                return "errorPages/404";
-            }
+            } else
+                return "errorPages/403";
         }
         return "boardTemplates/editBoard";
     }
