@@ -201,11 +201,16 @@ public class BoardWebController {
     public String deleteBoard(@PathVariable(value = "board_id") String board_id,
                               Authentication auth)
             throws ResourceNotFoundException {
-        Board board = boardController.getBoardById(board_id).getBody();
+        ResponseEntity<Board> result = boardController.getBoardById(board_id);
+        if(result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            Board board = result.getBody();
 
-        if (board != null && board.getUserId().equals(auth.getName())) {
-            boardController.deleteBoard(board_id);
-            return "redirect:/";
+            if (board != null && board.getUserId().equals(auth.getName())) {
+                boardController.deleteBoard(board_id);
+                return "redirect:/";
+            }
+            else
+                return "errorPages/403";
         }
 
         return "errorPages/404";
