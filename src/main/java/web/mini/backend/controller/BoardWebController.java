@@ -102,7 +102,7 @@ public class BoardWebController {
         if (board.getStatusCode().is2xxSuccessful() && board.getBody() != null) {
             // Check if board is private and requesting User is not the board owner, then raise 404
             if (board.getBody().getPrivateBoard() && (auth == null || !auth.getName().equals(board.getBody().getUserId())))
-                return "errorPages/404";
+                return "errorPages/403";
 
             Board board_body = board.getBody();
 
