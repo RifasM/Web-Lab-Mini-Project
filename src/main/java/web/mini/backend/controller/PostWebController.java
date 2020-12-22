@@ -214,7 +214,8 @@ public class PostWebController {
      * @return rendered editPost.html
      */
     @GetMapping("/editPost/{post_id}")
-    public String editPost(@PathVariable(value = "post_id") String post_id, Model model) {
+    public String editPost(@PathVariable(value = "post_id") String post_id,
+                           Model model) {
         ResponseEntity<Post> post = postController.getPostsById(post_id);
         if (post.getStatusCode().is2xxSuccessful())
             model.addAttribute("post_data", post.getBody());
