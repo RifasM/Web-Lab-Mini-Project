@@ -248,7 +248,7 @@ public class PostWebController {
                 postRepository.save(post);
                 model.addAttribute("success", post_id);
             } else
-                model.addAttribute("error", "unauthorised");
+                return "errorPages/403";
 
             model.addAttribute("post_data", post);
             return "postTemplates/editPost";
