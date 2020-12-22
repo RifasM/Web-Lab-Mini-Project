@@ -156,7 +156,7 @@ public class PostWebController {
             model.addAttribute("user_boards", boardController.findByUser(auth.getName()));
 
             if (post.getEnabled() == 0 && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
-                return "errorPages/404";
+                return "errorPages/403";
 
         } else
             return "errorPages/404";
