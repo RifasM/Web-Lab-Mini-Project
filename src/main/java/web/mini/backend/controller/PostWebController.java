@@ -192,11 +192,16 @@ public class PostWebController {
     public String deletePost(@PathVariable(value = "post_id") String post_id,
                              Authentication auth)
             throws ResourceNotFoundException {
-        Post post = postController.getPostsById(post_id).getBody();
+        ResponseEntity<Post> result = postController.getPostsById(post_id);
+        if(result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            Post post = result.getBody();
 
-        if (post != null && post.getPostUser().equals(auth.getName())) {
-            postController.deletePost(post_id);
-            return "redirect:/";
+            if (post != null && post.getPostUser().equals(auth.getName())) {
+                postController.deletePost(post_id);
+                return "redirect:/";
+            }
+            else
+                return "errorPages/403";
         }
 
         return "errorPages/404";
