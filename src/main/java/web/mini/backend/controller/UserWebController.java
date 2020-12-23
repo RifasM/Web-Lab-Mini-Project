@@ -304,6 +304,6 @@ public class UserWebController {
             return "userTemplates/disabledUsers";
         }
 
-        return "errorPages/404";
+        return "errorPages/403";
     }
 }
