@@ -28,6 +28,16 @@ public class CustomErrorController implements ErrorController {
         return "errorPages/500";
     }
 
+    @RequestMapping("/403")
+    public String handleForbidden(){
+        return "errorPages/403";
+    }
+
+    @RequestMapping("/500")
+    public String handleServerError(){
+        return "errorPages/500";
+    }
+
     @Override
     public String getErrorPath() {
         return null;
