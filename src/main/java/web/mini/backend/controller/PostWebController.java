@@ -156,7 +156,7 @@ public class PostWebController {
             model.addAttribute("user_boards", boardController.findByUser(auth.getName()));
 
             if (post.getEnabled() == 0 && !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN")))
-                return "errorPages/404";
+                return "errorPages/403";
 
         } else
             return "errorPages/404";
@@ -192,11 +192,16 @@ public class PostWebController {
     public String deletePost(@PathVariable(value = "post_id") String post_id,
                              Authentication auth)
             throws ResourceNotFoundException {
-        Post post = postController.getPostsById(post_id).getBody();
+        ResponseEntity<Post> result = postController.getPostsById(post_id);
+        if(result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            Post post = result.getBody();
 
-        if (post != null && post.getPostUser().equals(auth.getName())) {
-            postController.deletePost(post_id);
-            return "redirect:/";
+            if (post != null && post.getPostUser().equals(auth.getName())) {
+                postController.deletePost(post_id);
+                return "redirect:/";
+            }
+            else
+                return "errorPages/403";
         }
 
         return "errorPages/404";
@@ -209,7 +214,8 @@ public class PostWebController {
      * @return rendered editPost.html
      */
     @GetMapping("/editPost/{post_id}")
-    public String editPost(@PathVariable(value = "post_id") String post_id, Model model) {
+    public String editPost(@PathVariable(value = "post_id") String post_id,
+                           Model model) {
         ResponseEntity<Post> post = postController.getPostsById(post_id);
         if (post.getStatusCode().is2xxSuccessful())
             model.addAttribute("post_data", post.getBody());
@@ -242,7 +248,7 @@ public class PostWebController {
                 postRepository.save(post);
                 model.addAttribute("success", post_id);
             } else
-                model.addAttribute("error", "unauthorised");
+                return "errorPages/403";
 
             model.addAttribute("post_data", post);
             return "postTemplates/editPost";
@@ -305,9 +311,11 @@ public class PostWebController {
             ResponseEntity<Boolean> result = postController.disablePost(postID, auth);
             if (result.getStatusCode().is2xxSuccessful())
                 return "redirect:/viewPost/" + postID;
+            else
+                return "errorPages/500";
         }
 
-        return "errorPages/404";
+        return "errorPages/403";
     }
 
     /**
@@ -324,9 +332,11 @@ public class PostWebController {
             ResponseEntity<Boolean> result = postController.enablePost(postID, auth);
             if (result.getStatusCode().is2xxSuccessful())
                 return "redirect:/viewPost/" + postID;
+            else
+                return "errorPages/500";
         }
 
-        return "errorPages/404";
+        return "errorPages/403";
     }
 
     /**

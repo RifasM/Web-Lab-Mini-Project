@@ -83,7 +83,7 @@ public class BoardWebController {
 
             return "boardTemplates/createBoard";
         }
-        return "error";
+        return "errorPages/403";
     }
 
     /**
@@ -102,7 +102,7 @@ public class BoardWebController {
         if (board.getStatusCode().is2xxSuccessful() && board.getBody() != null) {
             // Check if board is private and requesting User is not the board owner, then raise 404
             if (board.getBody().getPrivateBoard() && (auth == null || !auth.getName().equals(board.getBody().getUserId())))
-                return "errorPages/404";
+                return "errorPages/403";
 
             Board board_body = board.getBody();
 
@@ -163,9 +163,8 @@ public class BoardWebController {
                     model.addAttribute("error", status.getBody());
 
                 model.addAttribute("board_data", status.getBody());
-            } else {
-                return "errorPages/404";
-            }
+            } else
+                return "errorPages/403";
         }
         return "boardTemplates/editBoard";
     }
@@ -186,6 +185,8 @@ public class BoardWebController {
                 model.addAttribute("board_data", request.getBody());
                 return "boardTemplates/editBoard";
             }
+            else
+                return "errorPages/403";
         }
         return "errorPages/404";
     }
@@ -200,11 +201,16 @@ public class BoardWebController {
     public String deleteBoard(@PathVariable(value = "board_id") String board_id,
                               Authentication auth)
             throws ResourceNotFoundException {
-        Board board = boardController.getBoardById(board_id).getBody();
+        ResponseEntity<Board> result = boardController.getBoardById(board_id);
+        if(result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            Board board = result.getBody();
 
-        if (board != null && board.getUserId().equals(auth.getName())) {
-            boardController.deleteBoard(board_id);
-            return "redirect:/";
+            if (board != null && board.getUserId().equals(auth.getName())) {
+                boardController.deleteBoard(board_id);
+                return "redirect:/";
+            }
+            else
+                return "errorPages/403";
         }
 
         return "errorPages/404";

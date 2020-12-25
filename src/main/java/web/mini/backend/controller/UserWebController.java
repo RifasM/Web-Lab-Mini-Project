@@ -70,15 +70,7 @@ public class UserWebController {
     public String profile(@PathVariable(value = "username") String username,
                           Model model) {
         ResponseEntity<User> result = userController.getEnabledUsersByUsername(username);
-        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
-            model.addAttribute("user", result.getBody());
-            model.addAttribute("posts", postController.findByUser(username));
-            model.addAttribute("boards", boardController.findByUser(username));
-
-            return "userTemplates/profile";
-        }
-
-        return "errorPages/404";
+        return getString(username, model, result);
     }
 
     /**
@@ -94,13 +86,26 @@ public class UserWebController {
                                   Authentication auth) {
         if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             ResponseEntity<User> result = userController.getDisabledUsersByUsername(username);
-            if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
-                model.addAttribute("user", result.getBody());
-                model.addAttribute("posts", postController.findByUser(username));
-                model.addAttribute("boards", boardController.findByUser(username));
+            return getString(username, model, result);
+        }
 
-                return "userTemplates/profile";
-            }
+        return "errorPages/403";
+    }
+
+    /**
+     * Get the page to be returned based on the given parameters
+     * @param username name of the user logged in
+     * @param model to send back data to the templates
+     * @param result the ResponseEntity Variable to fetch data from
+     * @return the relevent template name to be returned
+     */
+    private String getString(String username, Model model, ResponseEntity<User> result) {
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            model.addAttribute("user", result.getBody());
+            model.addAttribute("posts", postController.findByUser(username));
+            model.addAttribute("boards", boardController.findByUser(username));
+
+            return "userTemplates/profile";
         }
 
         return "errorPages/404";
@@ -258,11 +263,13 @@ public class UserWebController {
             Boolean result = userController.deactivateUser(username, auth.getName());
             if (result)
                 return "redirect:/profile/disabled/" + username;
-            else
+            else {
                 LOGGER.error("Could not deactivate user: " + username + ", with admin user authentication: " + auth.getName());
+                return "errorPages/500";
+            }
         }
 
-        return "errorPages/404";
+        return "errorPages/403";
     }
 
     /**
@@ -279,11 +286,13 @@ public class UserWebController {
             Boolean result = userController.activateUser(username, auth.getName());
             if (result)
                 return "redirect:/profile/" + username;
-            else
+            else {
                 LOGGER.error("Could not activate user: " + username + ", with admin user authentication: " + auth.getName());
+                return "errorPages/500";
+            }
         }
 
-        return "errorPages/404";
+        return "errorPages/403";
     }
 
     @RequestMapping("/disabledUsers")
@@ -295,6 +304,6 @@ public class UserWebController {
             return "userTemplates/disabledUsers";
         }
 
-        return "errorPages/404";
+        return "errorPages/403";
     }
 }
