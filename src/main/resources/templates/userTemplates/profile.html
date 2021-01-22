@@ -111,10 +111,10 @@
                                         <img class="img-fluid rounded shadow-sm" th:alt="${post.postDescription}"
                                              th:if="${post.postType == 'image' || post.postType == 'gif'}"
                                              th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'+${post.postUrl}"/>
-                                        <video autoplay loop th:if="${post.postType == 'video'}">
+                                        <video autoplay loop muted th:if="${post.postType == 'video'}">
                                             <source th:src="'https://web-mini.s3.ap-south-1.amazonaws.com/posts/'
                                             +${post.postUrl}"
-                                                    type="vi/mp4">
+                                                    type="video/mp4">
                                         </video>
                                     </a>
                                 </div>
