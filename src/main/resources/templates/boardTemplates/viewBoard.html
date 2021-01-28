@@ -121,6 +121,7 @@
                                                 <a th:href="'/viewPost/'+ ${post.id}">View Post</a>
                                             </div>
                                             <form class="read-more" method="post"
+                                                  th:if="${#authentication.name == board_data.userId}"
                                                   th:action="@{/removePost/{id}(id = ${post.id})}">
                                                 <input name="boardID" th:value="${board_data.id}" type="hidden">
                                                 <button class="btn btn-sm btn-outline-danger btn-rounded m-3"
